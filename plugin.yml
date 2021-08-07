@@ -1,0 +1,6 @@
+---
+name: BetterMinion
+version: 1.0
+main: Mcbeany\BetterMinion\BetterMinion
+api: 3.20.0
+...
