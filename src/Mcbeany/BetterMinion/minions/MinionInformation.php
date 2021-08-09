@@ -22,7 +22,7 @@ class MinionInformation implements MinionNBT
     /** @var int */
     private $resourcesCollected;
 
-    public function __construct(string $owner, MinionType $type, MinionUpgrade $upgrade, int $level = 1, int $resourcesCollected = 0)
+    public function __construct(string $owner, MinionType $type, MinionUpgrade $upgrade, int $level, int $resourcesCollected)
     {
         $this->owner = $owner;
         $this->type = $type;
@@ -61,9 +61,9 @@ class MinionInformation implements MinionNBT
         return $this->resourcesCollected;
     }
 
-    public function incrementResourcesCollected(int $amount): void
+    public function incrementResourcesCollected(): void
     {
-        $this->resourcesCollected += $amount;
+        $this->resourcesCollected++;
     }
 
     public function nbtSerialize(): CompoundTag

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion;
 
-use Mcbeany\BetterMinion\entities\MinionEntity;
-use Mcbeany\BetterMinion\entities\types\MiningMinion;
 use Mcbeany\BetterMinion\minions\MinionInformation;
 use Mcbeany\BetterMinion\minions\MinionType;
 use Mcbeany\BetterMinion\minions\MinionUpgrade;
@@ -30,7 +28,7 @@ class EventListener implements Listener
         $player = $event->getPlayer();
         if ($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK) {
             $mItem = Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"));
-            if ($item->getId() === Item::MOB_HEAD) {
+            if ($item->getId() === $mItem->getId() && $item->getDamage() === $mItem->getDamage()) {
                 if (($minionInformation = $item->getNamedTag()->getCompoundTag("MinionInformation")) !== null) {
                     if (($minionType = $minionInformation->getCompoundTag("MinionType")) !== null) {
                         $minionUpgrade = $minionInformation->hasTag("MinionUpgrade") ? MinionUpgrade::nbtDeserialize($minionInformation->getCompoundTag("MinionUpgrade")) : new MinionUpgrade();
@@ -43,8 +41,10 @@ class EventListener implements Listener
                             new StringTag("GeometryName", $skin->getGeometryName()),
                             new ByteArrayTag("GeometryData", $skin->getGeometryData())
                         ]));
-                        $nbt->setTag((new MinionInformation($player->getName(), MinionType::nbtDeserialize($minionType), $minionUpgrade, $minionInformation->getInt("Level", 1), $minionInformation->getInt("ResourcesCollected", 0)))->nbtSerialize());
-                        $entity = new MiningMinion($player->getLevelNonNull(), $nbt);
+                        $type = MinionType::nbtDeserialize($minionType);
+                        $nbt->setTag((new MinionInformation($player->getName(), $type, $minionUpgrade, $minionInformation->getInt("Level", 1), $minionInformation->getInt("ResourcesCollected", 0)))->nbtSerialize());
+                        $entityType = BetterMinion::$minions[$type->getActionType()];
+                        $entity = new $entityType($player->getLevelNonNull(), $nbt);
                         $entity->spawnToAll();
                         $item->pop();
                         $player->getInventory()->setItemInHand($item);
