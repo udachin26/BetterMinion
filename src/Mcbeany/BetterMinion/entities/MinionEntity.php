@@ -14,7 +14,6 @@ use muqsit\invmenu\transaction\DeterministicInvMenuTransaction;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\block\Block;
 use pocketmine\block\BlockIds;
-use pocketmine\block\Crops;
 use pocketmine\entity\EffectInstance;
 use pocketmine\entity\Human;
 use pocketmine\entity\Living;
@@ -43,6 +42,8 @@ abstract class MinionEntity extends Human
     protected $minionInformation;
     /** @var MinionInventory */
     protected $minionInventory;
+    /** @var float */
+    private $money;
     /** @var int */
     protected $currentAction = self::ACTION_IDLE;
     /** @var int */
@@ -61,6 +62,7 @@ abstract class MinionEntity extends Human
         $this->minionInformation = MinionInformation::nbtDeserialize($this->namedtag->getCompoundTag("MinionInformation"));
         $this->minionInventory = new MinionInventory();
         $this->minionInventory->setSize($this->minionInformation->getLevel());
+        $this->money = $this->namedtag->getFloat("Money", 0);
         $invTag = $this->namedtag->getListTag("MinionInventory");
         if ($invTag !== null) {
             $this->minionInventory->setContents(array_map(function (CompoundTag $tag): Item{
@@ -86,6 +88,7 @@ abstract class MinionEntity extends Human
             return $item->nbtSerialize();
         }, $this->minionInventory->getContents())));
         $this->namedtag->setTag($this->minionInformation->nbtSerialize());
+        $this->namedtag->setFloat("Money", $this->money);
     }
 
     public function attack(EntityDamageEvent $source): void
@@ -97,15 +100,30 @@ abstract class MinionEntity extends Human
                     $menu = InvMenu::create(MenuIds::TYPE_DOUBLE_CHEST);
                     $menu->setName($this->getMinionInformation()->getOwner() . "'s Minion " . Utils::getRomanNumeral($this->getMinionInformation()->getLevel()));
                     $menu->getInventory()->setContents(array_fill(0, 54, Item::get(BlockIds::INVISIBLE_BEDROCK, 7)->setCustomName(TextFormat::RESET)));
-                    $types = ["Mining", "Farming", "Lumberjack", "Slaying", "Fishing"];
-                    $menu->getInventory()->setItem(37, Item::get(BlockIds::COMMAND_BLOCK)->setCustomName("Expander")->setLore([$this->getMinionInformation()->getUpgrade()->isExpand() ? "Enabled" : "Disabled"]));
+                    if ($this->canUseAutoSmelter()) {
+                        $menu->getInventory()->setItem(10, Item::get(BlockIds::FURNACE)->setCustomName("Auto Smelter (" . ($this->getMinionInformation()->getUpgrade()->isAutoSmelt() ? "Enabled" : "Disabled") . ")")->setLore(["Automatically smelts items that the minion produces.", "Result: " . $this->getSmeltedTarget()->getVanillaName() . "."]));
+                    } else {
+                        $menu->getInventory()->setItem(10, Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::RED . "Your minion cannot use this upgrade!"));
+                    }
+                    if ($this->canUseCompacter()) {
+                        $menu->getInventory()->setItem(19, Item::get(BlockIds::DISPENSER)->setCustomName("Compacter (" . $this->getCompactedTarget()->getVanillaName() . ")"));
+                    } else {
+                        $menu->getInventory()->setItem(19, Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::RED . "Your minion cannot use this upgrade!"));
+                    }
+                    if ($this->canUseExpander()) {
+                        $menu->getInventory()->setItem(37, Item::get(BlockIds::COMMAND_BLOCK)->setCustomName("Expander (" . ($this->getMinionInformation()->getUpgrade()->isExpand() ? "Enabled" : "Disabled") . ")")->setLore(["Increases the minion range by one block."]));
+                    } else {
+                        $menu->getInventory()->setItem(37, Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::RED . "Your minion cannot use this upgrade!"));
+                    }
                     $menu->getInventory()->setItem(48, Item::get(BlockIds::CHEST)->setCustomName(TextFormat::GREEN . "Retrieve all results"));
                     $menu->getInventory()->setItem(50, Item::get(ItemIds::BOTTLE_O_ENCHANTING)->setCustomName(TextFormat::AQUA . "Level up your minion")->setLore([$this->getMinionInformation()->getLevel() < 15 ? TextFormat::YELLOW . "Cost: " . TextFormat::GREEN . $this->getLevelUpCost() : TextFormat::RED . "Reached max level!"]));
                     $menu->getInventory()->setItem(53, Item::get(BlockIds::BEDROCK)->setCustomName(TextFormat::RED . "Remove your minion"));
-                    $taskId = BetterMinion::getInstance()->getScheduler()->scheduleRepeatingTask(new ClosureTask(function (int $currentTick) use ($types, $menu): void {
+                    $taskId = BetterMinion::getInstance()->getScheduler()->scheduleRepeatingTask(new ClosureTask(function (int $currentTick) use ($menu): void {
                         for ($i = 0; $i < 15; $i++) {
                             $menu->getInventory()->setItem((int)(21 + ($i % 5) + (9 * floor($i / 5))), $this->getMinionInventory()->slotExists($i) ? $this->getMinionInventory()->getItem($i) : Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::YELLOW . "Unlock at level " . TextFormat::GOLD . Utils::getRomanNumeral(($i + 1))));
                         }
+                        $menu->getInventory()->setItem(28, Item::get(ItemIds::HOPPER)->setCustomName("Auto Seller (" . ($this->getMinionInformation()->getUpgrade()->isAutoSell() ? "Enabled" : "Disabled") . ")")->setLore(["Sells resources when the minion's storage is full.", "Held money: " . $this->money . "."]));
+                        $types = ["Mining", "Farming", "Lumberjack", "Slaying", "Fishing"];
                         $menu->getInventory()->setItem(4, Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"))->setCustomName(TextFormat::BLUE . $this->getMinionInformation()->getType()->getTargetName() . " Minion " . Utils::getRomanNumeral($this->getMinionInformation()->getLevel()))->setLore([
                             "Type: " . $types[$this->getMinionInformation()->getType()->getActionType()],
                             "Target: " . $this->getMinionInformation()->getType()->getTargetName(),
@@ -118,6 +136,19 @@ abstract class MinionEntity extends Human
                         $itemClicked = $transaction->getItemClicked();
                         $action = $transaction->getAction();
                         switch ($action->getSlot()) {
+                            case 10:
+                                $player->removeWindow($action->getInventory());
+                                $this->getMinionInformation()->getUpgrade()->setAutoSmelt();
+                                break;
+                            case 28:
+                                $player->removeWindow($action->getInventory());
+                                if (!$this->getMinionInformation()->getUpgrade()->isAutoSell()) {
+                                    $this->getMinionInformation()->getUpgrade()->setAutoSell();
+                                } else {
+                                    EconomyAPI::getInstance()->addMoney($player, $this->money);
+                                    $this->money = 0;
+                                }
+                                break;
                             case 37:
                                 $player->removeWindow($action->getInventory());
                                 $this->getMinionInformation()->getUpgrade()->setExpand();
@@ -238,6 +269,10 @@ abstract class MinionEntity extends Human
                         $this->startWorking();
                         $this->stopWorking();
                         if ($this->isInventoryFull()) {
+                            if ($this->getMinionInformation()->getUpgrade()->isAutoSell()) {
+                                $this->sellItems();
+                                return $hasUpdate;
+                            }
                             $this->currentAction = self::ACTION_CANT_WORK;
                             $this->setNameTag($this->getMinionInformation()->getOwner() . "'s Minion\n" . TextFormat::RED . "My inventory is now full");
                         }
@@ -254,9 +289,52 @@ abstract class MinionEntity extends Human
         return $hasUpdate;
     }
 
+    protected function getSmeltedTarget(): ?Item
+    {
+        $manager = BetterMinion::getInstance()->getServer()->getCraftingManager();
+        $recipe = $manager->matchFurnaceRecipe(Item::get($this->getMinionInformation()->getType()->getTargetId(), $this->getMinionInformation()->getType()->getTargetMeta()));
+        if ($recipe !== null) {
+            $result = $recipe->getResult();
+            if ($result->getId() !== $this->getMinionInformation()->getType()->getTargetId() && $result->getId() !== $this->getMinionInformation()->getType()->toBlock()->getDropsForCompatibleTool(Item::get(BlockIds::AIR))[0]->getId()) {
+                return $result;
+            }
+
+        }
+        return null;
+    }
+
+    protected function canUseAutoSmelter(): bool
+    {
+        return $this->getSmeltedTarget() !== null;
+    }
+
+    protected function getCompactedTarget(): ?Item
+    {
+        $manager = BetterMinion::getInstance()->getServer()->getCraftingManager();
+        return null;
+    }
+
+    protected function canUseCompacter(): bool
+    {
+        return $this->getCompactedTarget() !== null;
+    }
+
+
+    protected function canUseExpander(): bool
+    {
+        return true;
+    }
+
     protected function isWorkFast(): bool
     {
         return false;
+    }
+
+    protected function getTargetDrops(): array
+    {
+        $drops = $this->getMinionInformation()->getType()->toBlock()->getDrops($this->inventory->getItemInHand());
+        if ($this->getMinionInformation()->getUpgrade()->isAutoSmelt()) $drops = array($this->getSmeltedTarget());
+        return $drops;
     }
 
     protected function updateTarget()
@@ -295,12 +373,26 @@ abstract class MinionEntity extends Human
         $this->flagForDespawn();
     }
 
+    private function sellItems()
+    {
+        $sellAll = BetterMinion::getInstance()->getServer()->getPluginManager()->getPlugin("SellAll");
+        $sellPrices = $sellAll->getConfig()->getAll();
+        foreach ($this->getMinionInventory()->getContents() as $item) {
+            if (isset($sellPrices[$item->getId()])) {
+                $this->money += $sellPrices[$item->getId()] * $item->getCount();
+                $this->getMinionInventory()->remove($item);
+            } elseif (isset($sellPrices[$item->getId() . ":" . $item->getDamage()])) {
+                $this->money += $sellPrices[$item->getId() . ":" . $item->getDamage()] * $item->getCount();
+                $this->getMinionInventory()->remove($item);
+            }
+        }
+    }
+
     protected function isInventoryFull(): bool
     {
         $full = true;
-        $block = $this->getMinionInformation()->getType()->toBlock();
-        if ($block instanceof Crops) $block->setDamage(7);
-        foreach ($block->getDropsForCompatibleTool(Item::get(BlockIds::AIR)) as $item) {
+        $drops = $this->getTargetDrops();
+        foreach ($drops as $item) {
             if ($this->getMinionInventory()->canAddItem($item->setCount(1))) {
                 $full = false;
             }
@@ -331,7 +423,7 @@ abstract class MinionEntity extends Human
         $this->level->addParticle(new DestroyBlockParticle($this->target->add(0.5, 0.5, 0.5), $this->target));
         $this->level->setBlock($this->target, $this->target->getId() === BlockIds::AIR ? $this->getMinionInformation()->getType()->toBlock() : Block::get(BlockIds::AIR));
         if ($this->target->getId() !== BlockIds::AIR) {
-            $drops = $this->target->getDropsForCompatibleTool(Item::get(BlockIds::AIR));
+            $drops = $this->getTargetDrops();
             foreach ($drops as $drop) {
                 for ($i = 1; $i <= $drop->getCount(); $i++) {
                     $thing = Item::get($drop->getId(), $drop->getDamage());

@@ -1,20 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Mcbeany\BetterMinion\entities\objects;
 
-use pocketmine\block\Farmland as PMFarmLand;
+use pocketmine\block\Farmland as PMFarmland;
 
-class Farmland extends PMFarmLand
+class Farmland extends PMFarmland
 {
 
+    /** @var bool */
     private $fromMinion;
 
     public function __construct(int $meta = 0, bool $fromMinion = false)
     {
-        parent::__construct($meta);
         $this->fromMinion = $fromMinion;
+        parent::__construct($meta);
     }
 
     protected function canHydrate(): bool

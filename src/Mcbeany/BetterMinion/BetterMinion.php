@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion;
 
+use AndreasHGK\SellAll\SellAll;
 use Mcbeany\BetterMinion\commands\MinionCommand;
-use Mcbeany\BetterMinion\entities\MinionEntity;
 use Mcbeany\BetterMinion\entities\objects\Farmland;
 use Mcbeany\BetterMinion\entities\types\FarmingMinion;
 use Mcbeany\BetterMinion\entities\types\LumberjackMinion;
@@ -39,9 +39,11 @@ class BetterMinion extends PluginBase
         BlockFactory::registerBlock(new Farmland(), true);
         $this->getServer()->getCommandMap()->register("minion", new MinionCommand($this));
         $this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
-        if (!class_exists(InvMenu::class)) {
-            $this->getLogger()->alert("InvMenu dependency not found! Please download this plugin from Poggit CI. Disabling plugin...");
-            $this->getServer()->getPluginManager()->disablePlugin($this);
+        foreach ([InvMenu::class, SellAll::class] as $class) {
+            if (!class_exists($class)) {
+                $this->getLogger()->alert("$class not found! Please download this plugin from Poggit CI. Disabling plugin...");
+                $this->getServer()->getPluginManager()->disablePlugin($this);
+            }
         }
         if (!class_exists(InvCrashFix::class)) {
             $this->getLogger()->notice("InvCrashFix is required to fix client crashes on 1.16+, download it here: https://poggit.pmmp.io/ci/Muqsit/InvCrashFix");

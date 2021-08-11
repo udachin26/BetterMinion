@@ -50,6 +50,16 @@ class LumberjackMinion extends MinionEntity
         if (count($blocks) > 0) $this->target = $blocks[array_rand($blocks)];
     }
 
+    protected function canUseAutoSmelter(): bool
+    {
+        return false;
+    }
+
+    protected function canUseExpander(): bool
+    {
+        return false;
+    }
+
     protected function startWorking()
     {
         if ($this->target->getId() !== BlockIds::AIR) {

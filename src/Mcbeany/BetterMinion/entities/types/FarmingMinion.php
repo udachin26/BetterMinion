@@ -3,10 +3,10 @@
 namespace Mcbeany\BetterMinion\entities\types;
 
 use Mcbeany\BetterMinion\entities\MinionEntity;
+use Mcbeany\BetterMinion\entities\objects\Farmland;
 use pocketmine\block\Block;
 use pocketmine\block\BlockIds;
 use pocketmine\block\Crops;
-use pocketmine\block\Farmland;
 use pocketmine\item\Item;
 
 class FarmingMinion extends MinionEntity
