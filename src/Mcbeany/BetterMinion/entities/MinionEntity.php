@@ -311,6 +311,7 @@ abstract class MinionEntity extends Human
     protected function getCompactedTarget(): ?Item
     {
         $manager = BetterMinion::getInstance()->getServer()->getCraftingManager();
+
         return null;
     }
 
@@ -332,7 +333,7 @@ abstract class MinionEntity extends Human
 
     protected function getTargetDrops(): array
     {
-        $drops = $this->getMinionInformation()->getType()->toBlock()->getDrops($this->inventory->getItemInHand());
+        $drops = $this->getMinionInformation()->getType()->toBlock()->getDropsForCompatibleTool(Item::get(BlockIds::AIR));
         if ($this->getMinionInformation()->getUpgrade()->isAutoSmelt()) $drops = array($this->getSmeltedTarget());
         return $drops;
     }
