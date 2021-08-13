@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion;
@@ -17,12 +16,12 @@ use pocketmine\nbt\tag\StringTag;
 
 class EventListener implements Listener
 {
-
+    
     /**
      * @ignoreCancelled
      * @param PlayerInteractEvent $event
      */
-    public function onClick(PlayerInteractEvent $event)
+    public function onInteract(PlayerInteractEvent $event)
     {
         $item = $event->getItem();
         $player = $event->getPlayer();
@@ -31,6 +30,7 @@ class EventListener implements Listener
             if ($item->getId() === $mItem->getId() && $item->getDamage() === $mItem->getDamage()) {
                 if (($minionInformation = $item->getNamedTag()->getCompoundTag("MinionInformation")) !== null) {
                     if (($minionType = $minionInformation->getCompoundTag("MinionType")) !== null) {
+                        if (in_array($player->getLevelNonNull()->getFolderName(), BetterMinion::getInstance()->getConfig()->get("worlds", []))) return;
                         $minionUpgrade = $minionInformation->hasTag("MinionUpgrade") ? MinionUpgrade::nbtDeserialize($minionInformation->getCompoundTag("MinionUpgrade")) : new MinionUpgrade();
                         $skin = $player->getSkin();
                         $nbt = Entity::createBaseNBT($event->getBlock()->getSide($event->getFace())->add(0.5, 0, 0.5));
@@ -47,12 +47,10 @@ class EventListener implements Listener
                         $entity = new $entityType($player->getLevelNonNull(), $nbt);
                         $entity->spawnToAll();
                         $item->pop();
-                        $player->getInventory()->setItemInHand($item);
                         $event->setCancelled();
                     }
                 }
             }
         }
     }
-
 }

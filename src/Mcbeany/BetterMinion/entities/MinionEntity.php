@@ -1,17 +1,16 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\entities;
 
-use Mcbeany\BetterMinion\BetterMinion;
-use Mcbeany\BetterMinion\entities\inventory\MinionInventory;
-use Mcbeany\BetterMinion\minions\MinionInformation;
-use Mcbeany\BetterMinion\utils\Utils;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\MenuIds;
 use muqsit\invmenu\transaction\DeterministicInvMenuTransaction;
 use onebone\economyapi\EconomyAPI;
+use Mcbeany\BetterMinion\BetterMinion;
+use Mcbeany\BetterMinion\entities\inventory\MinionInventory;
+use Mcbeany\BetterMinion\minions\MinionInformation;
+use Mcbeany\BetterMinion\utils\Utils;
 use pocketmine\block\Block;
 use pocketmine\block\BlockIds;
 use pocketmine\entity\EffectInstance;
@@ -33,11 +32,11 @@ use pocketmine\utils\TextFormat;
 
 abstract class MinionEntity extends Human
 {
-    const ACTION_CANT_WORK = -1;
-    const ACTION_IDLE = 0;
-    const ACTION_TURNING = 1;
-    const ACTION_WORKING = 2;
-
+    public const ACTION_CANT_WORK = -1;
+    public const ACTION_IDLE = 0;
+    public const ACTION_TURNING = 1;
+    public const ACTION_WORKING = 2;
+    
     /** @var MinionInformation */
     protected $minionInformation;
     /** @var MinionInventory */
@@ -52,7 +51,7 @@ abstract class MinionEntity extends Human
     protected $target = null;
     /** @var float */
     protected $gravity = 0;
-
+    
     protected function initEntity(): void
     {
         parent::initEntity();
@@ -80,7 +79,7 @@ abstract class MinionEntity extends Human
             $this->setNameTag($this->getMinionInformation()->getOwner() . "'s Minion");
         }
     }
-
+    
     public function saveNBT(): void
     {
         parent::saveNBT();
@@ -90,7 +89,7 @@ abstract class MinionEntity extends Human
         $this->namedtag->setTag($this->minionInformation->nbtSerialize());
         $this->namedtag->setFloat("Money", $this->money);
     }
-
+    
     public function attack(EntityDamageEvent $source): void
     {
         if ($source instanceof EntityDamageByEntityEvent) {
@@ -120,11 +119,11 @@ abstract class MinionEntity extends Human
                     $menu->getInventory()->setItem(53, Item::get(BlockIds::BEDROCK)->setCustomName(TextFormat::RED . "Remove your minion"));
                     $taskId = BetterMinion::getInstance()->getScheduler()->scheduleRepeatingTask(new ClosureTask(function (int $currentTick) use ($menu): void {
                         for ($i = 0; $i < 15; $i++) {
-                            $menu->getInventory()->setItem((int)(21 + ($i % 5) + (9 * floor($i / 5))), $this->getMinionInventory()->slotExists($i) ? $this->getMinionInventory()->getItem($i) : Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::YELLOW . "Unlock at level " . TextFormat::GOLD . Utils::getRomanNumeral(($i + 1))));
+                            $menu->getInventory()->setItem((int)(12 + ($i % 5) + (9 * floor($i / 5))), $this->getMinionInventory()->slotExists($i) ? $this->getMinionInventory()->getItem($i) : Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::YELLOW . "Unlock at level " . TextFormat::GOLD . Utils::getRomanNumeral(($i + 1))));
                         }
                         $menu->getInventory()->setItem(28, Item::get(ItemIds::HOPPER)->setCustomName("Auto Seller (" . ($this->getMinionInformation()->getUpgrade()->isAutoSell() ? "Enabled" : "Disabled") . ")")->setLore(["Sells resources when the minion's storage is full.", "Held money: " . $this->money . "."]));
                         $types = ["Mining", "Farming", "Lumberjack", "Slaying", "Fishing"];
-                        $menu->getInventory()->setItem(4, Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"))->setCustomName(TextFormat::BLUE . $this->getMinionInformation()->getType()->getTargetName() . " Minion " . Utils::getRomanNumeral($this->getMinionInformation()->getLevel()))->setLore([
+                        $menu->getInventory()->setItem(45, Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"))->setCustomName(TextFormat::BLUE . $this->getMinionInformation()->getType()->getTargetName() . " Minion " . Utils::getRomanNumeral($this->getMinionInformation()->getLevel()))->setLore([
                             "Type: " . $types[$this->getMinionInformation()->getType()->getActionType()],
                             "Target: " . $this->getMinionInformation()->getType()->getTargetName(),
                             "Level: " . $this->getMinionInformation()->getLevel(),
@@ -186,7 +185,7 @@ abstract class MinionEntity extends Human
                             default:
                                 for ($i = 0; $i <= 15; $i++) {
                                     if ($i > $this->getMinionInformation()->getLevel() - 1) continue;
-                                    $slot = (int)(21 + ($i % 5) + (9 * floor($i / 5)));
+                                    $slot = (int)(12 + ($i % 5) + (9 * floor($i / 5)));
                                     if ($action->getSlot() === $slot) {
                                         if ($player->getInventory()->canAddItem($itemClicked)) {
                                             $player->getInventory()->addItem($itemClicked);
@@ -216,7 +215,7 @@ abstract class MinionEntity extends Human
         }
         $source->setCancelled();
     }
-
+    
     public function entityBaseTick(int $tickDiff = 1): bool
     {
         $hasUpdate = parent::entityBaseTick($tickDiff);
@@ -288,7 +287,7 @@ abstract class MinionEntity extends Human
         }
         return $hasUpdate;
     }
-
+    
     protected function getSmeltedTarget(): ?Item
     {
         $manager = BetterMinion::getInstance()->getServer()->getCraftingManager();
@@ -302,65 +301,65 @@ abstract class MinionEntity extends Human
         }
         return null;
     }
-
+    
     protected function canUseAutoSmelter(): bool
     {
         return $this->getSmeltedTarget() !== null;
     }
-
+    
     protected function getCompactedTarget(): ?Item
     {
         $manager = BetterMinion::getInstance()->getServer()->getCraftingManager();
 
         return null;
     }
-
+    
     protected function canUseCompacter(): bool
     {
         return $this->getCompactedTarget() !== null;
     }
-
-
+    
     protected function canUseExpander(): bool
     {
         return true;
     }
-
+    
     protected function isWorkFast(): bool
     {
         return false;
     }
-
+    
     protected function getTargetDrops(): array
     {
         $drops = $this->getMinionInformation()->getType()->toBlock()->getDropsForCompatibleTool(Item::get(BlockIds::AIR));
         if ($this->getMinionInformation()->getUpgrade()->isAutoSmelt()) $drops = array($this->getSmeltedTarget());
         return $drops;
     }
-
+    
     protected function updateTarget()
     {
+        
     }
-
+    
     abstract protected function getTarget();
-
+    
     protected function checkTarget(): bool
     {
         return $this->target->getId() === BlockIds::AIR || ($this->target->getId() === $this->getMinionInformation()->getType()->getTargetId() && $this->target->getDamage() === $this->getMinionInformation()->getType()->getTargetMeta());
     }
-
+    
     public function addEffect(EffectInstance $effect): bool
     {
         return false;
     }
-
+    
     protected function stopWorking()
     {
         $this->currentAction = self::ACTION_IDLE;
         $this->currentActionTicks = 0;
         $this->target = null;
     }
-
+    
     private function destroy()
     {
         if ($this->target instanceof Block) {
@@ -373,7 +372,7 @@ abstract class MinionEntity extends Human
         $this->level->dropItem($this, $minionItem);
         $this->flagForDespawn();
     }
-
+    
     private function sellItems()
     {
         $sellAll = BetterMinion::getInstance()->getServer()->getPluginManager()->getPlugin("SellAll");
@@ -388,7 +387,7 @@ abstract class MinionEntity extends Human
             }
         }
     }
-
+    
     protected function isInventoryFull(): bool
     {
         $full = true;
@@ -400,25 +399,25 @@ abstract class MinionEntity extends Human
         }
         return $full;
     }
-
+    
     private function getLevelUpCost(): int
     {
         $costs = (array) BetterMinion::getInstance()->getConfig()->get("levelup-costs");
         return (int) $costs[$this->getMinionInformation()->getLevel()];
     }
-
+    
     abstract protected function getTool(string $tool, bool $isNetheriteTool): Item;
-
+    
     protected function getMinionRange(): int
     {
         return $this->getMinionInformation()->getUpgrade()->isExpand() ? 3 : 2;
     }
-
+    
     public function getMinionInformation(): MinionInformation
     {
         return $this->minionInformation;
     }
-
+    
     protected function startWorking()
     {
         $this->level->addParticle(new DestroyBlockParticle($this->target->add(0.5, 0.5, 0.5), $this->target));
@@ -436,10 +435,9 @@ abstract class MinionEntity extends Human
             }
         }
     }
-
+    
     public function getMinionInventory(): MinionInventory
     {
         return $this->minionInventory;
     }
-
 }

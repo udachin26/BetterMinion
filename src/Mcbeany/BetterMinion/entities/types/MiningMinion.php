@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\entities\types;
@@ -12,7 +11,7 @@ use pocketmine\item\ItemIds;
 
 class MiningMinion extends MinionEntity
 {
-
+    
     protected function getTarget()
     {
         $blocks = [];
@@ -27,7 +26,7 @@ class MiningMinion extends MinionEntity
         }
         if (count($blocks) > 0) $this->target = $blocks[array_rand($blocks)];
     }
-
+    
     protected function getTool(string $tool, bool $isNetheriteTool): Item
     {
         $tools = [
@@ -39,5 +38,4 @@ class MiningMinion extends MinionEntity
         ];
         return $tools[$this->getMinionInformation()->getType()->toBlock()->getToolType()];
     }
-
 }

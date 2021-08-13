@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\entities\types;
@@ -14,7 +13,7 @@ use pocketmine\utils\TextFormat;
 
 class LumberjackMinion extends MinionEntity
 {
-
+    
     protected function updateTarget()
     {
         for ($x = -$this->getMinionRange(); $x <= $this->getMinionRange(); $x++) {
@@ -31,7 +30,7 @@ class LumberjackMinion extends MinionEntity
             }
         }
     }
-
+    
     protected function getTarget()
     {
         $blocks = [];
@@ -49,17 +48,17 @@ class LumberjackMinion extends MinionEntity
         }
         if (count($blocks) > 0) $this->target = $blocks[array_rand($blocks)];
     }
-
+    
     protected function canUseAutoSmelter(): bool
     {
         return false;
     }
-
+    
     protected function canUseExpander(): bool
     {
         return false;
     }
-
+    
     protected function startWorking()
     {
         if ($this->target->getId() !== BlockIds::AIR) {
@@ -84,10 +83,9 @@ class LumberjackMinion extends MinionEntity
             $this->level->setBlock($this->target, $this->getMinionInformation()->getType()->toTree()->sapling);
         }
     }
-
+    
     protected function getTool(string $tool, bool $isNetheriteTool): Item
     {
         return $isNetheriteTool ? Item::get(746) : Item::fromString($tool . " Axe");
     }
-
 }

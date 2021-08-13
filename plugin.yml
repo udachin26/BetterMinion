@@ -1,6 +1,17 @@
 ---
 name: BetterMinion
-version: 1.0
 main: Mcbeany\BetterMinion\BetterMinion
-api: 3.20.0
+version: 1.0.0
+api: 3.21.0
+authors:
+- Mcbeany
+- AIPTU
+depend:
+- EconomyAPI
+- SellAll
+
+permissions:
+  betterminion.command:
+    default: op
+    description: Allows users to use better minion command
 ...

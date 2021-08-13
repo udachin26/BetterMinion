@@ -20,7 +20,7 @@ class MinionCommand extends PluginCommand
     {
         parent::__construct("minion", $owner);
         $this->description = "Give you a minion spawner";
-        $this->setPermission("minion.commands");
+        $this->setPermission("betterminion.command");
         $this->usageMessage = "/minion give|remove";
     }
 

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\minions;
@@ -11,10 +10,10 @@ use pocketmine\nbt\tag\IntTag;
 
 class MinionType implements MinionNBT
 {
-
-    const MINING_MINION = 0;
-    const FARMING_MINION = 1;
-    const LUMBERJACK_MINION = 2;
+    
+    public const MINING_MINION = 0;
+    public const FARMING_MINION = 1;
+    public const LUMBERJACK_MINION = 2;
 
     /** @var int */
     private $actionType;
@@ -22,44 +21,44 @@ class MinionType implements MinionNBT
     private $targetId;
     /** @var int */
     private $targetMeta;
-
+    
     public function __construct(int $actionType, int $targetId, int $targetMeta = 0)
     {
         $this->actionType = $actionType;
         $this->targetId = $targetId;
         $this->targetMeta = $targetMeta;
     }
-
+    
     public function getActionType(): int
     {
         return $this->actionType;
     }
-
+    
     public function getTargetId(): int
     {
         return $this->targetId;
     }
-
+    
     public function getTargetMeta(): int
     {
         return $this->targetMeta;
     }
-
+    
     public function toBlock(): Block
     {
         return Block::get($this->getTargetId(), $this->getTargetMeta());
     }
-
+    
     public function toTree(): MinionTree
     {
         return new MinionTree($this->toBlock());
     }
-
+    
     public function getTargetName(): string
     {
         return $this->toBlock()->getName();
     }
-
+    
     public function nbtSerialize(): CompoundTag
     {
         return new CompoundTag("MinionType", [
@@ -68,10 +67,9 @@ class MinionType implements MinionNBT
             new IntTag("TargetMeta", $this->getTargetMeta())
         ]);
     }
-
+    
     public static function nbtDeserialize(CompoundTag $tag): self
     {
         return new self($tag->getInt("ActionType"), $tag->getInt("TargetId"), $tag->getInt("TargetMeta"));
     }
-
 }

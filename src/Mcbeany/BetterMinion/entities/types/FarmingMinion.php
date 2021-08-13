@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\entities\types;
 
@@ -11,7 +12,7 @@ use pocketmine\item\Item;
 
 class FarmingMinion extends MinionEntity
 {
-
+    
     protected function updateTarget()
     {
         for ($x = -$this->getMinionRange(); $x <= $this->getMinionRange(); $x++) {
@@ -28,22 +29,22 @@ class FarmingMinion extends MinionEntity
             }
         }
     }
-
+    
     protected function isWorkFast(): bool
     {
         return true;
     }
-
+    
     private function isFarmland(Block $block): bool
     {
         return $block->getId() === ($this->getMinionInformation()->getType()->getTargetId() === BlockIds::NETHER_WART_PLANT ? BlockIds::SOUL_SAND : BlockIds::FARMLAND);
     }
-
+    
     protected function getTool(string $tool, bool $isNetheriteTool): Item
     {
         return $isNetheriteTool ? Item::get(747) : Item::fromString($tool . " Hoe");
     }
-
+    
     protected function getTarget()
     {
         $blocks = [];
@@ -59,12 +60,12 @@ class FarmingMinion extends MinionEntity
         }
         if (count($blocks) > 0) $this->target = $blocks[array_rand($blocks)];
     }
-
+    
     protected function checkTarget(): bool
     {
         return ($this->target->getId() !== BlockIds::AIR && $this->isFarmland($this->level->getBlock($this->target->subtract(0, 1)))) || parent::checkTarget();
     }
-
+    
     protected function startWorking()
     {
         $farmland = $this->level->getBlock($this->target->subtract(0, 1));
@@ -78,5 +79,4 @@ class FarmingMinion extends MinionEntity
         }
         parent::startWorking();
     }
-
 }
