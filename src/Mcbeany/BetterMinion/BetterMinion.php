@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion;
 
+use CortexPE\Commando\PacketHooker as Commando;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\InvMenuHandler;
 use muqsit\invcrashfix\Loader as InvCrashFix;
@@ -32,7 +33,7 @@ class BetterMinion extends PluginBase
     
     public function onEnable(): void
     {
-        foreach ([InvMenu::class, ConfigUpdater::class] as $class) {
+        foreach ([InvMenu::class, ConfigUpdater::class, Commando::class] as $class) {
             if (!class_exists($class)) {
                 $this->getLogger()->alert("$class not found! Please download this plugin from Poggit CI. Disabling plugin...");
                 $this->getServer()->getPluginManager()->disablePlugin($this);
@@ -47,7 +48,8 @@ class BetterMinion extends PluginBase
         BlockFactory::registerBlock(new Farmland(), true);
         if (!InvMenuHandler::isRegistered()) InvMenuHandler::register($this);
         ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", 1);
-        $this->getServer()->getCommandMap()->register("Minion", new MinionCommand($this));
+        if (!Commando::isRegistered()) Commando::register($this);
+        $this->getServer()->getCommandMap()->register("Minion", new MinionCommand($this, "minion", "Minion commands"));
         $this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
     }
 }

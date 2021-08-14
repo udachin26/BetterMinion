@@ -4,69 +4,31 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\commands;
 
-use Mcbeany\BetterMinion\BetterMinion;
-use Mcbeany\BetterMinion\minions\MinionType;
+use CortexPE\Commando\BaseCommand;
+use Mcbeany\BetterMinion\commands\subcommands\GiveCommand;
+use Mcbeany\BetterMinion\commands\subcommands\RemoveCommand;
 use pocketmine\command\CommandSender;
-use pocketmine\command\PluginCommand;
-use pocketmine\item\Item;
-use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
-use pocketmine\plugin\Plugin;
+use pocketmine\utils\TextFormat;
 
-class MinionCommand extends PluginCommand
+class MinionCommand extends BaseCommand
 {
 
-    public function __construct(Plugin $owner)
+    protected function prepare(): void
     {
-        parent::__construct("minion", $owner);
-        $this->description = "Give you a minion spawner";
-        $this->setPermission("betterminion.command");
-        $this->usageMessage = "/minion give|remove";
+        $this->registerSubCommand(new GiveCommand("give", "Give you a minion spawner"));
+        $this->registerSubCommand(new RemoveCommand("remove", "Quickly remove minions"));
+        $this->setPermission("betterminion.commands");
+        $this->setUsage("/minion give|remove");
     }
 
-    public function execute(CommandSender $sender, string $commandLabel, array $args): bool
+    public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
-        if (!$sender instanceof Player) return false;
-        if (isset($args[0])) {
-            switch ($args[0]) {
-                case "give":
-                    array_shift($args);
-                    if (count($args) === 3) {
-                        $player = $sender->getServer()->getPlayer($args[0]);
-                        if ($player !== null) {
-                            $type = intval($args[1]);
-                            if ($type >= 0 && $type <= 4) {
-                                try {
-                                    $target = Item::fromString($args[2]);
-                                    if ($target->getId() < 255) {
-                                        $mType = new MinionType($type, $target->getId(), $target->getDamage());
-                                        $item = Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"));
-                                        $item->setCustomName($mType->getTargetName() . " Minion I");
-                                        $item->setNamedTagEntry(new CompoundTag("MinionInformation", [
-                                            $mType->nbtSerialize()
-                                        ]));
-                                        $player->getInventory()->addItem($item);
-                                    } else {
-                                        $sender->sendMessage("Item not found!");
-                                    }
-                                } catch (\InvalidArgumentException $exception) {
-                                    return false;
-                                }
-                            } else {
-                                $sender->sendMessage("Type not found!");
-                            }
-                        } else {
-                            $sender->sendMessage("Player not found!");
-                        }
-                    }
-                    break;
-                case "remove":
-                    break;
-                default:
-                    return false;
-            }
+        if ($sender instanceof Player && !$sender->hasPermission($this->getPermission())) {
+            $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command!");
+            return;
         }
-        return true;
+        $this->sendUsage();
     }
 
 }

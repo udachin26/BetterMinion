@@ -47,6 +47,7 @@ class EventListener implements Listener
                         $entity = new $entityType($player->getLevelNonNull(), $nbt);
                         $entity->spawnToAll();
                         $item->pop();
+                        $player->getInventory()->setItemInHand($item);
                         $event->setCancelled();
                     }
                 }
