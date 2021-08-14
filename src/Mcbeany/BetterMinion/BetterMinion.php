@@ -29,6 +29,8 @@ class BetterMinion extends PluginBase
     {
     	self::setInstance($this);
         $this->saveDefaultConfig();
+        $this->saveResource("smelts.json");
+        $this->saveResource("compacts.json");
     }
     
     public function onEnable(): void

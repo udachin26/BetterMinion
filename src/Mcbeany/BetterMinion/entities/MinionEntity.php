@@ -225,6 +225,9 @@ abstract class MinionEntity extends Human
             if ($this->ticksLived % 60 === 0) {
                 $this->updateTarget();
             }
+            if (!$this->checkFull()) {
+                return $hasUpdate;
+            }
             if ($this->target === null) {
                 $this->getTarget();
             }
@@ -269,13 +272,8 @@ abstract class MinionEntity extends Human
                     if ($this->currentActionTicks === 60) {
                         $this->startWorking();
                         $this->stopWorking();
-                        if ($this->isInventoryFull()) {
-                            if ($this->getMinionInformation()->getUpgrade()->isAutoSell()) {
-                                $this->sellItems();
-                                return $hasUpdate;
-                            }
-                            $this->currentAction = self::ACTION_CANT_WORK;
-                            $this->setNameTag($this->getMinionInformation()->getOwner() . "'s Minion\n" . TextFormat::RED . "My inventory is now full");
+                        if (!$this->checkFull()) {
+                            return $hasUpdate;
                         }
                     }
                     break;
@@ -289,18 +287,30 @@ abstract class MinionEntity extends Human
         }
         return $hasUpdate;
     }
+
+    private function checkFull(): bool
+    {
+        if ($this->isInventoryFull()) {
+            if ($this->getMinionInformation()->getUpgrade()->isAutoSell()) {
+                $this->sellItems();
+            }
+            $this->currentAction = self::ACTION_CANT_WORK;
+            $this->setNameTag($this->getMinionInformation()->getOwner() . "'s Minion\n" . TextFormat::RED . "My inventory is now full");
+            return false;
+        }
+        return true;
+    }
     
     protected function getSmeltedTarget(): ?Item
     {
-        $manager = BetterMinion::getInstance()->getServer()->getCraftingManager();
-        foreach ($this->getRealDrops() as $item) {
-            $recipe = $manager->matchFurnaceRecipe($item);
-            if ($recipe !== null) {
-                $result = $recipe->getResult();
-                if ($result->getId() !== $this->getMinionInformation()->getType()->getTargetId() && $result->getId() !== $this->getMinionInformation()->getType()->toBlock()->getDropsForCompatibleTool(Item::get(BlockIds::AIR))[0]->getId()) {
-                    return $result;
+        $smeltedItems = json_decode(file_get_contents(BetterMinion::getInstance()->getDataFolder() . "smelts.json"), true);
+        foreach ($smeltedItems as $input => $output) {
+            $realInput = Item::fromString($input);
+            $realOutput = Item::fromString($output);
+            foreach ($this->getRealDrops() as $drop) {
+                if ($realInput->equals($drop, true)) {
+                    return $realOutput;
                 }
-
             }
         }
         return null;
@@ -311,8 +321,24 @@ abstract class MinionEntity extends Human
         return $this->getSmeltedTarget() !== null;
     }
     
-    protected function getCompactedTarget(): ?Item
+    protected function getCompactedTarget(Item $item = null): ?Item
     {
+        $compactedItems = json_decode(file_get_contents(BetterMinion::getInstance()->getDataFolder() . "compacts.json"), true);
+        foreach ($compactedItems as $input => $output) {
+            $realInput = Item::fromString($input);
+            $realOutput = Item::fromString($output);
+            if ($item === null) {
+                foreach ($this->getTargetDrops() as $drop) {
+                    if ($realInput->equals($drop, true)) {
+                        return $realOutput;
+                    }
+                }
+            } else {
+                if ($realInput->equals($item, true)) {
+                    return $realOutput;
+                }
+            }
+        }
         return null;
     }
     
@@ -334,7 +360,9 @@ abstract class MinionEntity extends Human
     protected function getTargetDrops(): array
     {
         $drops = $this->getRealDrops();
-        if ($this->getMinionInformation()->getUpgrade()->isAutoSmelt()) $drops = array($this->getSmeltedTarget());
+        if ($this->getMinionInformation()->getUpgrade()->isAutoSmelt()) {
+            $drops = array($this->getSmeltedTarget());
+        }
         return $drops;
     }
     
@@ -379,14 +407,13 @@ abstract class MinionEntity extends Human
     {
         $sellAll = BetterMinion::getInstance()->getServer()->getPluginManager()->getPlugin("SellAll");
         $sellPrices = $sellAll->getConfig()->getAll();
-        foreach ($this->getMinionInventory()->getContents() as $item) {
-            if (isset($sellPrices[$item->getId()])) {
-                $this->money += $sellPrices[$item->getId()] * $item->getCount();
-                $this->getMinionInventory()->remove($item);
-            } elseif (isset($sellPrices[$item->getId() . ":" . $item->getDamage()])) {
-                $this->money += $sellPrices[$item->getId() . ":" . $item->getDamage()] * $item->getCount();
-                $this->getMinionInventory()->remove($item);
-            }
+        $item = $this->getMinionInventory()->getItem($this->getMinionInventory()->getSize() - 1);
+        if (isset($sellPrices[$item->getId()])) {
+            $this->money += $sellPrices[$item->getId()] * $item->getCount();
+            $this->getMinionInventory()->remove($item);
+        } elseif (isset($sellPrices[$item->getId() . ":" . $item->getDamage()])) {
+            $this->money += $sellPrices[$item->getId() . ":" . $item->getDamage()] * $item->getCount();
+            $this->getMinionInventory()->remove($item);
         }
     }
     
