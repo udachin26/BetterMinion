@@ -109,11 +109,7 @@ abstract class MinionEntity extends Human
                     } else {
                         $menu->getInventory()->setItem(19, Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::RED . "Your minion cannot use this upgrade!"));
                     }
-                    if ($this->canUseExpander()) {
-                        $menu->getInventory()->setItem(37, Item::get(BlockIds::COMMAND_BLOCK)->setCustomName("Expander (" . ($this->getMinionInformation()->getUpgrade()->isExpand() ? "Enabled" : "Disabled") . ")")->setLore(["Increases the minion range by one block."]));
-                    } else {
-                        $menu->getInventory()->setItem(37, Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::RED . "Your minion cannot use this upgrade!"));
-                    }
+                    $menu->getInventory()->setItem(37, Item::get(BlockIds::COMMAND_BLOCK)->setCustomName("Expander (" . ($this->getMinionInformation()->getUpgrade()->isExpand() ? "Enabled" : "Disabled") . ")")->setLore(["Increases the minion range by one block."]));
                     $menu->getInventory()->setItem(48, Item::get(BlockIds::CHEST)->setCustomName(TextFormat::GREEN . "Retrieve all results"));
                     $menu->getInventory()->setItem(50, Item::get(ItemIds::BOTTLE_O_ENCHANTING)->setCustomName(TextFormat::AQUA . "Level up your minion")->setLore([$this->getMinionInformation()->getLevel() < 15 ? TextFormat::YELLOW . "Cost: " . TextFormat::GREEN . $this->getLevelUpCost() : TextFormat::RED . "Reached max level!"]));
                     $menu->getInventory()->setItem(53, Item::get(BlockIds::BEDROCK)->setCustomName(TextFormat::RED . "Remove your minion"));
@@ -136,13 +132,17 @@ abstract class MinionEntity extends Human
                         $action = $transaction->getAction();
                         switch ($action->getSlot()) {
                             case 10:
-                                $player->removeWindow($action->getInventory());
-                                $this->getMinionInformation()->getUpgrade()->setAutoSmelt();
+                                if ($this->canUseAutoSmelter()) {
+                                    $player->removeWindow($action->getInventory());
+                                    $this->getMinionInformation()->getUpgrade()->setAutoSmelt();
+                                    $this->stopWorking();
+                                }
                                 break;
                             case 28:
                                 $player->removeWindow($action->getInventory());
                                 if (!$this->getMinionInformation()->getUpgrade()->isAutoSell()) {
                                     $this->getMinionInformation()->getUpgrade()->setAutoSell();
+                                    $this->stopWorking();
                                 } else {
                                     EconomyAPI::getInstance()->addMoney($player, $this->money);
                                     $this->money = 0;
@@ -151,6 +151,7 @@ abstract class MinionEntity extends Human
                             case 37:
                                 $player->removeWindow($action->getInventory());
                                 $this->getMinionInformation()->getUpgrade()->setExpand();
+                                $this->stopWorking();
                                 break;
                             case 48:
                                 $player->removeWindow($action->getInventory());
@@ -171,6 +172,7 @@ abstract class MinionEntity extends Human
                                         $this->getMinionInformation()->incrementLevel();
                                         $player->sendMessage(TextFormat::GREEN . "Your minion has been upgraded to level " . TextFormat::GOLD . Utils::getRomanNumeral($this->getMinionInformation()->getLevel()));
                                         $this->getMinionInventory()->setSize($this->getMinionInformation()->getLevel());
+                                        $this->stopWorking();
                                     } else {
                                         $player->sendMessage(TextFormat::RED . "You don't have enough economy to level up!");
                                     }
@@ -291,7 +293,7 @@ abstract class MinionEntity extends Human
     protected function getSmeltedTarget(): ?Item
     {
         $manager = BetterMinion::getInstance()->getServer()->getCraftingManager();
-        foreach ($this->getRealDrop() as $item) {
+        foreach ($this->getRealDrops() as $item) {
             $recipe = $manager->matchFurnaceRecipe($item);
             if ($recipe !== null) {
                 $result = $recipe->getResult();
@@ -311,8 +313,6 @@ abstract class MinionEntity extends Human
     
     protected function getCompactedTarget(): ?Item
     {
-        $manager = BetterMinion::getInstance()->getServer()->getCraftingManager();
-
         return null;
     }
     
@@ -321,24 +321,19 @@ abstract class MinionEntity extends Human
         return $this->getCompactedTarget() !== null;
     }
     
-    protected function canUseExpander(): bool
-    {
-        return true;
-    }
-    
     protected function isWorkFast(): bool
     {
         return false;
     }
 
-    private function getRealDrop(): array
+    private function getRealDrops(): array
     {
         return $this->getMinionInformation()->getType()->toBlock()->getDropsForCompatibleTool(Item::get(BlockIds::AIR));
     }
     
     protected function getTargetDrops(): array
     {
-        $drops = $this->getRealDrop();
+        $drops = $this->getRealDrops();
         if ($this->getMinionInformation()->getUpgrade()->isAutoSmelt()) $drops = array($this->getSmeltedTarget());
         return $drops;
     }

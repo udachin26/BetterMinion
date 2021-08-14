@@ -19,7 +19,7 @@ class LumberjackMinion extends MinionEntity
         for ($x = -$this->getMinionRange(); $x <= $this->getMinionRange(); $x++) {
             for ($z = -$this->getMinionRange(); $z <= $this->getMinionRange(); $z++) {
                 if ($x === 0 && $z === 0) continue;
-                if ($x % 2 === 0 && $z % 2 === 0) {
+                if (($x % $this->getMinionRange() === 0 && $z % $this->getMinionRange() === 0) || ($this->getMinionInformation()->getUpgrade()->isExpand() && (abs($x) === 1 && abs($z) === 1))) {
                     $block = $this->level->getBlock($this->add($x, 0, $z));
                     if ($block->getId() === BlockIds::SAPLING && $block->getDamage() === $this->getMinionInformation()->getType()->toTree()->sapling->getDamage()) {
                         if (mt_rand(0, 1) === 0) {
@@ -39,7 +39,7 @@ class LumberjackMinion extends MinionEntity
                 if ($x === 0 && $z === 0) continue;
                 $dirt = $this->level->getBlock($this->add($x, -1, $z));
                 $block = $this->level->getBlock($this->add($x, 0, $z));
-                if ($x % 2 === 0 && $z % 2 === 0) {
+                if (($x % $this->getMinionRange() === 0 && $z % $this->getMinionRange() === 0) || ($this->getMinionInformation()->getUpgrade()->isExpand() && (abs($x) === 1 && abs($z) === 1))) {
                     if (in_array($dirt->getId(), [BlockIds::GRASS, BlockIds::DIRT, BlockIds::FARMLAND]) && ($block->getId() === BlockIds::AIR || ($block->getId() === $this->getMinionInformation()->getType()->getTargetId() && $block->getDamage() === $this->getMinionInformation()->getType()->getTargetMeta()))) {
                         $blocks[] = $block;
                     }
@@ -50,11 +50,6 @@ class LumberjackMinion extends MinionEntity
     }
     
     protected function canUseAutoSmelter(): bool
-    {
-        return false;
-    }
-    
-    protected function canUseExpander(): bool
     {
         return false;
     }
