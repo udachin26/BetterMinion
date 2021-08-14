@@ -7,7 +7,6 @@ namespace Mcbeany\BetterMinion\commands\subcommands;
 use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseSubCommand;
 use Mcbeany\BetterMinion\BetterMinion;
-use Mcbeany\BetterMinion\commands\arguments\PlayerArgument;
 use Mcbeany\BetterMinion\commands\arguments\TypeArgument;
 use Mcbeany\BetterMinion\minions\MinionType;
 use pocketmine\command\CommandSender;
@@ -29,14 +28,16 @@ class GiveCommand extends BaseSubCommand
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
         /** @var Player $player */
-        $player = empty($args["player"]) ? null : Server::getInstance()->getPlayer($args["player"]);
+        $player = !isset($args["player"]) ? null : Server::getInstance()->getPlayer($args["player"]);
         if ($player === null) {
+            $sender->sendMessage("That player can't be found");
+            return;
+        }
+        if (!isset($args["type"]) or !is_numeric($args["type"])) {
+            $this->sendUsage();
             return;
         }
         $type = $args["type"];
-        if ($type === -1) {
-            return;
-        }
         try {
             $target = Item::fromString($args["target"]);
             if ($target->getId() > 255) {
@@ -49,9 +50,11 @@ class GiveCommand extends BaseSubCommand
                 $minionType->nbtSerialize()
             ]));
             if (!$player->getInventory()->canAddItem($item)) {
+                $player->sendMessage("Your inventory is full");
                 return;
             }
             $player->getInventory()->addItem($item);
+            $player->sendMessage("Successfully got you a minion");
         } catch (\InvalidArgumentException $exception) {
             return;
         }

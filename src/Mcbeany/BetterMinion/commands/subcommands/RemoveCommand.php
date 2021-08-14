@@ -15,22 +15,17 @@ class RemoveCommand extends BaseSubCommand
 
     protected function prepare(): void
     {
-        $this->registerArgument(0, new RawStringArgument("player", false));
+        $this->registerArgument(0, new RawStringArgument("player", true));
     }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
-        $player = null;
-        if ($sender instanceof Player) {
-            $player = $sender;
-        }
-        if (isset($args["player"])) {
-            $player = Server::getInstance()->getPlayer($args["player"]);
-        }
+        /** @var Player $player */
+        $player = !isset($args["player"]) ? null : Server::getInstance()->getPlayer($args["player"]);
         if ($player === null) {
+            $sender->sendMessage("That player can't be found");
             return;
         }
-        // TODO
+        $sender->sendMessage("TODO");
     }
-
 }
