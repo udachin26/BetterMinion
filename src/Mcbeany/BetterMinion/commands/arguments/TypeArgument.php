@@ -26,17 +26,12 @@ class TypeArgument extends StringEnumArgument
 
     public function getValue(string $string)
     {
-        return self::VALUES[$string] ?? -1;
+        return parent::getValue($string) ?? -1;
     }
 
     public function getTypeName(): string
     {
         return "type";
-    }
-
-    public function getEnumValues(): array
-    {
-        return array_keys(self::VALUES);
     }
 
 }

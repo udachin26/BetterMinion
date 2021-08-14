@@ -21,15 +21,15 @@ class GiveCommand extends BaseSubCommand
 
     protected function prepare(): void
     {
-        $this->registerArgument(0, new RawStringArgument("player", false));
-        $this->registerArgument(1, new TypeArgument("type", false));
-        $this->registerArgument(2, new RawStringArgument("target", false));
+        $this->registerArgument(0, new RawStringArgument("player", true));
+        $this->registerArgument(1, new TypeArgument("type", true));
+        $this->registerArgument(2, new RawStringArgument("target", true));
     }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
         /** @var Player $player */
-        $player = Server::getInstance()->getPlayer($args["player"]);
+        $player = empty($args["player"]) ? null : Server::getInstance()->getPlayer($args["player"]);
         if ($player === null) {
             return;
         }
