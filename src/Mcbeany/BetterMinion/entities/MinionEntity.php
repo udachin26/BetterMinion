@@ -291,13 +291,15 @@ abstract class MinionEntity extends Human
     protected function getSmeltedTarget(): ?Item
     {
         $manager = BetterMinion::getInstance()->getServer()->getCraftingManager();
-        $recipe = $manager->matchFurnaceRecipe(Item::get($this->getMinionInformation()->getType()->getTargetId(), $this->getMinionInformation()->getType()->getTargetMeta()));
-        if ($recipe !== null) {
-            $result = $recipe->getResult();
-            if ($result->getId() !== $this->getMinionInformation()->getType()->getTargetId() && $result->getId() !== $this->getMinionInformation()->getType()->toBlock()->getDropsForCompatibleTool(Item::get(BlockIds::AIR))[0]->getId()) {
-                return $result;
-            }
+        foreach ($this->getRealDrop() as $item) {
+            $recipe = $manager->matchFurnaceRecipe($item);
+            if ($recipe !== null) {
+                $result = $recipe->getResult();
+                if ($result->getId() !== $this->getMinionInformation()->getType()->getTargetId() && $result->getId() !== $this->getMinionInformation()->getType()->toBlock()->getDropsForCompatibleTool(Item::get(BlockIds::AIR))[0]->getId()) {
+                    return $result;
+                }
 
+            }
         }
         return null;
     }
@@ -328,10 +330,15 @@ abstract class MinionEntity extends Human
     {
         return false;
     }
+
+    private function getRealDrop(): array
+    {
+        return $this->getMinionInformation()->getType()->toBlock()->getDropsForCompatibleTool(Item::get(BlockIds::AIR));
+    }
     
     protected function getTargetDrops(): array
     {
-        $drops = $this->getMinionInformation()->getType()->toBlock()->getDropsForCompatibleTool(Item::get(BlockIds::AIR));
+        $drops = $this->getRealDrop();
         if ($this->getMinionInformation()->getUpgrade()->isAutoSmelt()) $drops = array($this->getSmeltedTarget());
         return $drops;
     }
