@@ -119,7 +119,7 @@ abstract class MinionEntity extends Human
                         }
                         $menu->getInventory()->setItem(28, Item::get(ItemIds::HOPPER)->setCustomName("Auto Seller (" . ($this->getMinionInformation()->getUpgrade()->isAutoSell() ? "Enabled" : "Disabled") . ")")->setLore(["Sells resources when the minion's storage is full.", "Held money: " . $this->money . "."]));
                         $types = ["Mining", "Farming", "Lumberjack", "Slaying", "Fishing"];
-                        $menu->getInventory()->setItem(45, Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"))->setCustomName(TextFormat::BLUE . $this->getMinionInformation()->getType()->getTargetName() . " Minion " . Utils::getRomanNumeral($this->getMinionInformation()->getLevel()))->setLore([
+                        $menu->getInventory()->setItem(45, Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"), false)->setCustomName(TextFormat::BLUE . $this->getMinionInformation()->getType()->getTargetName() . " Minion " . Utils::getRomanNumeral($this->getMinionInformation()->getLevel()))->setLore([
                             "Type: " . $types[$this->getMinionInformation()->getType()->getActionType()],
                             "Target: " . $this->getMinionInformation()->getType()->getTargetName(),
                             "Level: " . $this->getMinionInformation()->getLevel(),
@@ -305,8 +305,8 @@ abstract class MinionEntity extends Human
     {
         $smeltedItems = json_decode(file_get_contents(BetterMinion::getInstance()->getDataFolder() . "smelts.json"), true);
         foreach ($smeltedItems as $input => $output) {
-            $realInput = Item::fromString($input);
-            $realOutput = Item::fromString($output);
+            $realInput = Item::fromString($input, false);
+            $realOutput = Item::fromString($output, false);
             foreach ($this->getRealDrops() as $drop) {
                 if ($realInput->equals($drop, true)) {
                     return $realOutput;
@@ -325,8 +325,8 @@ abstract class MinionEntity extends Human
     {
         $compactedItems = json_decode(file_get_contents(BetterMinion::getInstance()->getDataFolder() . "compacts.json"), true);
         foreach ($compactedItems as $input => $output) {
-            $realInput = Item::fromString($input);
-            $realOutput = Item::fromString($output);
+            $realInput = Item::fromString($input, false);
+            $realOutput = Item::fromString($output, false);
             if ($item === null) {
                 foreach ($this->getTargetDrops() as $drop) {
                     if ($realInput->equals($drop, true)) {
@@ -334,6 +334,8 @@ abstract class MinionEntity extends Human
                     }
                 }
             } else {
+                $data = explode(":", $input);
+                $realInput->setCount((int)($data[2] ?? 1));
                 if ($realInput->equals($item, true)) {
                     return $realOutput;
                 }
@@ -354,7 +356,10 @@ abstract class MinionEntity extends Human
 
     private function getRealDrops(): array
     {
-        return $this->getMinionInformation()->getType()->toBlock()->getDropsForCompatibleTool(Item::get(BlockIds::AIR));
+        $block = $this->getMinionInformation()->getType()->toBlock();
+        $drops = $block->getDropsForCompatibleTool(Item::get(BlockIds::AIR));
+        if (empty($drops)) $drops = $block->getSilkTouchDrops(Item::get(BlockIds::AIR));
+        return $drops;
     }
     
     protected function getTargetDrops(): array
@@ -396,7 +401,7 @@ abstract class MinionEntity extends Human
             $this->level->broadcastLevelEvent($this->target, LevelEventPacket::EVENT_BLOCK_STOP_BREAK);
         }
         $this->minionInventory->dropContents($this->level, $this);
-        $minionItem = Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"));
+        $minionItem = Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"), false);
         $minionItem->setCustomName($this->getMinionInformation()->getType()->getTargetName() . " Minion " . Utils::getRomanNumeral($this->getMinionInformation()->getLevel()));
         $minionItem->setNamedTagEntry($this->minionInformation->nbtSerialize());
         $this->level->dropItem($this, $minionItem);
@@ -462,6 +467,8 @@ abstract class MinionEntity extends Human
                     }
                 }
             }
+        }
+        if ($this->getMinionInformation()->getUpgrade()->isCompact()) {
         }
     }
     

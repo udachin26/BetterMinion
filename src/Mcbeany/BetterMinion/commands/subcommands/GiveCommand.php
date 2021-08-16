@@ -41,10 +41,11 @@ class GiveCommand extends BaseSubCommand
         try {
             $target = Item::fromString($args["target"]);
             if ($target->getId() > 255) {
+                $player->sendMessage("That item can't be found");
                 return;
             }
             $minionType = new MinionType($type, $target->getId(), $target->getDamage());
-            $item = Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"));
+            $item = Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"), false);
             $item->setCustomName($minionType->getTargetName() . " Minion I");
             $item->setNamedTagEntry(new CompoundTag("MinionInformation", [
                 $minionType->nbtSerialize()
@@ -56,6 +57,7 @@ class GiveCommand extends BaseSubCommand
             $player->getInventory()->addItem($item);
             $player->sendMessage("Successfully got you a minion");
         } catch (\InvalidArgumentException $exception) {
+            $player->sendMessage("That item can't be found");
             return;
         }
     }
