@@ -469,6 +469,7 @@ abstract class MinionEntity extends Human
             }
         }
         if ($this->getMinionInformation()->getUpgrade()->isCompact()) {
+            //TODO
         }
     }
     
