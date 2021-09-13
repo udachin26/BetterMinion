@@ -17,7 +17,6 @@ use pocketmine\Server;
 
 class GiveCommand extends BaseSubCommand
 {
-
     protected function prepare(): void
     {
         $this->registerArgument(0, new RawStringArgument("player", true));
@@ -61,5 +60,4 @@ class GiveCommand extends BaseSubCommand
             return;
         }
     }
-
 }

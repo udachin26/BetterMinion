@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\entities\objects;
@@ -12,10 +13,9 @@ use pocketmine\utils\Random;
 
 class MinionTree extends Tree
 {
-    
     /** @var Block */
     public $sapling;
-    
+
     public function __construct(Block $log)
     {
         $this->trunkBlock = $log->getId();
@@ -23,7 +23,7 @@ class MinionTree extends Tree
         $this->type = $log->getVariant();
         $this->sapling = Block::get(BlockIds::SAPLING, $log->getId() === BlockIds::WOOD ? $log->getVariant() : ($log->getVariant() + 4));
     }
-    
+
     public function placeObject(ChunkManager $level, int $x, int $y, int $z, Random $random)
     {
         parent::placeTrunk($level, $x, $y, $z, $random, 4);

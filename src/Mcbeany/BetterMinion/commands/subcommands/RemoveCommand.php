@@ -12,7 +12,6 @@ use pocketmine\Server;
 
 class RemoveCommand extends BaseSubCommand
 {
-
     protected function prepare(): void
     {
         $this->registerArgument(0, new RawStringArgument("player", true));

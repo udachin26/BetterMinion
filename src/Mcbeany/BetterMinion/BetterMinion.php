@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion;
@@ -21,18 +22,18 @@ use pocketmine\utils\SingletonTrait;
 class BetterMinion extends PluginBase
 {
     use SingletonTrait;
-    
+
     /** @var string[] */
     public static $minions = [MiningMinion::class, FarmingMinion::class, LumberjackMinion::class];
-    
+
     public function onLoad(): void
     {
-    	self::setInstance($this);
+        self::setInstance($this);
         $this->saveDefaultConfig();
         $this->saveResource("smelts.json");
         $this->saveResource("compacts.json");
     }
-    
+
     public function onEnable(): void
     {
         foreach ([InvMenu::class, ConfigUpdater::class, Commando::class] as $class) {
@@ -48,9 +49,13 @@ class BetterMinion extends PluginBase
             Entity::registerEntity($minion, true);
         }
         BlockFactory::registerBlock(new Farmland(), true);
-        if (!InvMenuHandler::isRegistered()) InvMenuHandler::register($this);
+        if (!InvMenuHandler::isRegistered()) {
+            InvMenuHandler::register($this);
+        }
         ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", 1);
-        if (!Commando::isRegistered()) Commando::register($this);
+        if (!Commando::isRegistered()) {
+            Commando::register($this);
+        }
         $this->getServer()->getCommandMap()->register("Minion", new MinionCommand($this, "minion", "Minion commands"));
         $this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
     }

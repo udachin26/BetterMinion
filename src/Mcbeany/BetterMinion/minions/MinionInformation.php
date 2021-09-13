@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\minions;
@@ -9,7 +10,6 @@ use pocketmine\nbt\tag\StringTag;
 
 class MinionInformation implements MinionNBT
 {
-    
     /** @var string */
     private $owner;
     /** @var MinionType */
@@ -20,7 +20,7 @@ class MinionInformation implements MinionNBT
     private $level;
     /** @var int */
     private $resourcesCollected;
-    
+
     public function __construct(string $owner, MinionType $type, MinionUpgrade $upgrade, int $level, int $resourcesCollected)
     {
         $this->owner = $owner;
@@ -29,42 +29,42 @@ class MinionInformation implements MinionNBT
         $this->level = $level;
         $this->resourcesCollected = $resourcesCollected;
     }
-    
+
     public function getOwner(): string
     {
         return $this->owner;
     }
-    
+
     public function getType(): MinionType
     {
         return $this->type;
     }
-    
+
     public function getUpgrade(): MinionUpgrade
     {
         return $this->upgrade;
     }
-    
+
     public function getLevel(): int
     {
         return $this->level;
     }
-    
+
     public function incrementLevel(): void
     {
         $this->level++;
     }
-    
+
     public function getResourcesCollected(): int
     {
         return $this->resourcesCollected;
     }
-    
+
     public function incrementResourcesCollected(): void
     {
         $this->resourcesCollected++;
     }
-    
+
     public function nbtSerialize(): CompoundTag
     {
         return new CompoundTag("MinionInformation", [

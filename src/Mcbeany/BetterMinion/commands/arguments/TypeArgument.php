@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\commands\arguments;
@@ -9,8 +10,7 @@ use pocketmine\command\CommandSender;
 
 class TypeArgument extends StringEnumArgument
 {
-
-    const VALUES = [
+    public const VALUES = [
         "0" => MinionType::MINING_MINION,
         "1" => MinionType::FARMING_MINION,
         "2" => MinionType::LUMBERJACK_MINION,
@@ -33,5 +33,4 @@ class TypeArgument extends StringEnumArgument
     {
         return "type";
     }
-
 }

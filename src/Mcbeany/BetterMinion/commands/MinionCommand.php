@@ -13,7 +13,6 @@ use pocketmine\utils\TextFormat;
 
 class MinionCommand extends BaseCommand
 {
-
     protected function prepare(): void
     {
         $this->registerSubCommand(new GiveCommand("give", "Give you a minion spawner"));
@@ -30,5 +29,4 @@ class MinionCommand extends BaseCommand
         }
         $this->sendUsage();
     }
-
 }

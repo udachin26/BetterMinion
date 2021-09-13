@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\entities\types;
@@ -13,12 +14,13 @@ use pocketmine\utils\TextFormat;
 
 class LumberjackMinion extends MinionEntity
 {
-    
     protected function updateTarget()
     {
         for ($x = -$this->getMinionRange(); $x <= $this->getMinionRange(); $x++) {
             for ($z = -$this->getMinionRange(); $z <= $this->getMinionRange(); $z++) {
-                if ($x === 0 && $z === 0) continue;
+                if ($x === 0 && $z === 0) {
+                    continue;
+                }
                 if (($x % $this->getMinionRange() === 0 && $z % $this->getMinionRange() === 0) || ($this->getMinionInformation()->getUpgrade()->isExpand() && (abs($x) === 1 && abs($z) === 1))) {
                     $block = $this->level->getBlock($this->add($x, 0, $z));
                     if ($block->getId() === BlockIds::SAPLING && $block->getDamage() === $this->getMinionInformation()->getType()->toTree()->sapling->getDamage()) {
@@ -30,13 +32,15 @@ class LumberjackMinion extends MinionEntity
             }
         }
     }
-    
+
     protected function getTarget()
     {
         $blocks = [];
         for ($x = -$this->getMinionRange(); $x <= $this->getMinionRange(); $x++) {
             for ($z = -$this->getMinionRange(); $z <= $this->getMinionRange(); $z++) {
-                if ($x === 0 && $z === 0) continue;
+                if ($x === 0 && $z === 0) {
+                    continue;
+                }
                 $dirt = $this->level->getBlock($this->add($x, -1, $z));
                 $block = $this->level->getBlock($this->add($x, 0, $z));
                 if (($x % $this->getMinionRange() === 0 && $z % $this->getMinionRange() === 0) || ($this->getMinionInformation()->getUpgrade()->isExpand() && (abs($x) === 1 && abs($z) === 1))) {
@@ -46,14 +50,16 @@ class LumberjackMinion extends MinionEntity
                 }
             }
         }
-        if (count($blocks) > 0) $this->target = $blocks[array_rand($blocks)];
+        if (count($blocks) > 0) {
+            $this->target = $blocks[array_rand($blocks)];
+        }
     }
-    
+
     protected function canUseAutoSmelter(): bool
     {
         return false;
     }
-    
+
     protected function startWorking()
     {
         if ($this->target->getId() !== BlockIds::AIR) {
@@ -78,7 +84,7 @@ class LumberjackMinion extends MinionEntity
             $this->level->setBlock($this->target, $this->getMinionInformation()->getType()->toTree()->sapling);
         }
     }
-    
+
     protected function getTool(string $tool, bool $isNetheriteTool): Item
     {
         return $isNetheriteTool ? Item::get(746) : Item::fromString($tool . " Axe");

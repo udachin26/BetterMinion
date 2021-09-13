@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\utils;
 
 class Utils
 {
-    
     public static function getRomanNumeral(int $integer): string
     {
         $romanNumeralConversionTable = [

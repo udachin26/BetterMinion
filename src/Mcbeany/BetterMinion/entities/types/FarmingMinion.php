@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\entities\types;
@@ -12,12 +13,13 @@ use pocketmine\item\Item;
 
 class FarmingMinion extends MinionEntity
 {
-    
     protected function updateTarget()
     {
         for ($x = -$this->getMinionRange(); $x <= $this->getMinionRange(); $x++) {
             for ($z = -$this->getMinionRange(); $z <= $this->getMinionRange(); $z++) {
-                if ($x === 0 && $z === 0) continue;
+                if ($x === 0 && $z === 0) {
+                    continue;
+                }
                 if (mt_rand(0, 2) === 0) {
                     $block = $this->level->getBlock($this->add($x, 0, $z));
                     if ($block instanceof Crops || $block->getId() === BlockIds::NETHER_WART_PLANT) {
@@ -29,28 +31,30 @@ class FarmingMinion extends MinionEntity
             }
         }
     }
-    
+
     protected function isWorkFast(): bool
     {
         return true;
     }
-    
+
     private function isFarmland(Block $block): bool
     {
         return $block->getId() === ($this->getMinionInformation()->getType()->getTargetId() === BlockIds::NETHER_WART_PLANT ? BlockIds::SOUL_SAND : BlockIds::FARMLAND);
     }
-    
+
     protected function getTool(string $tool, bool $isNetheriteTool): Item
     {
         return $isNetheriteTool ? Item::get(747) : Item::fromString($tool . " Hoe");
     }
-    
+
     protected function getTarget()
     {
         $blocks = [];
         for ($x = -$this->getMinionRange(); $x <= $this->getMinionRange(); $x++) {
             for ($z = -$this->getMinionRange(); $z <= $this->getMinionRange(); $z++) {
-                if ($x === 0 && $z === 0) continue;
+                if ($x === 0 && $z === 0) {
+                    continue;
+                }
                 $farmland = $this->level->getBlock($this->add($x, -1, $z));
                 $block = $this->level->getBlock($this->add($x, 0, $z));
                 if ($block->getId() === BlockIds::AIR || ($block->getId() === $this->getMinionInformation()->getType()->getTargetId() && $block->getDamage() >= ($block instanceof Crops ? 7 : 3) && $this->isFarmland($farmland))) {
@@ -58,14 +62,16 @@ class FarmingMinion extends MinionEntity
                 }
             }
         }
-        if (count($blocks) > 0) $this->target = $blocks[array_rand($blocks)];
+        if (count($blocks) > 0) {
+            $this->target = $blocks[array_rand($blocks)];
+        }
     }
-    
+
     protected function checkTarget(): bool
     {
         return ($this->target->getId() !== BlockIds::AIR && $this->isFarmland($this->level->getBlock($this->target->subtract(0, 1)))) || parent::checkTarget();
     }
-    
+
     protected function startWorking()
     {
         $farmland = $this->level->getBlock($this->target->subtract(0, 1));
