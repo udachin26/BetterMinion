@@ -110,7 +110,11 @@ abstract class MinionEntity extends Human
                     } else {
                         $menu->getInventory()->setItem(19, Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::RED . "Your minion cannot use this upgrade!"));
                     }
-                    $menu->getInventory()->setItem(37, Item::get(BlockIds::COMMAND_BLOCK)->setCustomName("Expander (" . ($this->getMinionInformation()->getUpgrade()->isExpand() ? "Enabled" : "Disabled") . ")")->setLore(["Increases the minion range by one block."]));
+                    if ($this->canUseExpander()) {
+                        $menu->getInventory()->setItem(37, Item::get(BlockIds::COMMAND_BLOCK)->setCustomName("Expander (" . ($this->getMinionInformation()->getUpgrade()->isExpand() ? "Enabled" : "Disabled") . ")")->setLore(["Increases the minion range by one block."]));
+                    } else {
+                        $menu->getInventory()->setItem(37, Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::RED . "Your minion cannot use this upgrade!"));
+                    }
                     $menu->getInventory()->setItem(48, Item::get(BlockIds::CHEST)->setCustomName(TextFormat::GREEN . "Retrieve all results"));
                     $menu->getInventory()->setItem(50, Item::get(ItemIds::BOTTLE_O_ENCHANTING)->setCustomName(TextFormat::AQUA . "Level up your minion")->setLore([$this->getMinionInformation()->getLevel() < 15 ? TextFormat::YELLOW . "Cost: " . TextFormat::GREEN . $this->getLevelUpCost() : TextFormat::RED . "Reached max level!"]));
                     $menu->getInventory()->setItem(53, Item::get(BlockIds::BEDROCK)->setCustomName(TextFormat::RED . "Remove your minion"));
@@ -352,6 +356,11 @@ abstract class MinionEntity extends Human
     protected function canUseCompacter(): bool
     {
         return $this->getCompactedTarget() !== null;
+    }
+
+    protected function canUseExpander(): bool
+    {
+        return true;
     }
 
     protected function isWorkFast(): bool
