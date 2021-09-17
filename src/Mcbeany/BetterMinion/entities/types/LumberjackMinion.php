@@ -21,7 +21,7 @@ class LumberjackMinion extends MinionEntity
                 if ($x === 0 && $z === 0) {
                     continue;
                 }
-                if (($x % 2 === 0 && $z % 2 === 0) || ($this->getMinionInformation()->getUpgrade()->isExpand() && (abs($x) === 1 && abs($z) === 1))) {
+                if (($x % 2 === 0 && $z % 2 === 0)) {
                     $block = $this->level->getBlock($this->add($x, 0, $z));
                     if ($block->getId() === BlockIds::SAPLING && $block->getDamage() === $this->getMinionInformation()->getType()->toTree()->sapling->getDamage()) {
                         if (mt_rand(0, 1) === 0) {
