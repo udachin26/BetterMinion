@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\entities;
 
+use Mcbeany\BetterMinion\utils\MinionLimiter;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\MenuIds;
 use muqsit\invmenu\transaction\DeterministicInvMenuTransaction;
@@ -79,6 +80,7 @@ abstract class MinionEntity extends Human
         } else {
             $this->setNameTag($this->getMinionInformation()->getOwner() . "'s Minion");
         }
+        MinionLimiter::addCount($this->getMinionInformation()->getOwner(), $this->getLevelNonNull()->getFolderName());
     }
 
     public function saveNBT(): void
@@ -415,6 +417,7 @@ abstract class MinionEntity extends Human
         if ($this->target instanceof Block) {
             $this->level->broadcastLevelEvent($this->target, LevelEventPacket::EVENT_BLOCK_STOP_BREAK);
         }
+        MinionLimiter::reduceCount($this->getMinionInformation()->getOwner(), $this->getLevelNonNull()->getFolderName());
         $this->minionInventory->dropContents($this->level, $this);
         $minionItem = Item::fromString((string) BetterMinion::getInstance()->getConfig()->get("minion-item"), false);
         $minionItem->setCustomName($this->getMinionInformation()->getType()->getTargetName() . " Minion " . Utils::getRomanNumeral($this->getMinionInformation()->getLevel()));

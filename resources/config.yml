@@ -33,4 +33,7 @@ levelup-costs:
 # worlds:
 #   - "exampleworld"
 worlds: []
+
+# Number of minions that can be placed in each world
+max-minions: 3
 ...
