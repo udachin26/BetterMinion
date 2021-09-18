@@ -89,7 +89,7 @@ class LumberjackMinion extends MinionEntity
     {
         return $isNetheriteTool ? Item::get(746) : Item::fromString($tool . " Axe");
     }
-    protected function canUseExpander(): bool
+    protected function canUseAutoSmelter(): bool
     {
         return false;
     }
