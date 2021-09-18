@@ -55,7 +55,7 @@ class LumberjackMinion extends MinionEntity
         }
     }
 
-    protected function canUseAutoSmelter(): bool
+    protected function canUseExpander(): bool
     {
         return false;
     }
