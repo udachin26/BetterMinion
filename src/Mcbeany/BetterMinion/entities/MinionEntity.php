@@ -463,6 +463,7 @@ abstract class MinionEntity extends Human
     {
         $full = true;
         $drops = $this->getTargetDrops();
+        if ($this->getMinionInformation()->getUpgrade()->isCompact()) $drop[] = $this->getCompactedTarget()->setCount(1);
         foreach ($drops as $item) {
             if ($this->getMinionInventory()->canAddItem($item->setCount(1))) {
                 $full = false;
