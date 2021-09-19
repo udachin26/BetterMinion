@@ -138,10 +138,19 @@ abstract class MinionEntity extends Human
                         $itemClicked = $transaction->getItemClicked();
                         $action = $transaction->getAction();
                         switch ($action->getSlot()) {
+
+                            // TODO: upgrade cost
                             case 10:
                                 if ($this->canUseAutoSmelter()) {
                                     $player->removeWindow($action->getInventory());
                                     $this->getMinionInformation()->getUpgrade()->setAutoSmelt();
+                                    $this->stopWorking();
+                                }
+                                break;
+                            case 19:
+                                if ($this->canUseCompacter()) {
+                                    $player->removeWindow($action->getInventory());
+                                    $this->getMinionInformation()->getUpgrade()->setCompact();
                                     $this->stopWorking();
                                 }
                                 break;
@@ -332,7 +341,10 @@ abstract class MinionEntity extends Human
         return $this->getSmeltedTarget() !== null;
     }
 
-    protected function getCompactedTarget(Item $item = null): ?Item
+    /**
+     * @return Item[]|Item|null
+     */
+    protected function getCompactedTarget(Item $item = null)
     {
         $compactedItems = json_decode(file_get_contents(BetterMinion::getInstance()->getDataFolder() . "compacts.json"), true);
         foreach ($compactedItems as $input => $output) {
@@ -345,10 +357,11 @@ abstract class MinionEntity extends Human
                     }
                 }
             } else {
+                $item = clone $item;
                 $data = explode(":", $input);
                 $realInput->setCount((int)($data[2] ?? 1));
-                if ($realInput->equals($item, true)) {
-                    return $realOutput;
+                if ($realInput->equals($item, true) && $item->getCount() >= $realInput->getCount()) {
+                    return array($realOutput->setCount(intval($item->getCount() / $realInput->getCount())), $item->setCount($item->getCount() % $realInput->getCount()));
                 }
             }
         }
@@ -487,7 +500,18 @@ abstract class MinionEntity extends Human
             }
         }
         if ($this->getMinionInformation()->getUpgrade()->isCompact()) {
-            //TODO
+            foreach ($this->getMinionInventory()->getContents() as $item) {
+                if ($item->getCount() !== $item->getMaxStackSize()) continue;
+                $results = $this->getCompactedTarget($item);
+                if ($results === null) continue;
+                $result = $results[0];
+                $extra = $results[1];
+                $this->getMinionInventory()->removeItem($item);
+                $this->getMinionInventory()->addItem($result);
+                if (!$extra->isNull()) {
+                    $this->getMinionInventory()->addItem($extra);
+                }
+            }
         }
     }
 

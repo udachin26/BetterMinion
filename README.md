@@ -15,7 +15,7 @@ A plugin that adds minions to your Minecraft Server
 - [x] Auto smelter, auto seller, expander upgrade
 - [x] In-built command `/minion`
 - [ ] Slaying, Fishing minion
-- [ ] Compactor
+- [x] Compactor
 - [ ] More minion types...
 - [ ] Languages system
 - [ ] Form user interface
