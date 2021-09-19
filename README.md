@@ -4,7 +4,7 @@ A plugin that adds minions to your Minecraft Server
 ## ⚠️This project is currently **unfinished** and needs some help! If you'd like to help us get the job done, submit a pull request via this [link](https://github.com/Mcbeany/BetterMinion/pulls). Thanks❤️
 
 ## Screenshot:
-<img src="https://media.discordapp.net/attachments/880873146159333476/886931358990086185/unknown.png?width=994&height=559">
+<img src="https://media.discordapp.net/attachments/880873146159333476/886931358990086185/unknown.png?width=994&height=559" alt="">
 
 ## Requirements:
 - Plugins: [InvCrashFix](https://github.com/Muqsit/InvCrashFix) (optional), [DEVirions](https://github.com/poggit/devirion), [SellAll](https://github.com/AndreasHGK/SellAll), [EconomyAPI](https://github.com/poggit-orphanage/EconomyS/tree/master/EconomyAPI/)

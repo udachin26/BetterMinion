@@ -26,6 +26,9 @@ class BetterMinion extends PluginBase
     /** @var string[] */
     public static $minions = [MiningMinion::class, FarmingMinion::class, LumberjackMinion::class];
 
+    /** @var string[] */
+    public $isRemove = [];
+
     public function onLoad(): void
     {
         self::setInstance($this);

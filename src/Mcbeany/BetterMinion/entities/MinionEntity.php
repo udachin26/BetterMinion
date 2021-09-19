@@ -98,6 +98,12 @@ abstract class MinionEntity extends Human
         if ($source instanceof EntityDamageByEntityEvent) {
             $damager = $source->getDamager();
             if ($damager instanceof Player) {
+                if (isset(BetterMinion::getInstance()->isRemove[$damager->getName()])) {
+                    unset(BetterMinion::getInstance()->isRemove[$damager->getName()]);
+                    $damager->sendMessage("Successfully removed " . $this->getMinionInformation()->getOwner() . "'s minion");
+                    $this->destroy();
+                    return;
+                }
                 if ($damager->getName() === $this->getMinionInformation()->getOwner()) {
                     $menu = InvMenu::create(MenuIds::TYPE_DOUBLE_CHEST);
                     $menu->setName($this->getMinionInformation()->getOwner() . "'s Minion " . Utils::getRomanNumeral($this->getMinionInformation()->getLevel()));

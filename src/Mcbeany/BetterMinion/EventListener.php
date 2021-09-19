@@ -11,6 +11,7 @@ use Mcbeany\BetterMinion\utils\MinionLimiter;
 use pocketmine\entity\Entity;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
+use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\item\Item;
 use pocketmine\nbt\tag\ByteArrayTag;
 use pocketmine\nbt\tag\CompoundTag;
@@ -64,6 +65,14 @@ class EventListener implements Listener
                     }
                 }
             }
+        }
+    }
+
+    public function onQuit(PlayerQuitEvent $event)
+    {
+        $player = $event->getPlayer();
+        if (isset(BetterMinion::getInstance()->isRemove[$player->getName()])) {
+            unset(BetterMinion::getInstance()->isRemove[$player->getName()]);
         }
     }
 }

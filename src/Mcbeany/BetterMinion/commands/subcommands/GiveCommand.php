@@ -26,9 +26,12 @@ class GiveCommand extends BaseSubCommand
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
-        /** @var Player $player */
+        if ($sender instanceof Player && !$sender->hasPermission("betterminions.command")) {
+            $sender->sendMessage("You don't have permission to use this command!");
+            return;
+        }
         $player = !isset($args["player"]) ? null : Server::getInstance()->getPlayer($args["player"]);
-        if ($player === null) {
+        if (!$player instanceof Player) {
             $sender->sendMessage("That player can't be found");
             return;
         }
