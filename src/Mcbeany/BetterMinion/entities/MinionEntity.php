@@ -389,6 +389,11 @@ abstract class MinionEntity extends Human
         return false;
     }
 
+    public function canBeCollidedWith(): bool
+    {
+        return false;
+    }
+
     private function getRealDrops(): array
     {
         $block = $this->getMinionInformation()->getType()->toBlock();
