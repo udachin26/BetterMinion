@@ -114,7 +114,7 @@ abstract class MinionEntity extends Human
                         $menu->getInventory()->setItem(10, Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::RED . "Your minion cannot use this upgrade!"));
                     }
                     if ($this->canUseCompacter()) {
-                        $menu->getInventory()->setItem(19, Item::get(BlockIds::DISPENSER)->setCustomName("Compacter (" . $this->getCompactedTarget()->getVanillaName() . ")"));
+                        $menu->getInventory()->setItem(19, Item::get(BlockIds::DISPENSER)->setCustomName("Compacter (" . ($this->getMinionInformation()->getUpgrade()->isCompact() ? "Enabled" : "Disabled") . ")"));
                     } else {
                         $menu->getInventory()->setItem(19, Item::get(BlockIds::STAINED_GLASS, 14)->setCustomName(TextFormat::RED . "Your minion cannot use this upgrade!"));
                     }
@@ -144,27 +144,34 @@ abstract class MinionEntity extends Human
                         $itemClicked = $transaction->getItemClicked();
                         $action = $transaction->getAction();
                         switch ($action->getSlot()) {
-
-                            // TODO: upgrade cost
                             case 10:
                                 if ($this->canUseAutoSmelter()) {
                                     $player->removeWindow($action->getInventory());
-                                    $this->getMinionInformation()->getUpgrade()->setAutoSmelt();
-                                    $this->stopWorking();
+                                    if (EconomyAPI::getInstance()->myMoney($player) - $this->getAutoSmeltCost() >= 0) {
+                                        EconomyAPI::getInstance()->reduceMoney($player, $this->getAutoSmeltCost());
+                                        $this->getMinionInformation()->getUpgrade()->setAutoSmelt();
+                                        $this->stopWorking();
+                                    }
                                 }
                                 break;
                             case 19:
                                 if ($this->canUseCompacter()) {
                                     $player->removeWindow($action->getInventory());
-                                    $this->getMinionInformation()->getUpgrade()->setCompact();
-                                    $this->stopWorking();
+                                    if (EconomyAPI::getInstance()->myMoney($player) - $this->getCompactCost() >= 0) {
+                                        EconomyAPI::getInstance()->reduceMoney($player, $this->getCompactCost());
+                                        $this->getMinionInformation()->getUpgrade()->setCompact();
+                                        $this->stopWorking();
+                                    }
                                 }
                                 break;
                             case 28:
                                 $player->removeWindow($action->getInventory());
                                 if (!$this->getMinionInformation()->getUpgrade()->isAutoSell()) {
-                                    $this->getMinionInformation()->getUpgrade()->setAutoSell();
-                                    $this->stopWorking();
+                                    if (EconomyAPI::getInstance()->myMoney($player) - $this->getAutoSellCost() >= 0) {
+                                        EconomyAPI::getInstance()->reduceMoney($player, $this->getAutoSellCost());
+                                        $this->getMinionInformation()->getUpgrade()->setAutoSell();
+                                        $this->stopWorking();
+                                    }
                                 } else {
                                     EconomyAPI::getInstance()->addMoney($player, $this->money);
                                     $this->money = 0;
@@ -172,8 +179,15 @@ abstract class MinionEntity extends Human
                                 break;
                             case 37:
                                 $player->removeWindow($action->getInventory());
-                                $this->getMinionInformation()->getUpgrade()->setExpand();
-                                $this->stopWorking();
+                                if ($this->canUseExpander()) {
+                                    if (!$this->getMinionInformation()->getUpgrade()->isExpand()) {
+                                        if (EconomyAPI::getInstance()->myMoney($player) - $this->getExpandCost() >= 0) {
+                                            EconomyAPI::getInstance()->reduceMoney($player, $this->getExpandCost());
+                                            $this->getMinionInformation()->getUpgrade()->setExpand();
+                                            $this->stopWorking();
+                                        }
+                                    }
+                                }
                                 break;
                             case 48:
                                 $player->removeWindow($action->getInventory());
@@ -482,6 +496,27 @@ abstract class MinionEntity extends Human
         $costs = (array) BetterMinion::getInstance()->getConfig()->get("levelup-costs");
         return (int) $costs[$this->getMinionInformation()->getLevel()];
     }
+
+    private function getAutoSmeltCost(): int
+    {
+        return (int) BetterMinion::getInstance()->getConfig()->getNested("upgrade-costs.autosmelt");
+    }
+
+    private function getAutoSellCost(): int
+    {
+        return (int) BetterMinion::getInstance()->getConfig()->getNested("upgrade-costs.autosell");
+    }
+
+    private function getCompactCost(): int
+    {
+        return (int) BetterMinion::getInstance()->getConfig()->getNested("upgrade-costs.compact");
+    }
+
+    private function getExpandCost(): int
+    {
+        return (int) BetterMinion::getInstance()->getConfig()->getNested("upgrade-costs.expand");
+    }
+
 
     abstract protected function getTool(string $tool, bool $isNetheriteTool): Item;
 

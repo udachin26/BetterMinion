@@ -26,6 +26,11 @@ levelup-costs:
   - 40000
   - 50000
   - 100000
+upgrade-costs:
+  auto-smelt: 10000
+  auto-sell: 10000
+  compact: 20000
+  expand: 5000
   
 # This is used if you want Minions not to be placed in certain world names
 # Empty it if you want the minions to be placed all over the world
