@@ -41,6 +41,10 @@ class GiveCommand extends BaseSubCommand
         }
         $type = $args["type"];
         try {
+            if (!isset($args["target"])) {
+                $player->sendMessage("Item not found!");
+                return;
+            }
             $target = Item::fromString($args["target"]);
             if ($target->getId() > 255) {
                 $player->sendMessage("That item can't be found");
