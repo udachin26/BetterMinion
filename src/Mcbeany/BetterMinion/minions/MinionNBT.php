@@ -8,7 +8,7 @@ use pocketmine\nbt\tag\CompoundTag;
 
 interface MinionNBT
 {
-    public function nbtSerialize(): CompoundTag;
+	public function nbtSerialize(): CompoundTag;
 
-    public static function nbtDeserialize(CompoundTag $tag);
+	public static function nbtDeserialize(CompoundTag $tag);
 }

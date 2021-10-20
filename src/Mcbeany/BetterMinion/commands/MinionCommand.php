@@ -13,20 +13,20 @@ use pocketmine\utils\TextFormat;
 
 class MinionCommand extends BaseCommand
 {
-    protected function prepare(): void
-    {
-        $this->registerSubCommand(new GiveCommand("give", "Give you a minion spawner"));
-        $this->registerSubCommand(new RemoveCommand("remove", "Quickly remove minions"));
-        $this->setPermission("betterminion.commands");
-        $this->setUsage("/minion give|remove");
-    }
+	protected function prepare(): void
+	{
+		$this->registerSubCommand(new GiveCommand("give", "Give you a minion spawner"));
+		$this->registerSubCommand(new RemoveCommand("remove", "Quickly remove minions"));
+		$this->setPermission("betterminion.commands");
+		$this->setUsage("/minion give|remove");
+	}
 
-    public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
-    {
-        if ($sender instanceof Player && !$sender->hasPermission($this->getPermission())) {
-            $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command!");
-            return;
-        }
-        $this->sendUsage();
-    }
+	public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
+	{
+		if ($sender instanceof Player && !$sender->hasPermission($this->getPermission())) {
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command!");
+			return;
+		}
+		$this->sendUsage();
+	}
 }
