@@ -9,6 +9,8 @@ authors:
 depend:
 - EconomyAPI
 - SellAll
+softdepend:
+- InvCrashFix
 
 permissions:
   betterminion.command:
