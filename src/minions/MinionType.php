@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\minions;
 
-use Mcbeany\BetterMinion\entities\type\FarmingMinion;
-use Mcbeany\BetterMinion\entities\type\MiningMinion;
+use Mcbeany\BetterMinion\entities\types\FarmingMinion;
+use Mcbeany\BetterMinion\entities\types\MiningMinion;
 use pocketmine\utils\EnumTrait;
 
 /**
