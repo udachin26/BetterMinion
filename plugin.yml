@@ -1,19 +1,7 @@
 ---
 name: BetterMinion
-main: Mcbeany\BetterMinion\BetterMinion
-version: 1.0.0
-api: 3.21.0
-authors:
-- Mcbeany
-- AIPTU
-depend:
-- EconomyAPI
-- SellAll
-softdepend:
-- InvCrashFix
-
-permissions:
-  betterminion.command:
-    default: op
-    description: Allows users to use better minion command
+version: 0.0.1
+main: Mcbeany\BetterMinion\Main
+api: 4.0.3
+src-namespace-prefix: Mcbeany\BetterMinion
 ...
