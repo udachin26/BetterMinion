@@ -1,7 +1,11 @@
 ---
 name: BetterMinion
 version: 0.0.1
-main: Mcbeany\BetterMinion\Main
+main: Mcbeany\BetterMinion\BetterMinion
 api: 4.0.3
 src-namespace-prefix: Mcbeany\BetterMinion
+
+permissions:
+  betterminion.commands:
+    default: op
 ...
