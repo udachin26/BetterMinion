@@ -6,6 +6,7 @@ namespace Mcbeany\BetterMinion;
 
 use pocketmine\plugin\PluginBase;
 
-class Main extends PluginBase{
+class Main extends PluginBase
+{
 
 }
