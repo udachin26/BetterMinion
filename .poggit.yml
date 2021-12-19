@@ -5,4 +5,9 @@ branches:
 projects:
   BetterMinion:
     path: ""
+    libs:
+#     - src: dktapps-pm-pl/pmforms/pmforms
+#       version: ^2.0.0
+      - src: CortexPE/Commando/Commando
+        version: ^3.0.0
 ...
