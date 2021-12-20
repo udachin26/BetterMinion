@@ -1,0 +1,8 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Mcbeany\BetterMinion\utils;
+
+final class EconomyProvider
+{}
