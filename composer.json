@@ -3,7 +3,8 @@
 	"description": "A plugin that adds minions to your Minecraft Server",
 	"type": "project",
 	"require": {
-		"pocketmine/pocketmine-mp": "^4.0"
+		"pocketmine/pocketmine-mp": "^4.0",
+		"php": "^8.0"
 	},
 	"license": "MIT",
 	"autoload": {
