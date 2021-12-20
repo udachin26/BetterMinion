@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6a074b201f3da23d1da76365d1e8138",
+    "content-hash": "5b946991b2306c33d1a56a163baaedbb",
     "packages": [
         {
             "name": "adhocore/json-comment",
@@ -120,6 +120,38 @@
                 }
             ],
             "time": "2021-08-15T20:50:18+00:00"
+        },
+        {
+            "name": "cortexpe/commando",
+            "version": "dev-PM-4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Paroxity/Commando.git",
+                "reference": "fad28e38ec2c7703c5780617fafadb4d16755932"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Paroxity/Commando/zipball/fad28e38ec2c7703c5780617fafadb4d16755932",
+                "reference": "fad28e38ec2c7703c5780617fafadb4d16755932",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CortexPE\\Commando\\": [
+                        "src\\CortexPE\\Commando\\"
+                    ]
+                }
+            },
+            "license": [
+                "LGPL-3.0-only"
+            ],
+            "description": "A Command Framework virion for PocketMine-MP ",
+            "support": {
+                "source": "https://github.com/Paroxity/Commando/tree/PM-4.0",
+                "issues": "https://github.com/Paroxity/Commando/issues"
+            },
+            "time": "2021-08-27T20:03:37+00:00"
         },
         {
             "name": "fgrosse/phpasn1",
@@ -1478,7 +1510,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "cortexpe/commando": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
