@@ -11,6 +11,7 @@ final class MinionInfo implements MinionNBT{
 
 	public function __construct(
 		protected MinionType $type,
+		protected BlockIdentifier $target,
 		protected MinionUpgrade $upgrade,
 		protected int $level = 0,
 		protected float $moneyHeld = 0,
@@ -21,7 +22,7 @@ final class MinionInfo implements MinionNBT{
 	public static function nbtDeserialize(CompoundTag $nbt) : self{
 		return new self(
 			MinionType::fromString($nbt->getString(MinionNBT::TYPE)),
-            self::targetDeserialize($nbt->getCompoundTag(MinionNBT::TARGET)),
+			self::targetDeserialize($nbt->getCompoundTag(MinionNBT::TARGET)),
 			MinionUpgrade::nbtDeserialize($nbt->getCompoundTag(MinionNBT::UPGRADE)),
 			$nbt->getInt(MinionNBT::LEVEL),
 			$nbt->getFloat(MinionNBT::MONEY_HELD),
@@ -29,45 +30,35 @@ final class MinionInfo implements MinionNBT{
 		);
 	}
 
-    private static function targetDeserialize(CompoundTag $nbt): BlockIdentifier
-    {
-        return new BlockIdentifier(
-            $nbt->getInt(MinionNBT::BLOCK_ID),
-            $nbt->getInt(MinionNBT::VARIANT)
-        );
-    }
-
-	public function incrementLevel() : void{
-		$this->level++;
-	}
-
-	public function incrementMoneyHeld(float $moneyHeld) : void{
-		$this->moneyHeld += $moneyHeld;
-	}
-
-	public function incrementCollectedResources(int $collectedResources) : void{
-		$this->collectedResources += $collectedResources;
+	private static function targetDeserialize(CompoundTag $nbt) : BlockIdentifier{
+		return new BlockIdentifier(
+			$nbt->getInt(MinionNBT::BLOCK_ID),
+			$nbt->getInt(MinionNBT::VARIANT)
+		);
 	}
 
 	public function nbtSerialize() : CompoundTag{
 		return CompoundTag::create()
 			->setString(MinionNBT::TYPE, $this->getType()->name())
-            ->setTag(MinionNBT::TARGET, $this->targetSerialize())
+			->setTag(MinionNBT::TARGET, $this->targetSerialize())
 			->setTag(MinionNBT::UPGRADE, $this->getUpgrade()->nbtSerialize())
 			->setInt(MinionNBT::LEVEL, $this->getLevel())
 			->setFloat(MinionNBT::MONEY_HELD, $this->getMoneyHeld())
 			->setInt(MinionNBT::COLLECTED_RESOURCES, $this->getCollectedResources());
 	}
 
-    private function targetSerialize(): CompoundTag
-    {
-        return CompoundTag::create()
-            ->setInt(MinionNBT::BLOCK_ID, $this->target->getBlockId())
-            ->setInt(MinionNBT::VARIANT, $this->target->getVariant());
-    }
+	private function targetSerialize() : CompoundTag{
+		return CompoundTag::create()
+			->setInt(MinionNBT::BLOCK_ID, $this->target->getBlockId())
+			->setInt(MinionNBT::VARIANT, $this->target->getVariant());
+	}
 
 	public function getType() : MinionType{
 		return $this->type;
+	}
+
+	public function getTarget() : BlockIdentifier{
+		return $this->target;
 	}
 
 	public function getUpgrade() : MinionUpgrade{
@@ -88,6 +79,10 @@ final class MinionInfo implements MinionNBT{
 
 	public function setLevel(int $level) : void{
 		$this->level = $level;
+	}
+
+	public function setTarget(BlockIdentifier $target){
+		$this->target = $target;
 	}
 
 	public function setMoneyHeld(float $amount) : void{
