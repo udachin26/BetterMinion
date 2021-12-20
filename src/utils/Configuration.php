@@ -8,6 +8,7 @@ use Mcbeany\BetterMinion\BetterMinion;
 use pocketmine\item\Item;
 use pocketmine\item\LegacyStringToItemParser;
 use pocketmine\item\StringToItemParser;
+use pocketmine\lang\Language;
 use pocketmine\utils\SingletonTrait;
 
 final class Configuration{

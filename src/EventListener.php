@@ -15,7 +15,11 @@ use pocketmine\event\player\PlayerItemUseEvent;
 
 final class EventListener implements Listener{
 
-	/** @handleCancelled false */
+	/**
+	 * @param PlayerItemUseEvent $event
+	 * @priority HIGHEST
+	 * @handleCancelled FALSE
+	 */
 	public function onItemUse(PlayerItemUseEvent $event) : void{
 		$player = $event->getPlayer();
 		$world = $player->getWorld();
