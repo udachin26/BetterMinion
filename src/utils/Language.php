@@ -25,5 +25,4 @@ final class Language extends PMLang{
 		);
 		self::setInstance($instance);
 	}
-
 }

@@ -27,13 +27,14 @@ class BetterMinion extends PluginBase{
 		MiningMinion::class,
 		FarmingMinion::class
 	];
-
-	/**
-	 * @throws HookAlreadyRegistered
-	 */
+	
 	protected function onEnable() : void{
-		if(!PacketHooker::isRegistered()){
-			PacketHooker::register($this);
+		try{
+			if(!PacketHooker::isRegistered()){
+				PacketHooker::register($this);
+			}
+		}catch(HookAlreadyRegistered){
+			//NOOP
 		}
 		foreach(self::MINION_CLASSES as $class){
 			EntityFactory::getInstance()->register($class,
