@@ -13,38 +13,36 @@ use pocketmine\entity\Location;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerItemUseEvent;
 
-final class EventListener implements Listener
-{
+final class EventListener implements Listener{
 
-    /** @handleCancelled false */
-    public function onItemUse(PlayerItemUseEvent $event): void
-    {
-        $player = $event->getPlayer();
-        $world = $player->getWorld();
-        $item = $event->getItem();
-        if ($item->equals(Configuration::getInstance()->minion_item(), true)) {
-            $nbt = $item->getNamedTag()->getCompoundTag(MinionNBT::INFO);
-            if ($nbt !== null) {
-                $event->cancel();
-                $info = MinionInfo::nbtDeserialize($nbt);
-                $class = $info->getType()->className();
-                /** @var BaseMinion $entity */
-                $entity = new $class(Location::fromObject(
-                    $world->getBlock($player->getPosition())->getPosition()->add(0.5, 0, 0.5),
-                    $world
-                ), $player->getSkin());
+	/** @handleCancelled false */
+	public function onItemUse(PlayerItemUseEvent $event) : void{
+		$player = $event->getPlayer();
+		$world = $player->getWorld();
+		$item = $event->getItem();
+		if($item->equals(Configuration::getInstance()->minion_item(), true)){
+			$nbt = $item->getNamedTag()->getCompoundTag(MinionNBT::INFO);
+			if($nbt !== null){
+				$event->cancel();
+				$info = MinionInfo::nbtDeserialize($nbt);
+				$class = $info->getType()->className();
+				/** @var BaseMinion $entity */
+				$entity = new $class(Location::fromObject(
+					$world->getBlock($player->getPosition())->getPosition()->add(0.5, 0, 0.5),
+					$world
+				), $player->getSkin());
 
-                $minionEvent = new MinionSpawnEvent($player, $entity);
-                $minionEvent->call();
-                if ($minionEvent->isCancelled()) {
-                    return;
-                }
-                $entity->spawnToAll();
+				$minionEvent = new MinionSpawnEvent($player, $entity);
+				$minionEvent->call();
+				if($minionEvent->isCancelled()){
+					return;
+				}
+				$entity->spawnToAll();
 
-                $item->pop();
-                $player->getInventory()->setItemInHand($item);
-            }
-        }
-    }
+				$item->pop();
+				$player->getInventory()->setItemInHand($item);
+			}
+		}
+	}
 
 }

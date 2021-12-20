@@ -20,35 +20,33 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\world\World;
 
-class BetterMinion extends PluginBase
-{
-    use SingletonTrait;
+class BetterMinion extends PluginBase{
+	use SingletonTrait;
 
-    const MINION_CLASSES = [
-        MiningMinion::class,
-        FarmingMinion::class
-    ];
+	const MINION_CLASSES = [
+		MiningMinion::class,
+		FarmingMinion::class
+	];
 
-    /**
-     * @throws HookAlreadyRegistered
-     */
-    protected function onEnable(): void
-    {
-        if (!PacketHooker::isRegistered()) {
-            PacketHooker::register($this);
-        }
-        foreach (self::MINION_CLASSES as $class) {
-            EntityFactory::getInstance()->register($class,
-                function (World $world, CompoundTag $nbt) use ($class): Entity {
-                    return new $class(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $nbt);
-                }, [basename($class)]
-            );
-        }
-        self::setInstance($this);
-        Configuration::load();
-        Language::load();
-        $this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
-        $this->getServer()->getCommandMap()->register("minion", new MinionCommand($this, "minion", "BetterMinion Commands"));
-    }
+	/**
+	 * @throws HookAlreadyRegistered
+	 */
+	protected function onEnable() : void{
+		if(!PacketHooker::isRegistered()){
+			PacketHooker::register($this);
+		}
+		foreach(self::MINION_CLASSES as $class){
+			EntityFactory::getInstance()->register($class,
+				function(World $world, CompoundTag $nbt) use ($class) : Entity{
+					return new $class(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $nbt);
+				}, [basename($class)]
+			);
+		}
+		self::setInstance($this);
+		Configuration::load();
+		Language::load();
+		$this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
+		$this->getServer()->getCommandMap()->register("minion", new MinionCommand($this, "minion", "BetterMinion Commands"));
+	}
 
 }

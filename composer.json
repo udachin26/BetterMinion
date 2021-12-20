@@ -1,21 +1,21 @@
 {
-    "name": "mcbeany/better-minion",
-    "description": "A plugin that adds minions to your Minecraft Server",
-    "type": "project",
-    "require": {
-        "pocketmine/pocketmine-mp": "^4.0",
-        "cortexpe/commando": "dev-PM-4.0"
-    },
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Mcbeany\\BetterMinion\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Khang Nguyen",
-            "email": "mcbeany7@gmail.com"
-        }
-    ]
+	"name": "mcbeany/better-minion",
+	"description": "A plugin that adds minions to your Minecraft Server",
+	"type": "project",
+	"require": {
+		"pocketmine/pocketmine-mp": "^4.0",
+		"cortexpe/commando": "dev-PM-4.0"
+	},
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Mcbeany\\BetterMinion\\": "src/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Khang Nguyen",
+			"email": "mcbeany7@gmail.com"
+		}
+	]
 }

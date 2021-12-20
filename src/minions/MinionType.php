@@ -17,43 +17,36 @@ use pocketmine\utils\EnumTrait;
  * @method static MinionType MINING()
  * @method static MinionType FARMING()
  */
+final class MinionType{
+	use EnumTrait {
+		__construct as private __enumConstruct;
+	}
 
-final class MinionType
-{
-    use EnumTrait {
-        __construct as private __enumConstruct;
-    }
+	private string $className;
 
-    private string $className;
+	private function __construct(string $enumName, string $className){
+		$this->__enumConstruct($enumName);
+		$this->className = $className;
+	}
 
-    private function __construct(string $enumName, string $className)
-    {
-        $this->__enumConstruct($enumName);
-        $this->className = $className;
-    }
+	public static function fromString(string $name) : self{
+		self::checkInit();
+		return self::$members[strtolower($name)];
+	}
 
-    public function className(): string
-    {
-        return $this->className;
-    }
+	protected static function setup() : void{
+		self::registerAll(
+			new self("mining", MiningMinion::class),
+			new self("farming", FarmingMinion::class)
+		);
+	}
 
-    public function typeName(): string
-    {
-        return ucfirst($this->name());
-    }
+	public function className() : string{
+		return $this->className;
+	}
 
-    protected static function setup(): void
-    {
-        self::registerAll(
-            new self("mining", MiningMinion::class),
-            new self("farming", FarmingMinion::class)
-        );
-    }
-
-    public static function fromString(string $name): self
-    {
-        self::checkInit();
-        return self::$members[strtolower($name)];
-    }
+	public function typeName() : string{
+		return ucfirst($this->name());
+	}
 
 }
