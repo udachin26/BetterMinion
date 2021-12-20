@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\minions;
 
+use pocketmine\block\BlockIdentifier;
 use pocketmine\nbt\tag\CompoundTag;
 
 final class MinionInfo implements MinionNBT
@@ -11,6 +12,7 @@ final class MinionInfo implements MinionNBT
 
     public function __construct(
         private MinionType $type,
+        private BlockIdentifier $target,
         private MinionUpgrade $upgrade,
         private int $level,
         private float $moneyHeld,
@@ -25,6 +27,11 @@ final class MinionInfo implements MinionNBT
     public function getUpgrade(): MinionUpgrade
     {
         return $this->upgrade;
+    }
+
+    public function getTarget(): BlockIdentifier
+    {
+        return $this->target;
     }
     
     public function getLevel(): int
@@ -61,6 +68,7 @@ final class MinionInfo implements MinionNBT
     {
         return CompoundTag::create()
             ->setString(MinionNBT::TYPE, $this->getType()->name())
+            ->setTag(MinionNBT::TARGET, $this->targetSerialize())
             ->setTag(MinionNBT::UPGRADE, $this->getUpgrade()->nbtSerialize())
             ->setInt(MinionNBT::LEVEL, $this->getLevel())
             ->setFloat(MinionNBT::MONEY_HELD, $this->getMoneyHeld())
@@ -71,10 +79,26 @@ final class MinionInfo implements MinionNBT
     {
         return new self(
             MinionType::fromString($nbt->getString(MinionNBT::TYPE)),
+            self::targetDeserialize($nbt->getCompoundTag(MinionNBT::TARGET)),
             MinionUpgrade::nbtDeserialize($nbt->getCompoundTag(MinionNBT::UPGRADE)),
             $nbt->getInt(MinionNBT::LEVEL),
             $nbt->getFloat(MinionNBT::MONEY_HELD),
             $nbt->getInt(MinionNBT::COLLECTED_RESOURCES)
+        );
+    }
+
+    private function targetSerialize(): CompoundTag
+    {
+        return CompoundTag::create()
+            ->setInt(MinionNBT::BLOCK_ID, $this->target->getBlockId())
+            ->setInt(MinionNBT::VARIANT, $this->target->getVariant());
+    }
+
+    private static function targetDeserialize(CompoundTag $nbt): BlockIdentifier
+    {
+        return new BlockIdentifier(
+            $nbt->getInt(MinionNBT::BLOCK_ID),
+            $nbt->getInt(MinionNBT::VARIANT)
         );
     }
 

@@ -12,10 +12,15 @@ interface MinionNBT
     // Info
     public const INFO = "minionInfo";
     public const TYPE = "type";
+    public const TARGET = "target";
     public const UPGRADE = "upgrade";
     public const LEVEL = "level";
     public const MONEY_HELD = "moneyHeld";
     public const COLLECTED_RESOURCES = "collectedResources";
+
+    // Target
+    public const BLOCK_ID = "blockId";
+    public const VARIANT = "variant";
 
     // Inv
     public const INV = "minionInv";
