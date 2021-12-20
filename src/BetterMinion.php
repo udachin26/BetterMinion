@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion;
 
+use CortexPE\Commando\exception\HookAlreadyRegistered;
 use CortexPE\Commando\PacketHooker;
 use Mcbeany\BetterMinion\commands\MinionCommand;
 use Mcbeany\BetterMinion\entities\types\FarmingMinion;
 use Mcbeany\BetterMinion\entities\types\MiningMinion;
+use Mcbeany\BetterMinion\utils\Configuration;
+use Mcbeany\BetterMinion\utils\Language;
 use pocketmine\entity\Entity;
 use pocketmine\entity\EntityDataHelper;
 use pocketmine\entity\EntityFactory;
@@ -26,29 +29,26 @@ class BetterMinion extends PluginBase
         FarmingMinion::class
     ];
 
+    /**
+     * @throws HookAlreadyRegistered
+     */
     protected function onEnable(): void
     {
-        $this->saveDefaultConfig();
         if (!PacketHooker::isRegistered()) {
             PacketHooker::register($this);
         }
-        /** @var EntityFactory $factory */
-        $factory = EntityFactory::getInstance();
         foreach (self::MINION_CLASSES as $class) {
-            $factory->register(
-                $class,
+            EntityFactory::getInstance()->register($class,
                 function (World $world, CompoundTag $nbt) use ($class): Entity {
                     return new $class(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $nbt);
-                },
-                [basename($class)]
+                }, [basename($class)]
             );
         }
+        self::setInstance($this);
+        Configuration::load();
+        Language::load();
         $this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
-        $this->getServer()->getCommandMap()->register("minion", new MinionCommand(
-            $this,
-            "minion",
-            "BetterMinion Commands"
-        ));
+        $this->getServer()->getCommandMap()->register("minion", new MinionCommand($this, "minion", "BetterMinion Commands"));
     }
 
 }
