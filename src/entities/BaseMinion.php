@@ -6,12 +6,15 @@ namespace Mcbeany\BetterMinion\entities;
 
 use Mcbeany\BetterMinion\minions\MinionInfo;
 use Mcbeany\BetterMinion\minions\MinionNBT;
+use pocketmine\block\Block;
 use pocketmine\entity\Human;
 use pocketmine\inventory\SimpleInventory;
 use pocketmine\item\Item;
 use pocketmine\nbt\tag\CompoundTag;
 
 abstract class BaseMinion extends Human{
+
+	protected const WORKING_RADIUS = 2;
 
 	protected MinionInfo $minionInfo;
 	protected SimpleInventory $minionInv;
@@ -33,8 +36,11 @@ abstract class BaseMinion extends Human{
 		return $this->minionInv;
 	}
 
-	protected function onAction() : bool{
-		return true;
+	/**
+	 * @return Block[]
+	 */
+	public function getWorkingBlocks() : array{
+		return [];
 	}
 
 	public function onUpdate(int $currentTick) : bool{
@@ -49,5 +55,9 @@ abstract class BaseMinion extends Human{
 			return $hasUpdate;
 		}
 		return parent::onUpdate($currentTick);
+	}
+
+	protected function onAction() : bool{
+		return true;
 	}
 }
