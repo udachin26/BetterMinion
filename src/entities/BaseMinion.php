@@ -22,9 +22,8 @@ abstract class BaseMinion extends Human
         parent::initEntity($nbt);
         $this->minionInfo = MinionInfo::nbtDeserialize($nbt->getCompoundTag(MinionNBT::INFO));
         $this->minionInv = new SimpleInventory($this->getMinionInfo()->getLevel());
-        $this->getMinionInv()->setContents(array_map(
-            fn (CompoundTag $nbt): Item => Item::nbtDeserialize($nbt)
-            , $nbt->getListTag(MinionNBT::INV)?->getValue() ?? []));
+        $this->getMinionInv()->setContents(array_map(fn (CompoundTag $nbt): Item => Item::nbtDeserialize($nbt),
+            $nbt->getListTag(MinionNBT::INV)?->getValue() ?? []));
     }
 
     public function getMinionInfo(): MinionInfo
