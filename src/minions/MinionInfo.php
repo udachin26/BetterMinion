@@ -19,11 +19,6 @@ final class MinionInfo implements MinionNBT{
 	){
 	}
 
-    public function getType(): MinionType
-    {
-        return $this->type;
-    }
-
 	public static function nbtDeserialize(CompoundTag $nbt) : self{
 		return new self(
 			MinionType::fromString($nbt->getString(MinionNBT::TYPE)),
