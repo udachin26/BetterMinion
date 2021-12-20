@@ -25,6 +25,14 @@ final class MinionUpgrade implements MinionNBT{
 		);
 	}
 
+	public function nbtSerialize() : CompoundTag{
+		return CompoundTag::create()
+			->setByte(MinionNBT::AUTO_SMELTER, (int) $this->getAutoSmelter())
+			->setByte(MinionNBT::AUTO_SELLER, (int) $this->getAutoSeller())
+			->setByte(MinionNBT::COMPACTOR, (int) $this->getCompactor())
+			->setByte(MinionNBT::EXPANDER, (int) $this->getExpander());
+	}
+
 	public function setAutoSmelter($autoSmelter = true) : void{
 		$this->autoSmelter = $autoSmelter;
 	}
@@ -39,14 +47,6 @@ final class MinionUpgrade implements MinionNBT{
 
 	public function setExpander($expander = true) : void{
 		$this->expander = $expander;
-	}
-
-	public function nbtSerialize() : CompoundTag{
-		return CompoundTag::create()
-			->setByte(MinionNBT::AUTO_SMELTER, (int) $this->getAutoSmelter())
-			->setByte(MinionNBT::AUTO_SELLER, (int) $this->getAutoSeller())
-			->setByte(MinionNBT::COMPACTOR, (int) $this->getCompactor())
-			->setByte(MinionNBT::EXPANDER, (int) $this->getExpander());
 	}
 
 	public function getAutoSmelter() : bool{

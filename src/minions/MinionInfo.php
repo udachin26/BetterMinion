@@ -13,6 +13,7 @@ final class MinionInfo implements MinionNBT{
 		protected MinionType $type,
 		protected BlockIdentifier $target,
 		protected MinionUpgrade $upgrade,
+		protected int $actionTime = 0,
 		protected int $level = 0,
 		protected float $moneyHeld = 0,
 		protected int $collectedResources = 0
@@ -24,6 +25,7 @@ final class MinionInfo implements MinionNBT{
 			MinionType::fromString($nbt->getString(MinionNBT::TYPE)),
 			self::targetDeserialize($nbt->getCompoundTag(MinionNBT::TARGET)),
 			MinionUpgrade::nbtDeserialize($nbt->getCompoundTag(MinionNBT::UPGRADE)),
+			$nbt->getInt(MinionNBT::ACTION_TIME),
 			$nbt->getInt(MinionNBT::LEVEL),
 			$nbt->getFloat(MinionNBT::MONEY_HELD),
 			$nbt->getInt(MinionNBT::COLLECTED_RESOURCES)
@@ -42,6 +44,7 @@ final class MinionInfo implements MinionNBT{
 			->setString(MinionNBT::TYPE, $this->getType()->name())
 			->setTag(MinionNBT::TARGET, $this->targetSerialize())
 			->setTag(MinionNBT::UPGRADE, $this->getUpgrade()->nbtSerialize())
+			->setInt(MinionNBT::ACTION_TIME, $this->getActionTime())
 			->setInt(MinionNBT::LEVEL, $this->getLevel())
 			->setFloat(MinionNBT::MONEY_HELD, $this->getMoneyHeld())
 			->setInt(MinionNBT::COLLECTED_RESOURCES, $this->getCollectedResources());
@@ -65,6 +68,14 @@ final class MinionInfo implements MinionNBT{
 		return $this->upgrade;
 	}
 
+	/**
+	 * @return int
+	 * @description Return minion action time (in tick)
+	 */
+	public function getActionTime() : int{
+		return $this->actionTime;
+	}
+
 	public function getLevel() : int{
 		return $this->level;
 	}
@@ -75,6 +86,10 @@ final class MinionInfo implements MinionNBT{
 
 	public function getCollectedResources() : int{
 		return $this->collectedResources;
+	}
+
+	public function setActionTime(int $time) : void{
+		$this->actionTime = $time;
 	}
 
 	public function setLevel(int $level) : void{

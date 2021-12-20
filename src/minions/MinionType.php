@@ -29,16 +29,16 @@ final class MinionType{
 		$this->className = $className;
 	}
 
-	public static function fromString(string $name) : self{
-		self::checkInit();
-		return self::$members[strtolower($name)];
-	}
-
 	protected static function setup() : void{
 		self::registerAll(
 			new self("mining", MiningMinion::class),
 			new self("farming", FarmingMinion::class)
 		);
+	}
+
+	public static function fromString(string $name) : self{
+		self::checkInit();
+		return self::$members[strtolower($name)];
 	}
 
 	public function className() : string{
