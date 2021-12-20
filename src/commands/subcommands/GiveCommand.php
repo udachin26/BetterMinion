@@ -11,9 +11,8 @@ use pocketmine\command\CommandSender;
 
 class GiveCommand extends BaseSubCommand{
 
-	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		$sender->sendMessage("hi");
-	}
+    public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
+    }
 
 	/**
 	 * @throws ArgumentOrderException

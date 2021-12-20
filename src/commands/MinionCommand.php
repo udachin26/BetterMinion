@@ -10,14 +10,14 @@ use pocketmine\command\CommandSender;
 
 class MinionCommand extends BaseCommand{
 
-	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		$this->sendUsage();
-	}
+    protected function prepare() : void{
+        $this->setPermission("betterminion.commands");
+        $this->setUsage("Usage: /minion <give|remove|ui> [options...]");
+        $this->registerSubCommand(new GiveCommand($this->getOwningPlugin(), "give", "Give player a minion spawner"));
+    }
 
-	protected function prepare() : void{
-		$this->setPermission("betterminion.commands");
-		//$this->setUsage("Usage: /minion <give|remove|ui> [options...]");
-		$this->registerSubCommand(new GiveCommand($this->getOwningPlugin(), "give", "Give player a minion spawner"));
-	}
+    public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
+        $sender->sendMessage($this->getUsage());
+    }
 
 }
