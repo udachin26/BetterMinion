@@ -6,8 +6,7 @@ namespace Mcbeany\BetterMinion\minions;
 
 use pocketmine\nbt\tag\CompoundTag;
 
-interface MinionNBT
-{
+interface MinionNBT{
 
     // Info
     public const INFO = "minionInfo";
@@ -31,8 +30,8 @@ interface MinionNBT
     public const COMPACTOR = "compactor";
     public const EXPANDER = "expander";
 
-    public function nbtSerialize(): CompoundTag;
+	public static function nbtDeserialize(CompoundTag $nbt);
 
-    public static function nbtDeserialize(CompoundTag $nbt);
+	public function nbtSerialize() : CompoundTag;
 
 }

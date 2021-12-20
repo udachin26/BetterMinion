@@ -1,4 +1,3 @@
----
 name: BetterMinion
 version: 0.0.1
 main: Mcbeany\BetterMinion\BetterMinion
@@ -8,4 +7,3 @@ src-namespace-prefix: Mcbeany\BetterMinion
 permissions:
   betterminion.commands:
     default: op
-...

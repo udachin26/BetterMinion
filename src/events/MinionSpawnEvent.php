@@ -7,8 +7,6 @@ namespace Mcbeany\BetterMinion\events;
 use pocketmine\event\Cancellable;
 use pocketmine\event\CancellableTrait;
 
-class MinionSpawnEvent extends MinionEvent implements Cancellable
-{
-    use CancellableTrait;
-
+class MinionSpawnEvent extends MinionEvent implements Cancellable{
+	use CancellableTrait;
 }

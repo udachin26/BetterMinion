@@ -9,19 +9,15 @@ use CortexPE\Commando\exception\ArgumentOrderException;
 use Mcbeany\BetterMinion\commands\arguments\TypeArgument;
 use pocketmine\command\CommandSender;
 
-class GiveCommand extends BaseSubCommand
-{
+class GiveCommand extends BaseSubCommand{
 
-    /**
-     * @throws ArgumentOrderException
-     */
-    protected function prepare(): void
-    {
-        $this->registerArgument(0, new TypeArgument());
+    public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
     }
 
-    public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
-    {
-    }
-
+	/**
+	 * @throws ArgumentOrderException
+	 */
+	protected function prepare() : void{
+		$this->registerArgument(0, new TypeArgument());
+	}
 }
