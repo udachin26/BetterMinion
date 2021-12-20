@@ -19,7 +19,7 @@ use pocketmine\utils\EnumTrait;
  */
 final class MinionType{
 	use EnumTrait {
-		__construct as private __enumConstruct;
+		EnumTrait::__construct as private __enumConstruct;
 	}
 
 	private string $className;

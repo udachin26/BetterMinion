@@ -9,11 +9,11 @@ use pocketmine\nbt\tag\CompoundTag;
 final class MinionInfo implements MinionNBT{
 
 	public function __construct(
-		private MinionType $type,
-		private MinionUpgrade $upgrade,
-		private int $level,
-		private float $moneyHeld,
-		private int $collectedResources
+		protected MinionType $type,
+		protected MinionUpgrade $upgrade,
+		protected int $level = 0,
+		protected float $moneyHeld = 0,
+		protected int $collectedResources = 0
 	){
 	}
 
@@ -25,18 +25,6 @@ final class MinionInfo implements MinionNBT{
 			$nbt->getFloat(MinionNBT::MONEY_HELD),
 			$nbt->getInt(MinionNBT::COLLECTED_RESOURCES)
 		);
-	}
-
-	public function incrementLevel() : void{
-		$this->level++;
-	}
-
-	public function incrementMoneyHeld(float $moneyHeld) : void{
-		$this->moneyHeld += $moneyHeld;
-	}
-
-	public function incrementCollectedResources(int $collectedResources) : void{
-		$this->collectedResources += $collectedResources;
 	}
 
 	public function nbtSerialize() : CompoundTag{
@@ -66,6 +54,30 @@ final class MinionInfo implements MinionNBT{
 
 	public function getCollectedResources() : int{
 		return $this->collectedResources;
+	}
+
+	public function setLevel(int $level) : void{
+		$this->level = $level;
+	}
+
+	public function setMoneyHeld(float $amount) : void{
+		$this->moneyHeld = $amount;
+	}
+
+	public function setCollectedResources(int $collectedResources) : void{
+		$this->collectedResources = $collectedResources;
+	}
+
+	public function incrementLevel() : void{
+		$this->level++;
+	}
+
+	public function incrementMoneyHeld(float $amount) : void{
+		$this->moneyHeld += $amount;
+	}
+
+	public function incrementCollectedResources(int $collectedResources) : void{
+		$this->collectedResources += $collectedResources;
 	}
 
 }
