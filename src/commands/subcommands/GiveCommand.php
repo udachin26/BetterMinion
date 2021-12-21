@@ -19,48 +19,48 @@ use pocketmine\player\Player;
 
 class GiveCommand extends BaseSubCommand{
 
-    public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-        if (count($args) < 2) {
-            $sender->sendMessage("Usage: /minion give <type> <target> <player>");
-            return;
-        }
-        $type = MinionType::fromString($args["type"]);
-        if ($type === null) {
-            $sender->sendMessage(Language::type_not_found($args["type"]));
-        }
-        try {
-            $target = Utils::parseItem($args["target"])->getBlock();
-            if ($target->getId() !== BlockLegacyIds::AIR) {
-                /** @var Player|null $player */
-                $player = $sender;
-                if (!$sender instanceof Player) {
-                    if (!isset($args["player"])) {
-                        $sender->sendMessage(Language::no_selected_player());
-                        return;
-                    }
-                    $player = $sender->getServer()->getPlayerByPrefix($args["player"]);
-                }
-                if ($player === null) {
-                    $sender->sendMessage(Language::player_not_found($args["player"]));
-                    return;
-                }
-                $item = BetterMinion::getInstance()->createSpawner($type, $target->getIdInfo());
-                $player->getInventory()->addItem($item);
-            }
-            return;
-        } catch (LegacyStringToItemParserException) {
-        }
+	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
+		if(count($args) < 2){
+			$sender->sendMessage("Usage: /minion give <type> <target> <player>");
+			return;
+		}
+		$type = MinionType::fromString($args["type"]);
+		if($type === null){
+			$sender->sendMessage(Language::type_not_found($args["type"]));
+		}
+		try{
+			$target = Utils::parseItem($args["target"])->getBlock();
+			if($target->getId() !== BlockLegacyIds::AIR){
+				/** @var Player|null $player */
+				$player = $sender;
+				if(!$sender instanceof Player){
+					if(!isset($args["player"])){
+						$sender->sendMessage(Language::no_selected_player());
+						return;
+					}
+					$player = $sender->getServer()->getPlayerByPrefix($args["player"]);
+				}
+				if($player === null){
+					$sender->sendMessage(Language::player_not_found($args["player"]));
+					return;
+				}
+				$item = BetterMinion::getInstance()->createSpawner($type, $target->getIdInfo());
+				$player->getInventory()->addItem($item);
+			}
+			return;
+		}catch(LegacyStringToItemParserException){
+		}
 
-        $sender->sendMessage(Language::target_not_found($args["target"]));
-    }
+		$sender->sendMessage(Language::target_not_found($args["target"]));
+	}
 
-    /**
-     * @throws ArgumentOrderException
-     */
+	/**
+	 * @throws ArgumentOrderException
+	 */
 	protected function prepare() : void{
-        $this->setPermission("betterminion.commands.give");
+		$this->setPermission("betterminion.commands.give");
 		$this->registerArgument(0, new TypeArgument("type", true));
-        $this->registerArgument(1, new RawStringArgument("target", true));
-        $this->registerArgument(2, new RawStringArgument("player", true));
+		$this->registerArgument(1, new RawStringArgument("target", true));
+		$this->registerArgument(2, new RawStringArgument("player", true));
 	}
 }

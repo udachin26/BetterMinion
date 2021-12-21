@@ -17,6 +17,7 @@ final class EventListener implements Listener{
 
 	/**
 	 * @param PlayerItemUseEvent $event
+	 *
 	 * @priority HIGHEST
 	 * @handleCancelled FALSE
 	 */
@@ -34,7 +35,7 @@ final class EventListener implements Listener{
 				$entity = new $class(Location::fromObject(
 					$world->getBlock($player->getPosition())->getPosition()->add(0.5, 0, 0.5),
 					$world
-                    // TODO: Entity's yaw
+				// TODO: Entity's yaw
 				), $player->getSkin(), $info->nbtSerialize());
 
 				$minionEvent = new MinionSpawnEvent($player, $entity);

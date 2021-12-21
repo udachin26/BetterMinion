@@ -28,13 +28,13 @@ abstract class BaseMinion extends Human{
 		$this->getMinionInventory()->setContents(array_map(fn(CompoundTag $nbt) : Item => Item::nbtDeserialize($nbt), $nbt->getListTag(MinionNBT::INV)?->getValue() ?? []));
 	}
 
-    public function saveNBT() : CompoundTag{
-        $nbt = parent::saveNBT();
-        $nbt->merge($this->getMinionInfo()->nbtSerialize());
-        return $nbt;
-    }
+	public function saveNBT() : CompoundTag{
+		$nbt = parent::saveNBT();
+		$nbt->merge($this->getMinionInfo()->nbtSerialize());
+		return $nbt;
+	}
 
-    public function getMinionInfo() : MinionInfo{
+	public function getMinionInfo() : MinionInfo{
 		return $this->minionInfo;
 	}
 
@@ -42,9 +42,9 @@ abstract class BaseMinion extends Human{
 		return $this->minionInv;
 	}
 
-    public function getActionTime() : int{
-        return 1; // TODO: Level-based action time
-    }
+	public function getActionTime() : int{
+		return 1; // TODO: Level-based action time
+	}
 
 	/**
 	 * @return Block[]
@@ -64,11 +64,11 @@ abstract class BaseMinion extends Human{
 	protected function entityBaseTick(int $tickDiff = 1) : bool{
 		$this->tickWait += $tickDiff;
 		$actionTime = $this->getActionTime();
-		if ($this->tickWait >= $actionTime){
+		if($this->tickWait >= $actionTime){
 			$times = $this->tickWait / $actionTime;
 			$this->tickWait -= $actionTime * $times;
-			if ($this->tickWait == 0){
-				if (($times - 1) > 0){
+			if($this->tickWait == 0){
+				if(($times - 1) > 0){
 					$this->doOfflineAction($times - 1);
 				}
 				$hasUpdate = $this->onAction();
@@ -76,7 +76,7 @@ abstract class BaseMinion extends Human{
 				$hasUpdate = $this->doOfflineAction($times);
 			}
 		}
-		if (isset($hasUpdate)){
+		if(isset($hasUpdate)){
 			return $hasUpdate;
 		}
 		return parent::entityBaseTick($tickDiff);

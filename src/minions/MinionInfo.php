@@ -63,9 +63,9 @@ final class MinionInfo implements MinionNBT{
 		return $this->target;
 	}
 
-    public function getRealTarget() : Block{
-        return BlockFactory::getInstance()->get($this->getTarget()->getBlockId(), $this->getTarget()->getVariant());
-    }
+	public function getRealTarget() : Block{
+		return BlockFactory::getInstance()->get($this->getTarget()->getBlockId(), $this->getTarget()->getVariant());
+	}
 
 	public function getUpgrade() : MinionUpgrade{
 		return $this->upgrade;

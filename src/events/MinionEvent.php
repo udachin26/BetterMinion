@@ -10,11 +10,11 @@ use pocketmine\player\Player;
 
 abstract class MinionEvent extends PlayerEvent{
 
-    protected BaseMinion $minion;
+	protected BaseMinion $minion;
 
 	public function __construct(Player $player, BaseMinion $minion){
-        $this->player = $player;
-        $this->minion = $minion;
+		$this->player = $player;
+		$this->minion = $minion;
 	}
 
 	public function getMinion() : BaseMinion{
