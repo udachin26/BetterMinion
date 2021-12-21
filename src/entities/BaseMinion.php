@@ -43,21 +43,32 @@ abstract class BaseMinion extends Human{
 		return [];
 	}
 
-	public function onUpdate(int $currentTick) : bool{
-		if ($this->tickWait < $this->getMinionInfo()->getActionTime()){
-			$this->tickWait++;
-		} else {
-			$hasUpdate = $this->onAction();
-			$this->tickWait = 0;
-		}
+	protected function onAction() : bool{
+		return true;
+	}
 
+	protected function doOfflineAction(int $times) : bool{
+		return true;
+	}
+
+	protected function entityBaseTick(int $tickDiff = 1) : bool{
+		$this->tickWait += $tickDiff;
+		$actionTime = $this->getMinionInfo()->getActionTime();
+		if ($this->tickWait >= $actionTime){
+			$times = $this->tickWait / $actionTime;
+			$this->tickWait -= $actionTime * $times;
+			if ($this->tickWait == 0){
+				if (($times - 1) > 0){
+					$this->doOfflineAction($times - 1);
+				}
+				$hasUpdate = $this->onAction();
+			}else{
+				$hasUpdate = $this->doOfflineAction($times);
+			}
+		}
 		if (isset($hasUpdate)){
 			return $hasUpdate;
 		}
-		return parent::onUpdate($currentTick);
-	}
-
-	protected function onAction() : bool{
-		return true;
+		return parent::entityBaseTick($tickDiff);
 	}
 }
