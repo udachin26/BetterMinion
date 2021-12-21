@@ -36,9 +36,9 @@ final class MinionType{
 		);
 	}
 
-	public static function fromString(string $name) : self{
+	public static function fromString(string $name) : ?self{
 		self::checkInit();
-		return self::$members[strtolower($name)];
+		return self::$members[mb_strtoupper($name)] ?? null;
 	}
 
 	public function className() : string{

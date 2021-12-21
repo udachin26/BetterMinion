@@ -7,3 +7,5 @@ src-namespace-prefix: Mcbeany\BetterMinion
 permissions:
   betterminion.commands:
     default: op
+  betterminion.commands.give:
+    default: op
