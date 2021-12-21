@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b946991b2306c33d1a56a163baaedbb",
+    "content-hash": "f7691cdf8dbcc60b4fdf7d18f15e273e",
     "packages": [
         {
             "name": "adhocore/json-comment",
@@ -123,16 +123,16 @@
         },
         {
             "name": "cortexpe/commando",
-            "version": "dev-PM-4.0",
+            "version": "dev-PM4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Paroxity/Commando.git",
-                "reference": "fad28e38ec2c7703c5780617fafadb4d16755932"
+                "url": "https://github.com/CortexPE/Commando.git",
+                "reference": "89a1bc1f9ffb748004888e38e0479e2ec58a3fc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Paroxity/Commando/zipball/fad28e38ec2c7703c5780617fafadb4d16755932",
-                "reference": "fad28e38ec2c7703c5780617fafadb4d16755932",
+                "url": "https://api.github.com/repos/CortexPE/Commando/zipball/89a1bc1f9ffb748004888e38e0479e2ec58a3fc4",
+                "reference": "89a1bc1f9ffb748004888e38e0479e2ec58a3fc4",
                 "shasum": ""
             },
             "type": "library",
@@ -143,15 +143,16 @@
                     ]
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL-3.0-only"
             ],
             "description": "A Command Framework virion for PocketMine-MP ",
             "support": {
-                "source": "https://github.com/Paroxity/Commando/tree/PM-4.0",
-                "issues": "https://github.com/Paroxity/Commando/issues"
+                "issues": "https://github.com/CortexPE/Commando/issues",
+                "source": "https://github.com/CortexPE/Commando/tree/PM4"
             },
-            "time": "2021-08-27T20:03:37+00:00"
+            "time": "2021-11-21T08:13:35+00:00"
         },
         {
             "name": "fgrosse/phpasn1",
