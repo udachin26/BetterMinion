@@ -22,7 +22,16 @@ class FarmingMinion extends BaseMinion{
 		return $blocks;
 	}
 
-	public function onAction() : bool{
+	protected function onAction() : bool{
+		$working_blocks = $this->getWorkingBlocks();
+		$target = $working_blocks[array_rand($working_blocks)];
+		$this->lookAt($target->getPosition());
+		//TODO: Harvest Crops Action
 		return parent::onAction();
+	}
+
+	protected function doOfflineAction(int $times) : bool{
+		//TODO: Offline action (just add stuff to inventory)
+		return parent::doOfflineAction($times);
 	}
 }
