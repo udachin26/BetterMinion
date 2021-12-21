@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\entities\types;
 
 use Mcbeany\BetterMinion\entities\BaseMinion;
+use pocketmine\block\Air;
+use pocketmine\block\BlockFactory;
+use pocketmine\block\VanillaBlocks;
+use pocketmine\world\Position;
 
 class MiningMinion extends BaseMinion{
 	public function getWorkingBlocks() : array{
@@ -22,11 +26,28 @@ class MiningMinion extends BaseMinion{
 		return $blocks;
 	}
 
+	protected function place(Position $position) : void{
+		//TODO: Place animation
+		$position->getWorld()->setBlock($position, $this->getMinionInfo()->getRealTarget());
+	}
+
+	protected function mine(Position $position) : void{
+		//TODO: Mining animation
+	}
+
 	protected function onAction() : bool{
-		$working_blocks = $this->getWorkingBlocks();
-		$target = $working_blocks[array_rand($working_blocks)];
-		$this->lookAt($target->getPosition());
-		//TODO: Mine Action
+		if ($this->isContainInvalidBlock()){
+			//TODO: Send minion message in his nametag like "This place isnt perfect :("
+			return parent::onAction();
+		}
+		if ($this->isContainAir()){
+			$pos = $this->getAirBlock()->getPosition();
+			$this->place($pos);
+			return parent::onAction();
+		}
+		$area = $this->getWorkingBlocks();
+		$pos = $area[array_rand($area)]->getPosition();
+		$this->mine($pos);
 		return parent::onAction();
 	}
 

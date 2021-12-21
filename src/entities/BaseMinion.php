@@ -6,6 +6,7 @@ namespace Mcbeany\BetterMinion\entities;
 
 use Mcbeany\BetterMinion\minions\MinionInfo;
 use Mcbeany\BetterMinion\minions\MinionNBT;
+use pocketmine\block\Air;
 use pocketmine\block\Block;
 use pocketmine\entity\Human;
 use pocketmine\inventory\SimpleInventory;
@@ -51,6 +52,38 @@ abstract class BaseMinion extends Human{
 	 */
 	public function getWorkingBlocks() : array{
 		return [];
+	}
+
+	protected function isContainAir() : bool{
+		$workspace = $this->getWorkingBlocks();
+		foreach($workspace as $block){
+			if ($block instanceof Air){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected function getAirBlock() : ?Air{
+		$workspace = $this->getWorkingBlocks();
+		foreach($workspace as $block){
+			if ($block instanceof Air){
+				return $block;
+			}
+		}
+		return null;
+	}
+
+	protected function isContainInvalidBlock() : bool{
+		$workspace = $this->getWorkingBlocks();
+		foreach($workspace as $block){
+			if ($block->getIdInfo() !== $this->getMinionInfo()->getTarget()){
+				if (!$block instanceof Air){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	protected function onAction() : bool{
