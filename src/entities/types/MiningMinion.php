@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\entities\types;
 
 use Mcbeany\BetterMinion\entities\BaseMinion;
-use pocketmine\block\Air;
-use pocketmine\block\BlockFactory;
-use pocketmine\block\VanillaBlocks;
 use pocketmine\world\Position;
 
 class MiningMinion extends BaseMinion{
