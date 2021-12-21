@@ -59,12 +59,15 @@ final class BetterMinion extends PluginBase{
 		$this->getServer()->getCommandMap()->register("minion", new MinionCommand($this, "minion", "BetterMinion Commands"));
 	}
 
-	public function createSpawner(MinionType $type, BlockIdentifier $target) : Item{
+	public function createSpawner(MinionType $type, BlockIdentifier $target, int $level = 1, float $moneyHeld = 0, int $collectedResources = 0) : Item{
 		$info = new MinionInfo(
 			$type,
 			$target,
-			new MinionUpgrade()
-		// TODO: Spawner's custom options such as level and upgrade selection
+			new MinionUpgrade(),
+			$level,
+			$moneyHeld,
+			$collectedResources
+			// TODO: Spawner's custom options such as level and upgrade selection
 		);
 		$item = Configuration::minion_spawner();
 		$item->getNamedTag()->setTag(MinionNBT::INFO, $info->nbtSerialize());

@@ -14,7 +14,7 @@ use pocketmine\nbt\tag\CompoundTag;
 
 abstract class BaseMinion extends Human{
 
-	protected const WORKING_RADIUS = 2;
+	protected const WORKING_RADIUS = 2; //TODO: Expander upgrade
 
 	protected MinionInfo $minionInfo;
 	protected SimpleInventory $minionInv;

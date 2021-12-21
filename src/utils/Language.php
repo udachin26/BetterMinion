@@ -17,7 +17,7 @@ final class Language extends PMLang{
 	}
 
 	public const AVAILABLE_LANGS = [
-		"eng"
+		"eng" //TODO: Custom Language Config
 	];
 
 	public static function load(){
