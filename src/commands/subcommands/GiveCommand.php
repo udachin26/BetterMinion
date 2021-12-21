@@ -31,8 +31,7 @@ class GiveCommand extends BaseSubCommand{
         }
         $type = MinionType::fromString($args["type"]);
         if ($type === null) {
-            $sender->sendMessage(Language::getInstance()->type_not_found($args["type"]));
-            return;
+            $sender->sendMessage(Language::type_not_found($args["type"]));
         }
         try {
             $target = Utils::parseItem($args["target"])->getBlock();
@@ -40,13 +39,13 @@ class GiveCommand extends BaseSubCommand{
                 $player = $sender;
                 if (!$sender instanceof Player) {
                     if (!isset($args["player"])) {
-                        $sender->sendMessage(Language::getInstance()->no_selected_player());
+                        $sender->sendMessage(Language::no_selected_player());
                         return;
                     }
                     $player = $sender->getServer()->getPlayerByPrefix($args["player"]);
                 }
                 if ($player === null) {
-                    $sender->sendMessage(Language::getInstance()->player_not_found($args["player"]));
+                    $sender->sendMessage(Language::player_not_found($args["player"]));
                     return;
                 }
                 // TODO: Give player's a minion spawner
@@ -55,7 +54,7 @@ class GiveCommand extends BaseSubCommand{
         } catch (LegacyStringToItemParserException) {
         }
 
-        $sender->sendMessage(Language::getInstance()->target_not_found($args["target"]));
+        $sender->sendMessage(Language::target_not_found($args["target"]));
     }
 
     /**

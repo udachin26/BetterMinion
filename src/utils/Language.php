@@ -10,7 +10,10 @@ use pocketmine\lang\Translatable;
 use pocketmine\utils\SingletonTrait;
 
 final class Language extends PMLang{
-	use SingletonTrait;
+	use SingletonTrait {
+        setInstance as private;
+        getInstance as private;
+    }
 
 	public const AVAILABLE_LANGS = [
 		"eng"
@@ -21,38 +24,38 @@ final class Language extends PMLang{
 			BetterMinion::getInstance()->saveResource("langs".DIRECTORY_SEPARATOR."$lang.ini");
 		}
 		$instance = new self(
-			Configuration::getInstance()->language(),
+			Configuration::language(),
 			BetterMinion::getInstance()->getDataFolder() . "langs"
 		);
 		self::setInstance($instance);
 	}
 
-    public function type_not_found(string $input) : string{
-        return $this->translate(new Translatable($this->get("type.not.found"),
+    public static function type_not_found(string $input) : string{
+        return self::getInstance()->translate(new Translatable(self::getInstance()->get("type.not.found"),
             [
                 "type" =>  $input
             ]
         ));
     }
 
-    public function target_not_found(string $input) : string{
-        return $this->translate(new Translatable($this->get("target.not.found"),
+    public static function target_not_found(string $input) : string{
+        return self::getInstance()->translate(new Translatable(self::getInstance()->get("target.not.found"),
             [
                 "target" =>  $input
             ]
         ));
     }
 
-    public function player_not_found(string $input) : string{
-        return $this->translate(new Translatable($this->get("player.not.found"),
+    public static function player_not_found(string $input) : string{
+        return self::getInstance()->translate(new Translatable(self::getInstance()->get("player.not.found"),
             [
                 "player" =>  $input
             ]
         ));
     }
 
-    public function no_selected_player() : string{
-        return $this->translate(new Translatable($this->get("no.selected.player")));
+    public static function no_selected_player() : string{
+        return self::getInstance()->translate(new Translatable(self::getInstance()->get("no.selected.player")));
     }
 
 }

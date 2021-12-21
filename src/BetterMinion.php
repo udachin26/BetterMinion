@@ -27,6 +27,12 @@ class BetterMinion extends PluginBase{
 		MiningMinion::class,
 		FarmingMinion::class
 	];
+
+    protected function onLoad() : void{
+        self::setInstance($this);
+        Configuration::load();
+        Language::load();
+    }
 	
 	protected function onEnable() : void{
 		try{
@@ -43,9 +49,6 @@ class BetterMinion extends PluginBase{
 				}, [basename($class)]
 			);
 		}
-		self::setInstance($this);
-		Configuration::load();
-		Language::load();
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
 		$this->getServer()->getCommandMap()->register("minion", new MinionCommand($this, "minion", "BetterMinion Commands"));
 	}
