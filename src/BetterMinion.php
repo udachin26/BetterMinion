@@ -15,6 +15,7 @@ use Mcbeany\BetterMinion\minions\MinionType;
 use Mcbeany\BetterMinion\minions\MinionUpgrade;
 use Mcbeany\BetterMinion\utils\Configuration;
 use Mcbeany\BetterMinion\utils\Language;
+use muqsit\invmenu\InvMenuHandler;
 use pocketmine\block\BlockIdentifier;
 use pocketmine\entity\Entity;
 use pocketmine\entity\EntityDataHelper;
@@ -47,6 +48,9 @@ final class BetterMinion extends PluginBase{
 			}
 		}catch(HookAlreadyRegistered){
 			//NOOP
+		}
+		if (!InvMenuHandler::isRegistered()) {
+			InvMenuHandler::register($this);
 		}
 		foreach(self::MINION_CLASSES as $class){
 			EntityFactory::getInstance()->register($class,

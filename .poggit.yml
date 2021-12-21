@@ -9,4 +9,7 @@ projects:
       - src: CortexPE/Commando/Commando
         version: ^3.0.0
         branch: PM4
+      - src: Muqsit/InvMenu/InvMenu
+        version: ^4.3.4
+        branch: "4.0"
 ...
