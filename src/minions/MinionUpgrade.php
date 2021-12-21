@@ -9,10 +9,10 @@ use pocketmine\nbt\tag\CompoundTag;
 final class MinionUpgrade implements MinionNBT{
 
 	public function __construct(
-		private bool $autoSmelter,
-		private bool $autoSeller,
-		private bool $compactor,
-		private bool $expander
+		private bool $autoSmelter = false,
+		private bool $autoSeller = false,
+		private bool $compactor = false,
+		private bool $expander = false
 	){
 	}
 
@@ -27,10 +27,10 @@ final class MinionUpgrade implements MinionNBT{
 
 	public function nbtSerialize() : CompoundTag{
 		return CompoundTag::create()
-			->setByte(MinionNBT::AUTO_SMELTER, (int) $this->getAutoSmelter())
-			->setByte(MinionNBT::AUTO_SELLER, (int) $this->getAutoSeller())
-			->setByte(MinionNBT::COMPACTOR, (int) $this->getCompactor())
-			->setByte(MinionNBT::EXPANDER, (int) $this->getExpander());
+			->setByte(MinionNBT::AUTO_SMELTER, (int) $this->hasAutoSmelter())
+			->setByte(MinionNBT::AUTO_SELLER, (int) $this->hasAutoSeller())
+			->setByte(MinionNBT::COMPACTOR, (int) $this->hasCompactor())
+			->setByte(MinionNBT::EXPANDER, (int) $this->hasExpander());
 	}
 
 	public function setAutoSmelter($autoSmelter = true) : void{
@@ -49,19 +49,19 @@ final class MinionUpgrade implements MinionNBT{
 		$this->expander = $expander;
 	}
 
-	public function getAutoSmelter() : bool{
+	public function hasAutoSmelter() : bool{
 		return $this->autoSmelter;
 	}
 
-	public function getAutoSeller() : bool{
+	public function hasAutoSeller() : bool{
 		return $this->autoSeller;
 	}
 
-	public function getCompactor() : bool{
+	public function hasCompactor() : bool{
 		return $this->compactor;
 	}
 
-	public function getExpander() : bool{
+	public function hasExpander() : bool{
 		return $this->expander;
 	}
 
