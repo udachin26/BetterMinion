@@ -6,8 +6,6 @@ namespace Mcbeany\BetterMinion\utils;
 
 use Mcbeany\BetterMinion\BetterMinion;
 use pocketmine\item\Item;
-use pocketmine\item\LegacyStringToItemParser;
-use pocketmine\item\StringToItemParser;
 use pocketmine\lang\Language;
 use pocketmine\utils\SingletonTrait;
 
@@ -31,10 +29,9 @@ final class Configuration{
 		return BetterMinion::getInstance()->getConfig()->get("language");
 	}
 
-	public function minion_item() : Item{
-		$itemName = (string) BetterMinion::getInstance()->getConfig()->get("minion-item");
-		return StringToItemParser::getInstance()->parse($itemName)
-			?? LegacyStringToItemParser::getInstance()->parse($itemName);
+	public function minion_spawner() : Item{
+		$itemName = (string) BetterMinion::getInstance()->getConfig()->get("minion-spawner");
+		return Utils::parseItem($itemName);
 	}
 
 }
