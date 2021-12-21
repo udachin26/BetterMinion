@@ -31,6 +31,7 @@ class GiveCommand extends BaseSubCommand{
         try {
             $target = Utils::parseItem($args["target"])->getBlock();
             if ($target->getId() !== BlockLegacyIds::AIR) {
+                /** @var Player|null $player */
                 $player = $sender;
                 if (!$sender instanceof Player) {
                     if (!isset($args["player"])) {

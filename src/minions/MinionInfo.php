@@ -83,10 +83,6 @@ final class MinionInfo implements MinionNBT{
 		return $this->collectedResources;
 	}
 
-	public function setActionTime(int $time) : void{
-		$this->actionTime = $time;
-	}
-
 	public function setLevel(int $level) : void{
 		$this->level = $level;
 	}
