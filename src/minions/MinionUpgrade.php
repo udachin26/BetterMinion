@@ -6,13 +6,13 @@ namespace Mcbeany\BetterMinion\minions;
 
 use pocketmine\nbt\tag\CompoundTag;
 
-final class MinionUpgrade implements MinionNBT{
+class MinionUpgrade implements MinionNBT{
 
 	public function __construct(
-		private bool $autoSmelter = false,
-		private bool $autoSeller = false,
-		private bool $compactor = false,
-		private bool $expander = false
+		protected bool $autoSmelter = false,
+		protected bool $autoSeller = false,
+		protected bool $compactor = false,
+		protected bool $expander = false
 	){
 	}
 

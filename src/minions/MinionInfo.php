@@ -9,7 +9,7 @@ use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockIdentifier;
 use pocketmine\nbt\tag\CompoundTag;
 
-final class MinionInfo implements MinionNBT{
+class MinionInfo implements MinionNBT{
 
 	public function __construct(
 		protected MinionType $type,
