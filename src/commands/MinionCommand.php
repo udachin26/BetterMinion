@@ -8,18 +8,13 @@ use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\BaseSubCommand;
 use Mcbeany\BetterMinion\commands\subcommands\GiveCommand;
 use pocketmine\command\CommandSender;
-use pocketmine\plugin\Plugin;
 
 class MinionCommand extends BaseCommand{
 
-    public function __construct(Plugin $plugin, string $name, string $description = "", array $aliases = []){
-        parent::__construct($plugin, $name, $description, $aliases);
-        $this->usageMessage = "/minion <".implode("|",
-            array_map(fn (BaseSubCommand $subCommand) => $subCommand->getName(), $this->getSubCommands()))."> [options...]";
-    }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-        $this->sendUsage();
+        $sender->sendMessage("Usage: "."/minion <".implode("|",
+                array_map(fn (BaseSubCommand $subCommand) => $subCommand->getName(), $this->getSubCommands()))."> [options...]");
     }
 
     protected function prepare() : void{

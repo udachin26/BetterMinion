@@ -5,5 +5,4 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\utils;
 
 class EconomyProvider{
-	//TODO: EconomyProvider
 }

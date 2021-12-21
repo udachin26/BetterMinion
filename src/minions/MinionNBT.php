@@ -13,7 +13,6 @@ interface MinionNBT{
 	public const TYPE = "type";
 	public const TARGET = "target";
 	public const UPGRADE = "upgrade";
-	public const ACTION_TIME = "actionTime";
 	public const LEVEL = "level";
 	public const MONEY_HELD = "moneyHeld";
 	public const COLLECTED_RESOURCES = "collectedResources";

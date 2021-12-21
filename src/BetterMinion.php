@@ -9,18 +9,25 @@ use CortexPE\Commando\PacketHooker;
 use Mcbeany\BetterMinion\commands\MinionCommand;
 use Mcbeany\BetterMinion\entities\types\FarmingMinion;
 use Mcbeany\BetterMinion\entities\types\MiningMinion;
+use Mcbeany\BetterMinion\minions\MinionInfo;
+use Mcbeany\BetterMinion\minions\MinionNBT;
+use Mcbeany\BetterMinion\minions\MinionType;
+use Mcbeany\BetterMinion\minions\MinionUpgrade;
 use Mcbeany\BetterMinion\utils\Configuration;
 use Mcbeany\BetterMinion\utils\Language;
+use pocketmine\block\BlockFactory;
+use pocketmine\block\BlockIdentifier;
 use pocketmine\entity\Entity;
 use pocketmine\entity\EntityDataHelper;
 use pocketmine\entity\EntityFactory;
 use pocketmine\entity\Human;
+use pocketmine\item\Item;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\world\World;
 
-class BetterMinion extends PluginBase{
+final class BetterMinion extends PluginBase{
 	use SingletonTrait;
 
 	const MINION_CLASSES = [
@@ -52,5 +59,19 @@ class BetterMinion extends PluginBase{
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
 		$this->getServer()->getCommandMap()->register("minion", new MinionCommand($this, "minion", "BetterMinion Commands"));
 	}
+
+    public function createSpawner(MinionType $type, BlockIdentifier $target) : Item{
+        $info = new MinionInfo(
+            $type,
+            $target,
+            new MinionUpgrade()
+            // TODO: Spawner's custom options such as level and upgrade selection
+        );
+        $item = Configuration::minion_spawner();
+        $item->getNamedTag()->setTag(MinionNBT::INFO, $info->nbtSerialize());
+        $item->setCustomName(Language::minion_spawner_name($info));
+        $item->setLore(Language::minion_spawner_lore($info));
+        return $item;
+    }
 
 }

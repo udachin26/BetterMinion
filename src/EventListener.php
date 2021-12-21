@@ -24,7 +24,7 @@ final class EventListener implements Listener{
 		$player = $event->getPlayer();
 		$world = $player->getWorld();
 		$item = $event->getItem();
-		if($item->equals(Configuration::minion_spawner(), true)){
+		if($item->equals(Configuration::minion_spawner(), true, false)){
 			$nbt = $item->getNamedTag()->getCompoundTag(MinionNBT::INFO);
 			if($nbt !== null){
 				$event->cancel();
@@ -34,7 +34,8 @@ final class EventListener implements Listener{
 				$entity = new $class(Location::fromObject(
 					$world->getBlock($player->getPosition())->getPosition()->add(0.5, 0, 0.5),
 					$world
-				), $player->getSkin());
+                    // TODO: Entity's yaw
+				), $player->getSkin(), $info->nbtSerialize());
 
 				$minionEvent = new MinionSpawnEvent($player, $entity);
 				$minionEvent->call();

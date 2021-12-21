@@ -7,6 +7,7 @@ namespace Mcbeany\BetterMinion\commands\subcommands;
 use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseSubCommand;
 use CortexPE\Commando\exception\ArgumentOrderException;
+use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\commands\arguments\TypeArgument;
 use Mcbeany\BetterMinion\minions\MinionType;
 use Mcbeany\BetterMinion\utils\Language;
@@ -18,15 +19,9 @@ use pocketmine\player\Player;
 
 class GiveCommand extends BaseSubCommand{
 
-
-    public function __construct(string $name, string $description = "", array $aliases = []){
-        parent::__construct($name, $description, $aliases);
-        $this->usageMessage = "/minion <type> <target> <player>";
-    }
-
     public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
         if (count($args) < 2) {
-            $this->sendUsage();
+            $sender->sendMessage("Usage: /minion give <type> <target> <player>");
             return;
         }
         $type = MinionType::fromString($args["type"]);
@@ -48,7 +43,8 @@ class GiveCommand extends BaseSubCommand{
                     $sender->sendMessage(Language::player_not_found($args["player"]));
                     return;
                 }
-                // TODO: Give player's a minion spawner
+                $item = BetterMinion::getInstance()->createSpawner($type, $target->getIdInfo());
+                $player->getInventory()->addItem($item);
             }
             return;
         } catch (LegacyStringToItemParserException) {

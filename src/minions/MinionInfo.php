@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\minions;
 
+use pocketmine\block\Block;
+use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockIdentifier;
 use pocketmine\nbt\tag\CompoundTag;
 
@@ -13,8 +15,7 @@ final class MinionInfo implements MinionNBT{
 		protected MinionType $type,
 		protected BlockIdentifier $target,
 		protected MinionUpgrade $upgrade,
-		protected int $actionTime = 0,
-		protected int $level = 0,
+		protected int $level = 1,
 		protected float $moneyHeld = 0,
 		protected int $collectedResources = 0
 	){
@@ -25,7 +26,6 @@ final class MinionInfo implements MinionNBT{
 			MinionType::fromString($nbt->getString(MinionNBT::TYPE)),
 			self::targetDeserialize($nbt->getCompoundTag(MinionNBT::TARGET)),
 			MinionUpgrade::nbtDeserialize($nbt->getCompoundTag(MinionNBT::UPGRADE)),
-			$nbt->getInt(MinionNBT::ACTION_TIME),
 			$nbt->getInt(MinionNBT::LEVEL),
 			$nbt->getFloat(MinionNBT::MONEY_HELD),
 			$nbt->getInt(MinionNBT::COLLECTED_RESOURCES)
@@ -44,7 +44,6 @@ final class MinionInfo implements MinionNBT{
 			->setString(MinionNBT::TYPE, $this->getType()->name())
 			->setTag(MinionNBT::TARGET, $this->targetSerialize())
 			->setTag(MinionNBT::UPGRADE, $this->getUpgrade()->nbtSerialize())
-			->setInt(MinionNBT::ACTION_TIME, $this->getActionTime())
 			->setInt(MinionNBT::LEVEL, $this->getLevel())
 			->setFloat(MinionNBT::MONEY_HELD, $this->getMoneyHeld())
 			->setInt(MinionNBT::COLLECTED_RESOURCES, $this->getCollectedResources());
@@ -64,16 +63,12 @@ final class MinionInfo implements MinionNBT{
 		return $this->target;
 	}
 
+    public function getRealTarget() : Block{
+        return BlockFactory::getInstance()->get($this->getTarget()->getBlockId(), $this->getTarget()->getVariant());
+    }
+
 	public function getUpgrade() : MinionUpgrade{
 		return $this->upgrade;
-	}
-
-	/**
-	 * @return int
-	 * @description Return minion action time (in tick)
-	 */
-	public function getActionTime() : int{
-		return $this->actionTime;
 	}
 
 	public function getLevel() : int{

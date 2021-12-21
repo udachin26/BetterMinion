@@ -15,7 +15,7 @@ class MiningMinion extends BaseMinion{
 		for ($i = $x - self::WORKING_RADIUS; $i <= $x + self::WORKING_RADIUS; $i++){
 			for ($j = $z - self::WORKING_RADIUS; $j <= $z + self::WORKING_RADIUS; $z++){
 				if (($i !== $x) && ($j !== $z)){
-					$blocks[] = $this->getPosition()->getWorld()->getBlockAt($i, $y - 1, $j);
+					$blocks[] = $this->getPosition()->getWorld()->getBlockAt((int) $i, (int) $y - 1, (int) $j);
 				}
 			}
 		}
