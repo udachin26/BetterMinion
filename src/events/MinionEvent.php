@@ -21,4 +21,8 @@ abstract class MinionEvent extends PlayerEvent{
 		return $this->minion;
 	}
 
+	public function isOwn() : bool{
+		return $this->getMinion()->getOwner()->equals($this->getPlayer()->getUniqueId());
+	}
+
 }

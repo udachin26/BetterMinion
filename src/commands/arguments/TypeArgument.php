@@ -10,7 +10,7 @@ use pocketmine\command\CommandSender;
 
 class TypeArgument extends StringEnumArgument{
 
-	public function parse(string $argument, CommandSender $sender){
+	public function parse(string $argument, CommandSender $sender) : string{
 		return strtolower($argument);
 	}
 

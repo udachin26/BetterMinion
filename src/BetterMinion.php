@@ -42,6 +42,13 @@ final class BetterMinion extends PluginBase{
 	}
 
 	protected function onEnable() : void{
+		$this->initLibraries();
+		$this->initEntities();
+		$this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
+		$this->getServer()->getCommandMap()->register("minion", new MinionCommand($this, "minion", "BetterMinion Commands"));
+	}
+
+	protected function initLibraries() : void{
 		try{
 			if(!PacketHooker::isRegistered()){
 				PacketHooker::register($this);
@@ -52,6 +59,9 @@ final class BetterMinion extends PluginBase{
 		if (!InvMenuHandler::isRegistered()) {
 			InvMenuHandler::register($this);
 		}
+	}
+
+	protected function initEntities(){
 		foreach(self::MINION_CLASSES as $class){
 			EntityFactory::getInstance()->register($class,
 				function(World $world, CompoundTag $nbt) use ($class) : Entity{
@@ -59,8 +69,6 @@ final class BetterMinion extends PluginBase{
 				}, [basename($class)]
 			);
 		}
-		$this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
-		$this->getServer()->getCommandMap()->register("minion", new MinionCommand($this, "minion", "BetterMinion Commands"));
 	}
 
 	public function createSpawner(MinionType $type, BlockIdentifier $target, int $level = 1, float $moneyHeld = 0, int $collectedResources = 0) : Item{

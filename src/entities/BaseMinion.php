@@ -12,12 +12,17 @@ use pocketmine\entity\Human;
 use pocketmine\inventory\SimpleInventory;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
+use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\ListTag;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 abstract class BaseMinion extends Human{
 
 	protected const WORKING_RADIUS = 2; //TODO: Expander upgrade
 
+	protected UuidInterface $owner;
 	protected MinionInfo $minionInfo;
 	protected SimpleInventory $minionInv;
 
@@ -27,15 +32,29 @@ abstract class BaseMinion extends Human{
 
 	protected function initEntity(CompoundTag $nbt) : void{
 		parent::initEntity($nbt);
+		$this->owner = Uuid::uuid3(Uuid::NIL, $nbt->getString(MinionNBT::OWNER));
 		$this->minionInfo = MinionInfo::nbtDeserialize($nbt);
 		$this->minionInv = new SimpleInventory($this->getMinionInfo()->getLevel());
-		$this->getMinionInventory()->setContents(array_map(fn(CompoundTag $nbt) : Item => Item::nbtDeserialize($nbt), $nbt->getListTag(MinionNBT::INV)?->getValue() ?? []));
+		$this->getMinionInventory()->setContents(array_map(
+			fn(CompoundTag $nbt) : Item => Item::nbtDeserialize($nbt),
+			$nbt->getListTag(MinionNBT::INV)?->getValue() ?? []
+		));
 	}
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
+		$nbt->setString(MinionNBT::OWNER, $this->getOwner()->toString());
 		$nbt->merge($this->getMinionInfo()->nbtSerialize());
+		$nbt->setTag(MinionNBT::INV, new ListTag(array_map(
+			fn(Item $item) : CompoundTag => $item->nbtSerialize(),
+			$this->getMinionInventory()->getContents(true)),
+			NBT::TAG_Compound
+		));
 		return $nbt;
+	}
+
+	public function getOwner() : UuidInterface{
+		return $this->owner;
 	}
 
 	public function getMinionInfo() : MinionInfo{

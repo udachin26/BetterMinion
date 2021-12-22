@@ -21,6 +21,9 @@ interface MinionNBT{
 	public const BLOCK_ID = "blockId";
 	public const VARIANT = "variant";
 
+	// Owner
+	public const OWNER = "owner";
+
 	// Inv
 	public const INV = "minionInv";
 
