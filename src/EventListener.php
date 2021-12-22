@@ -39,7 +39,7 @@ final class EventListener implements Listener{
 					$world->getBlock($player->getPosition())->getPosition()->add(0.5, 0, 0.5),
 					$world
 				// TODO: Entity's yaw
-				), $player->getSkin(), $info->nbtSerialize());
+				), $player->getSkin(), $info->nbtSerialize()->setString(MinionNBT::OWNER, $player->getUniqueId()->toString()));
 
 				$minionEvent = new MinionSpawnEvent($player, $entity);
 				$minionEvent->call();
