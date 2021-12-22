@@ -6,8 +6,11 @@ namespace Mcbeany\BetterMinion\utils;
 
 use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\minions\MinionInfo;
+use Mcbeany\BetterMinion\minions\MinionType;
+use pocketmine\block\Block;
 use pocketmine\lang\Language as PMLang;
 use pocketmine\lang\Translatable;
+use pocketmine\player\Player;
 use pocketmine\utils\SingletonTrait;
 
 final class Language extends PMLang{
@@ -59,6 +62,25 @@ final class Language extends PMLang{
 		return self::getInstance()->translate(new Translatable(self::getInstance()->get("no.selected.player")));
 	}
 
+	public static function gave_player_spawner(Player $player, MinionType $type, Block $target) : string{
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("gave.player.spawner"),
+			[
+				"player" => $player->getName(),
+				"type" => $type->typeName(),
+				"target" => $target->getName()
+			]
+		));
+	}
+
+	public static function received_minion_spawner(MinionType $type, Block $target) : string{
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("received.minion.spawner"),
+			[
+				"type" => $type->typeName(),
+				"target" => $target->getName()
+			]
+		));
+	}
+
 	public static function minion_spawner_name(MinionInfo $info) : string{
 		return self::getInstance()->translate(new Translatable(self::getInstance()->get("minion.spawner.name"),
 			[
@@ -88,6 +110,10 @@ final class Language extends PMLang{
 			));
 		}
 		return $lores;
+	}
+
+	public static function inventory_is_full() : string{
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("inventory.is.full")));
 	}
 
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\commands\subcommands;
 
 use CortexPE\Commando\args\RawStringArgument;
+use CortexPE\Commando\args\TargetPlayerArgument;
 use CortexPE\Commando\BaseSubCommand;
 use CortexPE\Commando\exception\ArgumentOrderException;
 use Mcbeany\BetterMinion\BetterMinion;
@@ -45,7 +46,11 @@ class GiveCommand extends BaseSubCommand{
 					return;
 				}
 				$item = BetterMinion::getInstance()->createSpawner($type, $target->getIdInfo());
-				$player->getInventory()->addItem($item);
+				$player->sendMessage(Language::received_minion_spawner($type, $target));
+				if(!empty($player->getInventory()->addItem($item))){
+					$player->sendMessage(Language::inventory_is_full());
+				}
+				$sender->sendMessage(Language::gave_player_spawner($player, $type, $target));
 			}
 			return;
 		}catch(LegacyStringToItemParserException){
@@ -61,6 +66,6 @@ class GiveCommand extends BaseSubCommand{
 		$this->setPermission("betterminion.commands.give");
 		$this->registerArgument(0, new TypeArgument("type", true));
 		$this->registerArgument(1, new RawStringArgument("target", true));
-		$this->registerArgument(2, new RawStringArgument("player", true));
+		$this->registerArgument(2, new TargetPlayerArgument(true));
 	}
 }

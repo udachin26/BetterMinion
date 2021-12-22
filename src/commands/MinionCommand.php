@@ -19,7 +19,7 @@ class MinionCommand extends BaseCommand{
 
 	protected function prepare() : void{
 		$this->setPermission("betterminion.commands");
-		$this->registerSubCommand(new GiveCommand("give", "Give player a minion spawner"));
+		$this->registerSubCommand(new GiveCommand($this->getOwningPlugin(), "give", "Give player a minion spawner"));
 	}
 
 }
