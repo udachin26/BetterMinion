@@ -79,7 +79,7 @@ abstract class BaseMinion extends Human{
 	protected function isContainAir() : bool{
 		$workspace = $this->getWorkingBlocks();
 		foreach($workspace as $block){
-			if ($block instanceof Air){
+			if($block instanceof Air){
 				return true;
 			}
 		}
@@ -89,7 +89,7 @@ abstract class BaseMinion extends Human{
 	protected function getAirBlock() : ?Air{
 		$workspace = $this->getWorkingBlocks();
 		foreach($workspace as $block){
-			if ($block instanceof Air){
+			if($block instanceof Air){
 				return $block;
 			}
 		}
@@ -99,8 +99,8 @@ abstract class BaseMinion extends Human{
 	protected function isContainInvalidBlock() : bool{
 		$workspace = $this->getWorkingBlocks();
 		foreach($workspace as $block){
-			if ($block->getIdInfo() !== $this->getMinionInfo()->getTarget()){
-				if (!$block instanceof Air){
+			if($block->getIdInfo() !== $this->getMinionInfo()->getTarget()){
+				if(!$block instanceof Air){
 					return true;
 				}
 			}
@@ -117,7 +117,7 @@ abstract class BaseMinion extends Human{
 	}
 
 	protected function entityBaseTick(int $tickDiff = 1) : bool{
-		if ($this->isPaused){
+		if($this->isPaused){
 			return parent::entityBaseTick($tickDiff);
 		}
 		$this->tickWait += $tickDiff;

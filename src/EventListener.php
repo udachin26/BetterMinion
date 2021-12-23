@@ -63,12 +63,12 @@ final class EventListener implements Listener{
 	public function onEntityDamageByEntity(EntityDamageByEntityEvent $event){
 		$entity = $event->getEntity();
 		$damager = $event->getDamager();
-		if ($entity instanceof BaseMinion) {
+		if($entity instanceof BaseMinion){
 			//$event->cancel();
-			if ($damager instanceof Player) {
+			if($damager instanceof Player){
 				$minionEvent = new MinionInteractEvent($damager, $entity);
 				$minionEvent->call();
-				if ($minionEvent->isCancelled()) {
+				if($minionEvent->isCancelled()){
 					return;
 				}
 			}

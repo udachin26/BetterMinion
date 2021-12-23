@@ -23,7 +23,7 @@ class TypeArgument extends StringEnumArgument{
 	}
 
 	public function getEnumValues() : array{
-		return array_values(array_map(fn (MinionType $type) => $type->name(), MinionType::getAll()));
+		return array_values(array_map(fn(MinionType $type) => $type->name(), MinionType::getAll()));
 	}
 
 }

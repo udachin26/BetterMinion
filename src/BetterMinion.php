@@ -56,7 +56,7 @@ final class BetterMinion extends PluginBase{
 		}catch(HookAlreadyRegistered){
 			//NOOP
 		}
-		if (!InvMenuHandler::isRegistered()) {
+		if(!InvMenuHandler::isRegistered()){
 			InvMenuHandler::register($this);
 		}
 	}
@@ -79,7 +79,7 @@ final class BetterMinion extends PluginBase{
 			$level,
 			$moneyHeld,
 			$collectedResources
-			// TODO: Spawner's custom options such as level and upgrade selection
+		// TODO: Spawner's custom options such as level and upgrade selection
 		);
 		$item = Configuration::minion_spawner();
 		$item->getNamedTag()->setTag(MinionNBT::INFO, $info->nbtSerialize());

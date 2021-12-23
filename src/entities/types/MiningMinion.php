@@ -20,9 +20,9 @@ class MiningMinion extends BaseMinion{
 
 	public function getWorkingBlocks() : array{
 		$blocks = [];
-		$x = (int)$this->getPosition()->getX();
-		$y = (int)$this->getPosition()->getY();
-		$z = (int)$this->getPosition()->getZ();
+		$x = (int) $this->getPosition()->getX();
+		$y = (int) $this->getPosition()->getY();
+		$z = (int) $this->getPosition()->getZ();
 		for($i = $x - self::WORKING_RADIUS; $i <= $x + self::WORKING_RADIUS; $i++){
 			for($j = $z - self::WORKING_RADIUS; $j <= $z + self::WORKING_RADIUS; $z++){
 				if(($i !== $x) && ($j !== $z)){
@@ -43,26 +43,26 @@ class MiningMinion extends BaseMinion{
 		$this->isMining = true;
 		$breakTime = $this->getMinionInfo()->getRealTarget()->getBreakInfo()->getBreakTime($this->getTool());
 		$breakSpeed = $breakTime * 20;
-		$this->miningTimer = (int)$breakTime;
-		if ($breakSpeed > 0){
+		$this->miningTimer = (int) $breakTime;
+		if($breakSpeed > 0){
 			$breakSpeed = 1 / $breakSpeed;
-		} else {
+		}else{
 			$breakSpeed = 1;
 		}
-		$block->getPosition()->getWorld()->broadcastPacketToViewers($block->getPosition(), LevelEventPacket::create(LevelEvent::BLOCK_START_BREAK, (int)(65535 * $breakSpeed), $block->getPosition()));
+		$block->getPosition()->getWorld()->broadcastPacketToViewers($block->getPosition(), LevelEventPacket::create(LevelEvent::BLOCK_START_BREAK, (int) (65535 * $breakSpeed), $block->getPosition()));
 	}
 
 	protected function onAction() : bool{
-		if ($this->isContainInvalidBlock()){
+		if($this->isContainInvalidBlock()){
 			//TODO: Send minion message in his nametag like "This place isnt perfect :("
 			return parent::onAction();
 		}
-		if ($this->isContainAir()){
+		if($this->isContainAir()){
 			$pos = $this->getAirBlock()->getPosition();
 			$this->place($pos);
 			return parent::onAction();
 		}
-		if ($this->getWorkingBlock() == null){
+		if($this->getWorkingBlock() == null){
 			$area = $this->getWorkingBlocks();
 			$block = $area[array_rand($area)];
 			$this->setWorkingBlock($block);
