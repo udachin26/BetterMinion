@@ -15,7 +15,6 @@ use pocketmine\item\ItemFactory;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ListTag;
-use pocketmine\Server;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
