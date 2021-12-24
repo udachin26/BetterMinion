@@ -13,7 +13,6 @@ use pocketmine\item\VanillaItems;
 use pocketmine\math\Facing;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
 use pocketmine\network\mcpe\protocol\types\LevelEvent;
-use pocketmine\Server;
 use pocketmine\world\particle\BlockBreakParticle;
 use pocketmine\world\particle\BlockPunchParticle;
 use pocketmine\world\Position;
@@ -26,30 +25,30 @@ class MiningMinion extends BaseMinion{
 	protected ?Block $mining_block = null;
 
 	public function getWorkingBlocks() : array{
-		$cout = 0;
 		$blocks = [];
 		$x = (int) $this->getPosition()->getX();
 		$y = (int) $this->getPosition()->getY();
 		$z = (int) $this->getPosition()->getZ();
 		for($i = $x - self::WORKING_RADIUS; $i <= $x + self::WORKING_RADIUS; $i++){
-			for($j = $z - self::WORKING_RADIUS; $j <= $z + self::WORKING_RADIUS; $z++){
-				if(($i !== $x) && ($j !== $z)){
-					$blocks[] = $this->getPosition()->getWorld()->getBlockAt($i, $y - 1, $j);
-					Server::getInstance()->getLogger()->debug("LOOOPED " . $cout . " times");
-					$cout++;
+			for($j = $z - self::WORKING_RADIUS; $j <= $z + self::WORKING_RADIUS; $j++){
+				if(($i == $x) && ($j == $z)){
+					continue;
 				}
+				$blocks[] = $this->getPosition()->getWorld()->getBlockAt($i, $y - 1, $j);
 			}
 		}
 		return $blocks;
 	}
 
 	protected function place(Position $position) : void{
+		$this->lookAt($position);
 		$this->getInventory()->setItemInHand($this->getMinionInfo()->getRealTarget()->asItem());
 		$this->broadcastAnimation(new ArmSwingAnimation($this), $this->getViewers());
 		$position->getWorld()->setBlock($position, $this->getMinionInfo()->getRealTarget());
 	}
 
 	protected function startMine(Block $block) : void{
+		$this->getInventory()->setItemInHand($this->getTool());
 		$this->isMining = true;
 		$this->mining_block = $block;
 		$breakTime = $this->getMinionInfo()->getRealTarget()->getBreakInfo()->getBreakTime($this->getTool());
@@ -76,7 +75,6 @@ class MiningMinion extends BaseMinion{
 	}
 
 	protected function onAction() : bool{
-		Server::getInstance()->getLogger()->debug("Do action executed");
 		if($this->isContainInvalidBlock()){
 			//TODO: Send minion message in his nametag like "This place isnt perfect :("
 			return parent::onAction();
@@ -95,7 +93,6 @@ class MiningMinion extends BaseMinion{
 	}
 
 	protected function doOfflineAction(int $times) : bool{
-		Server::getInstance()->getLogger()->debug("Do offline action executed");
 		//TODO: Offline action (just add stuff to inventory)
 		return parent::doOfflineAction($times);
 	}
