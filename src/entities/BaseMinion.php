@@ -27,7 +27,6 @@ abstract class BaseMinion extends Human{
 	protected SimpleInventory $minionInv;
 
 	protected int $tickWait = 0;
-	protected ?Block $workingBlock = null;
 	protected bool $isPaused = false;
 
 	protected function initEntity(CompoundTag $nbt) : void{
@@ -117,7 +116,7 @@ abstract class BaseMinion extends Human{
 	}
 
 	protected function entityBaseTick(int $tickDiff = 1) : bool{
-		if($this->isPaused){
+		if($this->isStopedWorking()){
 			return parent::entityBaseTick($tickDiff);
 		}
 		$this->tickWait += $tickDiff;
@@ -140,15 +139,19 @@ abstract class BaseMinion extends Human{
 		return parent::entityBaseTick($tickDiff);
 	}
 
-	protected function getWorkingBlock() : ?Block{
-		return $this->workingBlock;
-	}
-
-	protected function setWorkingBlock(?Block $block) : void{
-		$this->workingBlock = $block;
-	}
-
 	protected function getTool() : Item{
 		return ItemFactory::air();
+	}
+
+	public function stopWorking() : void{
+		$this->isPaused = true;
+	}
+
+	public function continueWorking() : void{
+		$this->isPaused = false;
+	}
+
+	public function isStopedWorking() : bool{
+		return $this->isPaused;
 	}
 }
