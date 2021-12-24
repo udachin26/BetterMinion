@@ -28,7 +28,7 @@ final class EventListener implements Listener{
 		$player = $event->getPlayer();
 		$world = $player->getWorld();
 		$item = $event->getItem();
-		if(!$item->equals(Configuration::minion_spawner(), true, false)){
+		if($item->equals(Configuration::minion_spawner(), true, false)){
 			$nbt = $item->getNamedTag()->getCompoundTag(MinionNBT::INFO);
 			if($nbt !== null){
 				$event->cancel();
@@ -44,8 +44,10 @@ final class EventListener implements Listener{
 				$minionEvent = new MinionSpawnEvent($player, $entity);
 				$minionEvent->call();
 				if($minionEvent->isCancelled()){
+					$event->uncancel();
 					return;
 				}
+				$entity->setScale(0.5);
 				$entity->spawnToAll();
 
 				$item->pop();

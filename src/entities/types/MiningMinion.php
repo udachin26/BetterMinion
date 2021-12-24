@@ -13,6 +13,7 @@ use pocketmine\item\VanillaItems;
 use pocketmine\math\Facing;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
 use pocketmine\network\mcpe\protocol\types\LevelEvent;
+use pocketmine\Server;
 use pocketmine\world\particle\BlockBreakParticle;
 use pocketmine\world\particle\BlockPunchParticle;
 use pocketmine\world\Position;
@@ -25,6 +26,7 @@ class MiningMinion extends BaseMinion{
 	protected ?Block $mining_block = null;
 
 	public function getWorkingBlocks() : array{
+		$cout = 0;
 		$blocks = [];
 		$x = (int) $this->getPosition()->getX();
 		$y = (int) $this->getPosition()->getY();
@@ -33,6 +35,8 @@ class MiningMinion extends BaseMinion{
 			for($j = $z - self::WORKING_RADIUS; $j <= $z + self::WORKING_RADIUS; $z++){
 				if(($i !== $x) && ($j !== $z)){
 					$blocks[] = $this->getPosition()->getWorld()->getBlockAt($i, $y - 1, $j);
+					Server::getInstance()->getLogger()->debug("LOOOPED " . $cout . " times");
+					$cout++;
 				}
 			}
 		}
@@ -72,6 +76,7 @@ class MiningMinion extends BaseMinion{
 	}
 
 	protected function onAction() : bool{
+		Server::getInstance()->getLogger()->debug("Do action executed");
 		if($this->isContainInvalidBlock()){
 			//TODO: Send minion message in his nametag like "This place isnt perfect :("
 			return parent::onAction();
@@ -90,29 +95,37 @@ class MiningMinion extends BaseMinion{
 	}
 
 	protected function doOfflineAction(int $times) : bool{
+		Server::getInstance()->getLogger()->debug("Do offline action executed");
 		//TODO: Offline action (just add stuff to inventory)
 		return parent::doOfflineAction($times);
 	}
 
 	protected function entityBaseTick(int $tickDiff = 1) : bool{
-		if ($this->miningTimer - $tickDiff > 0){
-			$this->miningTimer -= $tickDiff;
-			$this->mine();
+		if($this->isStopedWorking()){
 			return parent::entityBaseTick($tickDiff);
 		}
-		if ($this->miningTimer - $tickDiff = 0){
-			$this->miningTimer = 0;
-			$block = clone $this->mining_block;
-			$this->mining_block = null;
-			$this->getWorld()->addParticle($block->getPosition()->add(0.5, 0.5, 0.5), new BlockBreakParticle($block));
-			$this->getWorld()->setBlock($block->getPosition(), VanillaBlocks::AIR());
-			//TODO: Add stuff.
-			return parent::entityBaseTick($tickDiff);
-		}
-		if ($this->miningTimer - $tickDiff < 0){
-			$this->miningTimer = 0;
-			//Hacks: Skip and just add stuff like offline action
-			$this->doOfflineAction(1);
+		if ($this->mining_block !== null){
+			if ($this->miningTimer - $tickDiff > 0){
+				$this->miningTimer -= $tickDiff;
+				$this->mine();
+				return parent::entityBaseTick($tickDiff);
+			}
+			if ($this->miningTimer - $tickDiff = 0){
+				$this->miningTimer = 0;
+				$block = clone $this->mining_block;
+				$this->mining_block = null;
+				$this->getWorld()->addParticle($block->getPosition()->add(0.5, 0.5, 0.5), new BlockBreakParticle($block));
+				$this->getWorld()->setBlock($block->getPosition(), VanillaBlocks::AIR());
+				//TODO: Add stuff.
+				return parent::entityBaseTick($tickDiff);
+			}
+			if ($this->miningTimer - $tickDiff < 0){
+				$this->miningTimer = 0;
+				//Hacks: Skip and just add stuff like offline action
+				$this->mining_block = null;
+				$this->doOfflineAction(1);
+				return parent::entityBaseTick($tickDiff);
+			}
 		}
 		return parent::entityBaseTick($tickDiff);
 	}

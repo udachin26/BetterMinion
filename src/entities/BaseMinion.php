@@ -38,6 +38,7 @@ abstract class BaseMinion extends Human{
 			fn(CompoundTag $nbt) : Item => Item::nbtDeserialize($nbt),
 			$nbt->getListTag(MinionNBT::INV)?->getValue() ?? []
 		));
+		$this->getInventory()->setItemInHand($this->getTool());
 	}
 
 	public function saveNBT() : CompoundTag{
@@ -65,7 +66,7 @@ abstract class BaseMinion extends Human{
 	}
 
 	public function getActionTime() : int{
-		return 1; // TODO: Level-based action time
+		return 100; // TODO: Level-based action time
 	}
 
 	/**
@@ -116,9 +117,6 @@ abstract class BaseMinion extends Human{
 	}
 
 	protected function entityBaseTick(int $tickDiff = 1) : bool{
-		if($this->isStopedWorking()){
-			return parent::entityBaseTick($tickDiff);
-		}
 		$this->tickWait += $tickDiff;
 		$actionTime = $this->getActionTime();
 		if($this->tickWait >= $actionTime){
