@@ -16,8 +16,8 @@ class EconomyProvider{
 	private static BedrockEconomy|null $provider = null;
 
 	public static function load(){
-		match (mb_strtolower(Configuration::economy_provider())) {
-			self::BEDROCK_ECONOMY => self::$provider = BedrockEconomy::getInstance()
+		self::$provider = match (mb_strtolower(Configuration::economy_provider())) {
+			self::BEDROCK_ECONOMY => BedrockEconomy::getInstance()
 		};
 	}
 
