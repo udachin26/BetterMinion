@@ -15,6 +15,7 @@ use Mcbeany\BetterMinion\minions\MinionType;
 use Mcbeany\BetterMinion\minions\MinionUpgrade;
 use Mcbeany\BetterMinion\utils\Configuration;
 use Mcbeany\BetterMinion\utils\economyProvider\EconomyProvider;
+use Mcbeany\BetterMinion\utils\economyProvider\EconomyProviderManager;
 use Mcbeany\BetterMinion\utils\Language;
 use muqsit\invmenu\InvMenuHandler;
 use pocketmine\block\BlockIdentifier;
@@ -36,7 +37,7 @@ final class BetterMinion extends PluginBase{
 		FarmingMinion::class
 	];
 
-	protected EconomyProvider $economyProvider;
+	protected EconomyProviderManager $economyProviderManager;
 
 	protected function onLoad() : void{
 		self::setInstance($this);
@@ -45,6 +46,7 @@ final class BetterMinion extends PluginBase{
 	}
 
 	protected function onEnable() : void{
+		$this->economyProviderManager = new EconomyProviderManager();
 		$this->initLibraries();
 		$this->initEntities();
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
@@ -92,6 +94,6 @@ final class BetterMinion extends PluginBase{
 	}
 
 	public function getEconomyProvider() : EconomyProvider{
-		return $this->economyProvider;
+		return $this->economyProviderManager->getEconomyProvider();
 	}
 }
