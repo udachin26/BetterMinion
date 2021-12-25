@@ -4,7 +4,7 @@ main: Mcbeany\BetterMinion\BetterMinion
 api: 4.0.0
 src-namespace-prefix: Mcbeany\BetterMinion
 softdepend:
-  - Captial
+  - Capital
   - BedrockEconomy
 
 permissions:
