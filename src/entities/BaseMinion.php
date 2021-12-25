@@ -33,7 +33,7 @@ abstract class BaseMinion extends Human{
 	protected function initEntity(CompoundTag $nbt) : void{
 		parent::initEntity($nbt);
 		$this->owner = Uuid::uuid3(Uuid::NIL, $nbt->getString(MinionNBT::OWNER));
-		$this->minionInfo = MinionInfo::nbtDeserialize($nbt);
+		$this->minionInfo = MinionInfo::nbtDeserialize($nbt->getCompoundTag(MinionNBT::INFO));
 		$this->minionInv = new SimpleInventory($this->getMinionInfo()->getLevel());
 		$this->getMinionInventory()->setContents(array_map(
 			fn(CompoundTag $nbt) : Item => Item::nbtDeserialize($nbt),
@@ -43,15 +43,14 @@ abstract class BaseMinion extends Human{
 	}
 
 	public function saveNBT() : CompoundTag{
-		$nbt = parent::saveNBT();
-		$nbt->setString(MinionNBT::OWNER, $this->getOwner()->toString());
-		$nbt->merge($this->getMinionInfo()->nbtSerialize());
-		$nbt->setTag(MinionNBT::INV, new ListTag(array_map(
-			fn(Item $item) : CompoundTag => $item->nbtSerialize(),
-			$this->getMinionInventory()->getContents(true)),
-			NBT::TAG_Compound
-		));
-		return $nbt;
+		return parent::saveNBT()
+			->setString(MinionNBT::OWNER, $this->getOwner()->toString())
+			->setTag(MinionNBT::INFO, $this->getMinionInfo()->nbtSerialize())
+			->setTag(MinionNBT::INV, new ListTag(array_map(
+				fn(Item $item) : CompoundTag => $item->nbtSerialize(),
+				$this->getMinionInventory()->getContents(true)),
+				NBT::TAG_Compound
+			));
 	}
 
 	public function getOwner() : UuidInterface{
