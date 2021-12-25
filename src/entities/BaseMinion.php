@@ -126,7 +126,7 @@ abstract class BaseMinion extends Human{
 		$this->tickWait += $tickDiff;
 		$actionTime = $this->getActionTime();
 		if($this->tickWait >= $actionTime){
-			$times = (int)($this->tickWait / $actionTime);
+			$times = (int) ($this->tickWait / $actionTime);
 			$this->tickWait -= $actionTime * $times;
 			if($this->tickWait < self::MAX_TICKDIFF){
 				if($times > 1){

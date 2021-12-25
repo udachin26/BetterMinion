@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\economy;
 
-use pocketmine\player\Player;
 use cooldogedev\BedrockEconomy\BedrockEconomy;
+use pocketmine\player\Player;
 
 class BedrockEconomyProvider implements EconomyProvider{
 
@@ -13,14 +13,14 @@ class BedrockEconomyProvider implements EconomyProvider{
 	}
 
 	public function add(Player $player, float $amount = 0) : void{
-		BedrockEconomy::getInstance()->getAPI()->addToPlayerBalance($player->getName(), (int)$amount);
+		BedrockEconomy::getInstance()->getAPI()->addToPlayerBalance($player->getName(), (int) $amount);
 	}
 
 	public function reduce(Player $player, float $amount = 0) : void{
-		BedrockEconomy::getInstance()->getAPI()->subtractFromPlayerBalance($player->getName(), (int)$amount);
+		BedrockEconomy::getInstance()->getAPI()->subtractFromPlayerBalance($player->getName(), (int) $amount);
 	}
 
 	public function set(Player $player, float $amount = 0) : void{
-		BedrockEconomy::getInstance()->getAPI()->setPlayerBalance($player->getName(), (int)$amount);
+		BedrockEconomy::getInstance()->getAPI()->setPlayerBalance($player->getName(), (int) $amount);
 	}
 }

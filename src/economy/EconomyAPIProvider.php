@@ -10,7 +10,7 @@ class EconomyAPIProvider implements EconomyProvider{
 
 	public function get(Player $player) : ?float{
 		$money = EconomyAPI::getInstance()->myMoney($player);
-		if (is_numeric($money)){
+		if(is_numeric($money)){
 			return $money;
 		}
 		return null;

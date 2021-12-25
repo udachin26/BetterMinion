@@ -54,7 +54,7 @@ class MiningMinion extends BaseMinion{
 		$breakTime = $this->getMinionInfo()->getRealTarget()->getBreakInfo()->getBreakTime($this->getTool());
 		$breakSpeed = $breakTime * 20;
 		$this->miningTimer = (int) $breakSpeed;
-		if ($this->miningTimer > $this->getActionTime()){ //When mining time > action time will cause spaming breaking block ...
+		if($this->miningTimer > $this->getActionTime()){ //When mining time > action time will cause spaming breaking block ...
 			$this->stopWorking();
 			//TODO: Send a minion message like "Something is broken..."
 			return;
@@ -101,13 +101,13 @@ class MiningMinion extends BaseMinion{
 		if($this->isStopedWorking()){
 			return parent::entityBaseTick($tickDiff);
 		}
-		if ($this->mining_block !== null){
-			if ($this->miningTimer - $tickDiff > 0){
+		if($this->mining_block !== null){
+			if($this->miningTimer - $tickDiff > 0){
 				$this->miningTimer -= $tickDiff;
 				$this->mine();
 				return parent::entityBaseTick($tickDiff);
 			}
-			if ($this->miningTimer - $tickDiff > self::MAX_TICKDIFF*(-1)){
+			if($this->miningTimer - $tickDiff > self::MAX_TICKDIFF * (-1)){
 				$this->miningTimer = 0;
 				$block = clone $this->mining_block;
 				$this->mining_block = null;
@@ -116,7 +116,7 @@ class MiningMinion extends BaseMinion{
 				//TODO: Add stuff.
 				return parent::entityBaseTick($tickDiff);
 			}
-			if ($this->miningTimer - $tickDiff < self::MAX_TICKDIFF*(-1)){
+			if($this->miningTimer - $tickDiff < self::MAX_TICKDIFF * (-1)){
 				$this->miningTimer = 0;
 				//Hacks: Skip and just add stuff like offline action
 				$this->mining_block = null;
