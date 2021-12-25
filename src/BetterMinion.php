@@ -14,6 +14,7 @@ use Mcbeany\BetterMinion\minions\MinionNBT;
 use Mcbeany\BetterMinion\minions\MinionType;
 use Mcbeany\BetterMinion\minions\MinionUpgrade;
 use Mcbeany\BetterMinion\utils\Configuration;
+use Mcbeany\BetterMinion\utils\economyProvider\EconomyProvider;
 use Mcbeany\BetterMinion\utils\Language;
 use muqsit\invmenu\InvMenuHandler;
 use pocketmine\block\BlockIdentifier;
@@ -34,6 +35,8 @@ final class BetterMinion extends PluginBase{
 		MiningMinion::class,
 		FarmingMinion::class
 	];
+
+	protected EconomyProvider $economyProvider;
 
 	protected function onLoad() : void{
 		self::setInstance($this);
@@ -88,4 +91,7 @@ final class BetterMinion extends PluginBase{
 		return $item;
 	}
 
+	public function getEconomyProvider() : EconomyProvider{
+		return $this->economyProvider;
+	}
 }
