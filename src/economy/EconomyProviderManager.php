@@ -11,20 +11,17 @@ class EconomyProviderManager{
 	public const ECONOMY_API = "economyapi";
 	public const CAPITAL = "capital";
 
-	protected ?EconomyProvider $provider = null;
+	protected ?EconomyProvider $provider;
 
 	public function __construct(){
-		switch(mb_strtolower(Configuration::economy_provider())) {
-			case self::BEDROCK_ECONOMY:
-				$this->provider = new BedrockEconomyProvider();
-				break;
-			case self::ECONOMY_API:
-				$this->provider = new EconomyAPIProvider();
-				break;
-		}
+		$this->provider = match (mb_strtolower(Configuration::economy_provider())) {
+			self::BEDROCK_ECONOMY => new BedrockEconomyProvider(),
+			self::ECONOMY_API => new EconomyAPIProvider(),
+			default => null,
+		};
 	}
 
-	public function getEconomyProvider() : EconomyProvider{
+	public function getEconomyProvider() : ?EconomyProvider{
 		return $this->provider;
 	}
 }

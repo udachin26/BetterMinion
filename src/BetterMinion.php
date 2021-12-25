@@ -93,7 +93,7 @@ final class BetterMinion extends PluginBase{
 		return $item;
 	}
 
-	public function getEconomyProvider() : EconomyProvider{
+	public function getEconomyProvider() : ?EconomyProvider{
 		return $this->economyProviderManager->getEconomyProvider();
 	}
 }
