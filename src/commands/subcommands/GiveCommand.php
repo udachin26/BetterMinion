@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\commands\subcommands;
 
 use CortexPE\Commando\args\RawStringArgument;
-use CortexPE\Commando\args\TargetPlayerArgument;
 use CortexPE\Commando\BaseSubCommand;
 use CortexPE\Commando\exception\ArgumentOrderException;
 use Mcbeany\BetterMinion\BetterMinion;
+use Mcbeany\BetterMinion\commands\arguments\PlayerArgument;
 use Mcbeany\BetterMinion\commands\arguments\TypeArgument;
 use Mcbeany\BetterMinion\minions\MinionType;
 use Mcbeany\BetterMinion\utils\Language;
@@ -66,6 +66,6 @@ class GiveCommand extends BaseSubCommand{
 		$this->setPermission("betterminion.commands.give");
 		$this->registerArgument(0, new TypeArgument("type", true));
 		$this->registerArgument(1, new RawStringArgument("target", true));
-		$this->registerArgument(2, new TargetPlayerArgument(true));
+		$this->registerArgument(2, new PlayerArgument("player", true));
 	}
 }

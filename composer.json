@@ -5,7 +5,7 @@
 	"require": {
 		"pocketmine/pocketmine-mp": "^4.0",
 		"php": "^8.0",
-		"cortexpe/commando": "dev-PM-4.0"
+		"cortexpe/commando": "dev-PM4"
 	},
 	"license": "MIT",
 	"autoload": {
@@ -17,13 +17,6 @@
 		{
 			"name": "Khang Nguyen",
 			"email": "mcbeany7@gmail.com"
-		}
-	],
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/Paroxity/Commando.git",
-			"branch": "PM-4.0"
 		}
 	]
 }

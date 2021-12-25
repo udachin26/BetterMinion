@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\utils;
 
 use Mcbeany\BetterMinion\BetterMinion;
+use Mcbeany\BetterMinion\economy\EconomyProviderManager;
 use pocketmine\item\Item;
 use pocketmine\lang\Language;
 
@@ -18,8 +19,9 @@ final class Configuration{
 	private static function default() : array{
 		return [
 			"language" => Language::FALLBACK_LANGUAGE,
-			"minion-item" => "nether_star",
-			"minion-size" => 0.5
+			"minion-spawner" => "nether_star",
+			"minion-size" => 0.5,
+			"economy-provider" => EconomyProviderManager::BEDROCK_ECONOMY
 		];
 	}
 

@@ -18,10 +18,6 @@ class TypeArgument extends StringEnumArgument{
 		return "string";
 	}
 
-	public function getEnumName() : string{
-		return "string";
-	}
-
 	public function getEnumValues() : array{
 		return array_values(array_map(fn(MinionType $type) => $type->name(), MinionType::getAll()));
 	}

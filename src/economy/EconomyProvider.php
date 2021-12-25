@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Mcbeany\BetterMinion\utils\economyProvider;
+namespace Mcbeany\BetterMinion\economy;
 
 use pocketmine\player\Player;
 
