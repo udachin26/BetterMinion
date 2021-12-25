@@ -12,3 +12,5 @@ permissions:
     default: op
   betterminion.commands.give:
     default: op
+  betterminion.commands.remove:
+    default: op

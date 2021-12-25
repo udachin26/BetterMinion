@@ -38,7 +38,6 @@ final class BetterMinion extends PluginBase{
 	];
 
 	protected EconomyProviderManager $economyProviderManager;
-
 	protected function onLoad() : void{
 		self::setInstance($this);
 		Configuration::load();

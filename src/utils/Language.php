@@ -81,6 +81,20 @@ final class Language extends PMLang{
 		));
 	}
 
+	public static function toggled_remove_mode(bool $mode) : string{
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("toggled.remove.mode"),
+			[
+				"mode" => self::toggle_mode_name($mode)
+			]
+		));
+	}
+
+	private static function toggle_mode_name(bool $mode) : string{
+		return $mode
+			? self::getInstance()->translate(new Translatable(self::getInstance()->get("toggled.remove.mode.enable")))
+			: self::getInstance()->translate(new Translatable(self::getInstance()->get("toggled.remove.mode.disable")));
+	}
+
 	public static function minion_spawner_name(MinionInfo $info) : string{
 		return self::getInstance()->translate(new Translatable(self::getInstance()->get("minion.spawner.name"),
 			[

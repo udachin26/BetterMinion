@@ -10,6 +10,8 @@ use pocketmine\command\CommandSender;
 
 class TypeArgument extends StringEnumArgument{
 
+	public function __construct(){ parent::__construct("type", true); }
+
 	public function parse(string $argument, CommandSender $sender) : string{
 		return strtolower($argument);
 	}

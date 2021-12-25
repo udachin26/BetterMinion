@@ -64,8 +64,8 @@ class GiveCommand extends BaseSubCommand{
 	 */
 	protected function prepare() : void{
 		$this->setPermission("betterminion.commands.give");
-		$this->registerArgument(0, new TypeArgument("type", true));
+		$this->registerArgument(0, new TypeArgument());
 		$this->registerArgument(1, new RawStringArgument("target", true));
-		$this->registerArgument(2, new PlayerArgument("player", true));
+		$this->registerArgument(2, new PlayerArgument());
 	}
 }

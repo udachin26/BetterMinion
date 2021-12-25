@@ -10,6 +10,8 @@ use pocketmine\network\mcpe\protocol\AvailableCommandsPacket;
 
 class PlayerArgument extends BaseArgument{
 
+	public function __construct(){ parent::__construct("player", true); }
+
 	public function getNetworkType() : int{
 		return AvailableCommandsPacket::ARG_TYPE_TARGET;
 	}
