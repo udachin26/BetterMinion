@@ -21,6 +21,7 @@ use Ramsey\Uuid\UuidInterface;
 abstract class BaseMinion extends Human{
 
 	protected const WORKING_RADIUS = 2; //TODO: Expander upgrade
+	protected const MAX_TICKDIFF = 20;
 
 	protected UuidInterface $owner;
 	protected MinionInfo $minionInfo;
@@ -126,7 +127,7 @@ abstract class BaseMinion extends Human{
 		if($this->tickWait >= $actionTime){
 			$times = (int)($this->tickWait / $actionTime);
 			$this->tickWait -= $actionTime * $times;
-			if($this->tickWait == 0){
+			if($this->tickWait < self::MAX_TICKDIFF){
 				if($times > 1){
 					$this->doOfflineAction($times - 1);
 				}
