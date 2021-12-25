@@ -14,11 +14,14 @@ class EconomyProviderManager{
 	protected ?EconomyProvider $provider = null;
 
 	public function __construct(){
-		$this->provider = match (mb_strtolower(Configuration::economy_provider())) {
-			self::BEDROCK_ECONOMY => new BedrockEconomyProvider(),
-			self::ECONOMY_API => new EconomyAPIProvider()
-			//TODO: CAPITAL
-		};
+		switch(mb_strtolower(Configuration::economy_provider())) {
+			case self::BEDROCK_ECONOMY:
+				$this->provider = new BedrockEconomyProvider();
+				break;
+			case self::ECONOMY_API:
+				$this->provider = new EconomyAPIProvider();
+				break;
+		}
 	}
 
 	public function getEconomyProvider() : EconomyProvider{
