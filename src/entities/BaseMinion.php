@@ -6,6 +6,7 @@ namespace Mcbeany\BetterMinion\entities;
 
 use Mcbeany\BetterMinion\minions\MinionInfo;
 use Mcbeany\BetterMinion\minions\MinionNBT;
+use Mcbeany\BetterMinion\utils\Configuration;
 use pocketmine\block\Air;
 use pocketmine\block\Block;
 use pocketmine\entity\Human;
@@ -39,6 +40,7 @@ abstract class BaseMinion extends Human{
 			fn(CompoundTag $nbt) : Item => Item::nbtDeserialize($nbt),
 			$nbt->getListTag(MinionNBT::INV)?->getValue() ?? []
 		));
+		$this->setScale(Configuration::minion_size());
 		$this->getInventory()->setItemInHand($this->getTool());
 	}
 

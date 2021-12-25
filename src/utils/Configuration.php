@@ -18,17 +18,37 @@ final class Configuration{
 	private static function default() : array{
 		return [
 			"language" => Language::FALLBACK_LANGUAGE,
-			"minion-item" => "nether_star"
+			"minion-item" => "nether_star",
+			"minion-size" => 0.5
 		];
 	}
 
 	public static function language() : string{
-		return BetterMinion::getInstance()->getConfig()->get("language");
+		return self::get("language");
 	}
 
 	public static function minion_spawner() : Item{
-		$itemName = (string) BetterMinion::getInstance()->getConfig()->get("minion-spawner");
-		return Utils::parseItem($itemName);
+		return Utils::parseItem(self::get("minion-spawner"));
+	}
+
+	public static function minion_size() : float{
+		return self::get("minion-size");
+	}
+
+	public static function economy_provider() : string{
+		return self::get("economy-provider");
+	}
+
+	protected static function get(string $key) : mixed{
+		$set = BetterMinion::getInstance()->getConfig()->get($key);
+		$default = self::default()[$key];
+		$compare = "is_" . (is_object($default) ? "object" : gettype($default));
+		if(!$compare($set)){
+			// TODO: Warn server's owner that the configuration has an incorrect data type
+			BetterMinion::getInstance()->getConfig()->set($key, $default);
+			BetterMinion::getInstance()->getConfig()->save();
+		}
+		return $compare;
 	}
 
 }
