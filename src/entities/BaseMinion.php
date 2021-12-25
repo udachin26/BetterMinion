@@ -34,7 +34,13 @@ abstract class BaseMinion extends Human{
 	protected function initEntity(CompoundTag $nbt) : void{
 		parent::initEntity($nbt);
 		$this->owner = Uuid::uuid3(Uuid::NIL, $nbt->getString(MinionNBT::OWNER));
-		$this->minionInfo = MinionInfo::nbtDeserialize($nbt->getCompoundTag(MinionNBT::INFO));
+		$info_nbt = $nbt->getCompoundTag(MinionNBT::INFO);
+		if ($info_nbt === null){
+			//Clear invalid minion.
+			$this->flagForDespawn();
+			return;
+		}
+		$this->minionInfo = MinionInfo::nbtDeserialize($info_nbt);
 		$this->minionInv = new SimpleInventory($this->getMinionInfo()->getLevel());
 		$this->getMinionInventory()->setContents(array_map(
 			fn(CompoundTag $nbt) : Item => Item::nbtDeserialize($nbt),
