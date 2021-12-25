@@ -14,6 +14,7 @@ use pocketmine\entity\Location;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerItemUseEvent;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\player\Player;
 
 final class EventListener implements Listener{
@@ -34,12 +35,14 @@ final class EventListener implements Listener{
 				$event->cancel();
 				$info = MinionInfo::nbtDeserialize($nbt);
 				$class = $info->getType()->className();
+				$minionNBT = CompoundTag::create()
+					->setTag(MinionNBT::INFO, $info->nbtSerialize())
+					->setString(MinionNBT::OWNER, $player->getUniqueId()->toString());
 				/** @var BaseMinion $entity */
 				$entity = new $class(Location::fromObject(
 					$world->getBlock($player->getPosition())->getPosition()->add(0.5, 0, 0.5),
-					$world
-				// TODO: Entity's yaw
-				), $player->getSkin(), $info->nbtSerialize()->setString(MinionNBT::OWNER, $player->getUniqueId()->toString()));
+					$world // TODO: Entity's yaw
+				), $player->getSkin(), $minionNBT);
 
 				$minionEvent = new MinionSpawnEvent($player, $entity);
 				$minionEvent->call();
