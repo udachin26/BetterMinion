@@ -48,7 +48,7 @@ final class Configuration{
 			BetterMinion::getInstance()->getConfig()->set($key, $default);
 			BetterMinion::getInstance()->getConfig()->save();
 		}
-		return $compare;
+		return $set;
 	}
 
 }
