@@ -53,7 +53,7 @@ class MiningMinion extends BaseMinion{
 		$this->mining_block = $block;
 		$breakTime = $this->getMinionInfo()->getRealTarget()->getBreakInfo()->getBreakTime($this->getTool());
 		$breakSpeed = $breakTime * 20;
-		$this->miningTimer = (int) $breakTime;
+		$this->miningTimer = (int) $breakSpeed;
 		if ($this->miningTimer > $this->getActionTime()){ //When mining time > action time will cause spaming breaking block ...
 			$this->stopWorking();
 			//TODO: Send a minion message like "Something is broken..."
