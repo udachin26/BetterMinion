@@ -12,14 +12,12 @@ use Mcbeany\BetterMinion\minions\MinionNBT;
 use Mcbeany\BetterMinion\sessions\SessionManager;
 use Mcbeany\BetterMinion\utils\Configuration;
 use pocketmine\entity\Location;
-use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerEntityInteractEvent;
 use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\player\Player;
 
 final class EventListener implements Listener{
 
