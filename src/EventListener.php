@@ -14,6 +14,7 @@ use Mcbeany\BetterMinion\utils\Configuration;
 use pocketmine\entity\Location;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerEntityInteractEvent;
 use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
@@ -63,42 +64,40 @@ final class EventListener implements Listener{
 	}
 
 	/**
-	 * @param EntityDamageByEntityEvent $event
+	 * @param PlayerEntityInteractEvent $event
 	 *
 	 * @priority HIGHEST
 	 * @handleCancelled FALSE
 	 */
-	public function onEntityDamageByEntity(EntityDamageByEntityEvent $event){
+	public function onInteractEntity(PlayerEntityInteractEvent $event) : void{
 		$entity = $event->getEntity();
-		$damager = $event->getDamager();
+		$player = $event->getPlayer();
 		if($entity instanceof BaseMinion){
 			$event->cancel();
-			if($damager instanceof Player){
-				$session = SessionManager::getSession($damager);
-				if($session->inRemoveMode()) {
-					$entity->flagForDespawn();
-					return;
-				}
-				$minionEvent = new MinionInteractEvent($damager, $entity);
-				$minionEvent->call();
-				if($minionEvent->isCancelled()){
-					return;
-				}
+			$session = SessionManager::getSession($player);
+			if($session->inRemoveMode()) {
+				$entity->flagForDespawn();
+				return;
 			}
+			$minionEvent = new MinionInteractEvent($player, $entity);
+			$minionEvent->call();
+			//TODO: Open minion GUI
 		}
 	}
 
 	/**
 	 * @param PlayerJoinEvent $event
+	 * @priority NORMAL
 	 */
-	public function onJoin(PlayerJoinEvent $event){
+	public function onJoin(PlayerJoinEvent $event) : void{
 		SessionManager::createSession($event->getPlayer());
 	}
 
 	/**
 	 * @param PlayerQuitEvent $event
+	 * @priority NORMAL
 	 */
-	public function onQuit(PlayerQuitEvent $event){
+	public function onQuit(PlayerQuitEvent $event) : void{
 		SessionManager::destroySession($event->getPlayer());
 	}
 
