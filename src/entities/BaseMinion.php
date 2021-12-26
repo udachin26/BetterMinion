@@ -25,15 +25,21 @@ abstract class BaseMinion extends Human{
 	protected const MAX_TICKDIFF = 20;
 
 	protected UuidInterface $owner;
+	protected string $ownerName;
 	protected MinionInfo $minionInfo;
 	protected SimpleInventory $minionInv;
 
 	protected int $tickWait = 0;
 	protected bool $isPaused = false;
 
+	protected $gravity = 0;
+	protected $gravityEnabled = false;
+	public $canCollide = false;
+
 	protected function initEntity(CompoundTag $nbt) : void{
 		parent::initEntity($nbt);
 		$this->owner = Uuid::uuid3(Uuid::NIL, $nbt->getString(MinionNBT::OWNER));
+		$this->ownerName = $nbt->getString(MinionNBT::OWNER_NAME);
 		$info_nbt = $nbt->getCompoundTag(MinionNBT::INFO);
 		if ($info_nbt === null){
 			//Clear invalid minion.
@@ -48,11 +54,15 @@ abstract class BaseMinion extends Human{
 		));
 		$this->setScale(Configuration::minion_size());
 		$this->getInventory()->setItemInHand($this->getTool());
+
+		$this->setNameTag($this->getOriginalNameTag());
+		$this->setNameTagAlwaysVisible(true);
 	}
 
 	public function saveNBT() : CompoundTag{
 		return parent::saveNBT()
 			->setString(MinionNBT::OWNER, $this->getOwner()->toString())
+			->setString(MinionNBT::OWNER_NAME, $this->getOwnerName())
 			->setTag(MinionNBT::INFO, $this->getMinionInfo()->nbtSerialize())
 			->setTag(MinionNBT::INV, new ListTag(array_map(
 				fn(Item $item) : CompoundTag => $item->nbtSerialize(),
@@ -65,6 +75,10 @@ abstract class BaseMinion extends Human{
 		return $this->owner;
 	}
 
+	public function getOwnerName() : string{
+		return $this->ownerName;
+	}
+
 	public function getMinionInfo() : MinionInfo{
 		return $this->minionInfo;
 	}
@@ -75,6 +89,11 @@ abstract class BaseMinion extends Human{
 
 	public function getActionTime() : int{
 		return 100; // TODO: Level-based action time
+	}
+
+	public function getOriginalNameTag() : string{
+		//TODO: Custom Nametag via Configuration.
+		return $this->getOwnerName() . "'s Minion";
 	}
 
 	/**

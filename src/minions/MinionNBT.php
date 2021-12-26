@@ -23,6 +23,7 @@ interface MinionNBT{
 
 	// Owner
 	public const OWNER = "owner";
+	public const OWNER_NAME = "ownerName";
 
 	// Inv
 	public const INV = "minionInv";

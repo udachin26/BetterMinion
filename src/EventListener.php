@@ -39,7 +39,8 @@ final class EventListener implements Listener{
 				$class = $info->getType()->className();
 				$minionNBT = CompoundTag::create()
 					->setTag(MinionNBT::INFO, $info->nbtSerialize())
-					->setString(MinionNBT::OWNER, $player->getUniqueId()->toString());
+					->setString(MinionNBT::OWNER, $player->getUniqueId()->toString())
+					->setString(MinionNBT::OWNER_NAME, $player->getName());
 				/** @var BaseMinion $entity */
 				$entity = new $class(Location::fromObject(
 					$world->getBlock($player->getPosition())->getPosition()->add(0.5, 0, 0.5),

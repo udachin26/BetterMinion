@@ -56,7 +56,7 @@ class MiningMinion extends BaseMinion{
 		$this->miningTimer = (int) $breakSpeed;
 		if($this->miningTimer > $this->getActionTime()){ //When mining time > action time will cause spaming breaking block ...
 			$this->stopWorking();
-			//TODO: Send a minion message like "Something is broken..."
+			$this->setNameTag($this->getOriginalNameTag() . "\nThe block break time too long :(");
 			return;
 		}
 		if($breakSpeed > 0){
@@ -76,7 +76,7 @@ class MiningMinion extends BaseMinion{
 
 	protected function onAction() : bool{
 		if($this->isContainInvalidBlock()){
-			//TODO: Send minion message in his nametag like "This place isnt perfect :("
+			$this->setNameTag($this->getOriginalNameTag() . "\nThis place doesnt perfect :(");
 			return parent::onAction();
 		}
 		if($this->isContainAir()){
@@ -99,7 +99,7 @@ class MiningMinion extends BaseMinion{
 
 	protected function entityBaseTick(int $tickDiff = 1) : bool{
 		if($this->isStopedWorking()){
-			return parent::entityBaseTick($tickDiff);
+			return true;
 		}
 		if($this->mining_block !== null){
 			if($this->miningTimer - $tickDiff > 0){
