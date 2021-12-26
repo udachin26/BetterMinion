@@ -52,7 +52,6 @@ final class EventListener implements Listener{
 					$event->uncancel();
 					return;
 				}
-				$entity->setScale(0.5);
 				$entity->spawnToAll();
 
 				$item->pop();
