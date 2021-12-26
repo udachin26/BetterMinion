@@ -6,7 +6,7 @@ src-namespace-prefix: Mcbeany\BetterMinion
 softdepend:
   - Capital
   - BedrockEconomy
-
+  - EconomyAPI
 permissions:
   betterminion.commands:
     default: op
