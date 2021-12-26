@@ -7,7 +7,6 @@ namespace Mcbeany\BetterMinion;
 use CortexPE\Commando\exception\HookAlreadyRegistered;
 use CortexPE\Commando\PacketHooker;
 use Mcbeany\BetterMinion\commands\MinionCommand;
-use Mcbeany\BetterMinion\economy\EconomyProvider;
 use Mcbeany\BetterMinion\economy\EconomyProviderManager;
 use Mcbeany\BetterMinion\entities\types\FarmingMinion;
 use Mcbeany\BetterMinion\entities\types\MiningMinion;
@@ -37,15 +36,14 @@ final class BetterMinion extends PluginBase{
 		FarmingMinion::class
 	];
 
-	protected EconomyProviderManager $economyProviderManager;
 	protected function onLoad() : void{
 		self::setInstance($this);
 		Configuration::load();
 		Language::load();
+		EconomyProviderManager::load();
 	}
 
 	protected function onEnable() : void{
-		$this->economyProviderManager = new EconomyProviderManager();
 		$this->initLibraries();
 		$this->initEntities();
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
@@ -92,7 +90,4 @@ final class BetterMinion extends PluginBase{
 		return $item;
 	}
 
-	public function getEconomyProvider() : ?EconomyProvider{
-		return $this->economyProviderManager->getEconomyProvider();
-	}
 }

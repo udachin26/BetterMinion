@@ -43,7 +43,8 @@ final class EventListener implements Listener{
 				/** @var BaseMinion $entity */
 				$entity = new $class(Location::fromObject(
 					$world->getBlock($player->getPosition())->getPosition()->add(0.5, 0, 0.5),
-					$world // TODO: Entity's yaw
+					$world,
+					fmod($player->getLocation()->getYaw(), 360)
 				), $player->getSkin(), $minionNBT);
 
 				$minionEvent = new MinionSpawnEvent($player, $entity);
