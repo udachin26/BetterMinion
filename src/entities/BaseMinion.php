@@ -16,7 +16,6 @@ use pocketmine\item\ItemFactory;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ListTag;
-use pocketmine\Server;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
@@ -55,6 +54,9 @@ abstract class BaseMinion extends Human{
 		));
 		$this->setScale(Configuration::minion_size());
 		$this->getInventory()->setItemInHand($this->getTool());
+
+		$this->setNameTag($this->getOriginalNameTag());
+		$this->setNameTagAlwaysVisible(true);
 	}
 
 	public function saveNBT() : CompoundTag{
@@ -87,6 +89,11 @@ abstract class BaseMinion extends Human{
 
 	public function getActionTime() : int{
 		return 100; // TODO: Level-based action time
+	}
+
+	public function getOriginalNameTag() : string{
+		//TODO: Custom Nametag via Configuration.
+		return $this->getOwnerName() . "'s Minion";
 	}
 
 	/**
