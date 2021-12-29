@@ -35,7 +35,7 @@ final class Language extends PMLang{
 	}
 
 	public static function type_not_found(string $input) : string{
-		return self::getInstance()->translate(new Translatable(self::getInstance()->get("type.not.found"),
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("command.give.type.notfound"),
 			[
 				"type" => $input
 			]
@@ -43,7 +43,7 @@ final class Language extends PMLang{
 	}
 
 	public static function target_not_found(string $input) : string{
-		return self::getInstance()->translate(new Translatable(self::getInstance()->get("target.not.found"),
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("command.give.target.notfound"),
 			[
 				"target" => $input
 			]
@@ -51,7 +51,7 @@ final class Language extends PMLang{
 	}
 
 	public static function player_not_found(string $input) : string{
-		return self::getInstance()->translate(new Translatable(self::getInstance()->get("player.not.found"),
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("command.give.player.notfound"),
 			[
 				"player" => $input
 			]
@@ -59,11 +59,11 @@ final class Language extends PMLang{
 	}
 
 	public static function no_selected_player() : string{
-		return self::getInstance()->translate(new Translatable(self::getInstance()->get("no.selected.player")));
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("command.give.no.player")));
 	}
 
 	public static function gave_player_spawner(Player $player, MinionType $type, Block $target) : string{
-		return self::getInstance()->translate(new Translatable(self::getInstance()->get("gave.player.spawner"),
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("command.give.success"),
 			[
 				"player" => $player->getName(),
 				"type" => $type->typeName(),
@@ -73,7 +73,7 @@ final class Language extends PMLang{
 	}
 
 	public static function received_minion_spawner(MinionType $type, Block $target) : string{
-		return self::getInstance()->translate(new Translatable(self::getInstance()->get("received.minion.spawner"),
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("command.give.received"),
 			[
 				"type" => $type->typeName(),
 				"target" => $target->getName()
@@ -82,7 +82,7 @@ final class Language extends PMLang{
 	}
 
 	public static function toggled_remove_mode(bool $mode) : string{
-		return self::getInstance()->translate(new Translatable(self::getInstance()->get("toggled.remove.mode"),
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("command.remove.toggle"),
 			[
 				"mode" => self::toggle_mode_name($mode)
 			]
@@ -91,12 +91,12 @@ final class Language extends PMLang{
 
 	private static function toggle_mode_name(bool $mode) : string{
 		return $mode
-			? self::getInstance()->translate(new Translatable(self::getInstance()->get("toggled.remove.mode.enable")))
-			: self::getInstance()->translate(new Translatable(self::getInstance()->get("toggled.remove.mode.disable")));
+			? self::getInstance()->translate(new Translatable(self::getInstance()->get("misc.enable")))
+			: self::getInstance()->translate(new Translatable(self::getInstance()->get("misc.disable")));
 	}
 
 	public static function minion_spawner_name(MinionInfo $info) : string{
-		return self::getInstance()->translate(new Translatable(self::getInstance()->get("minion.spawner.name"),
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("misc.spawner.name"),
 			[
 				"type" => $info->getType()->typeName(),
 				"target" => $info->getRealTarget()->getName(),
@@ -107,7 +107,7 @@ final class Language extends PMLang{
 	}
 
 	public static function minion_spawner_lore(MinionInfo $info) : array{
-		$contents = explode(PHP_EOL, self::getInstance()->get("minion.spawner.lore"), 4); // Max lines limit?
+		$contents = explode(PHP_EOL, self::getInstance()->get("misc.spawner.lore"), 4); // Max lines limit?
 		$lores = [];
 		foreach($contents as $content){
 			$lores[] = self::getInstance()->translate(new Translatable($content,
@@ -127,7 +127,7 @@ final class Language extends PMLang{
 	}
 
 	public static function inventory_is_full() : string{
-		return self::getInstance()->translate(new Translatable(self::getInstance()->get("inventory.is.full")));
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("misc.inventory.full")));
 	}
 
 }

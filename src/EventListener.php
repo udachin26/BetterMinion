@@ -7,6 +7,7 @@ namespace Mcbeany\BetterMinion;
 use Mcbeany\BetterMinion\entities\BaseMinion;
 use Mcbeany\BetterMinion\events\MinionInteractEvent;
 use Mcbeany\BetterMinion\events\MinionSpawnEvent;
+use Mcbeany\BetterMinion\menus\inventories\MinionMainMenu;
 use Mcbeany\BetterMinion\minions\MinionInfo;
 use Mcbeany\BetterMinion\minions\MinionNBT;
 use Mcbeany\BetterMinion\sessions\SessionManager;
@@ -80,7 +81,7 @@ final class EventListener implements Listener{
 			}
 			$minionEvent = new MinionInteractEvent($player, $entity);
 			$minionEvent->call();
-			//TODO: Open minion GUI
+			(new MinionMainMenu($entity))->display($player);
 		}
 	}
 
