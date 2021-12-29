@@ -12,8 +12,8 @@ class FarmingMinion extends BaseMinion{
 		$x = (int) $this->getPosition()->getX();
 		$y = (int) $this->getPosition()->getY();
 		$z = (int) $this->getPosition()->getZ();
-		for($i = $x - self::WORKING_RADIUS; $i <= $x + self::WORKING_RADIUS; $i++){
-			for($j = $z - self::WORKING_RADIUS; $j <= $z + self::WORKING_RADIUS; $z++){
+		for($i = $x - $this->getWorkingRadius(); $i <= $x + $this->getWorkingRadius(); $i++){
+			for($j = $z - $this->getWorkingRadius(); $j <= $z + $this->getWorkingRadius(); $z++){
 				if(($i !== $x) && ($j !== $z)){
 					$blocks[] = $this->getPosition()->getWorld()->getBlockAt($i, $y, $j);
 				}
