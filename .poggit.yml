@@ -12,4 +12,6 @@ projects:
       - src: Muqsit/InvMenu/InvMenu
         version: ^4.3.4
         branch: "4.0"
+      - src: dktapps-pm-pl/pmforms/pmforms
+        version: ^2.0.0
 ...
