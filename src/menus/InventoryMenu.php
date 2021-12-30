@@ -32,7 +32,7 @@ abstract class InventoryMenu implements IMenu{
 		$onResponse = fn(InvMenuTransaction $transaction) => $this->onResponse($transaction->getPlayer(), $transaction);
 		$this->invMenu = InvMenu::create(static::TYPE)
 			->setName($this->name)
-			->setListener($this->readonly ? InvMenu::readonly($onResponse($transaction)) : $onResponse);
+			->setListener($this->readonly ? InvMenu::readonly($onResponse) : $onResponse);
 		$this->renderTask = new ClosureTask(\Closure::fromCallable([$this, 'onDisplay']));
 		$this->getInvMenu()->setInventoryCloseListener(fn(Player $player, Inventory $inventory) => $this->onClose($player));
 	}
