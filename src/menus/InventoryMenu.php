@@ -29,17 +29,16 @@ abstract class InventoryMenu implements IMenu{
 	public function __construct(
 		protected ?BaseMinion $minion = null
 	){
+		$onResponse = fn(InvMenuTransaction $transaction) => $this->onResponse($transaction->getPlayer(), $transaction);
 		$this->invMenu = InvMenu::create(static::TYPE)
 			->setName($this->name)
 			->setListener(
 				$this->readonly ?
-				InvMenu::readonly(fn(DeterministicInvMenuTransaction $transaction) => $this->onResponse($transaction->getPlayer(), $transaction)) :
-				fn(InvMenuTransaction $transaction) : InvMenuTransactionResult => $this->onResponse($transaction->getPlayer(), $transaction)
+				InvMenu::readonly(fn(DeterministicInvMenuTransaction $transaction) => $onResponse($transaction)) :
+				$onResponse
 			);
 		$this->renderTask = new ClosureTask(\Closure::fromCallable([$this, 'onDisplay']));
-		$this->getInvMenu()->setInventoryCloseListener(function(Player $player, Inventory $inventory) : void{
-			$this->onClose($player);
-		});
+		$this->getInvMenu()->setInventoryCloseListener(fn(Player $player, Inventory $inventory) => $this->onClose($player));
 	}
 
 	public function getMinion() : ?BaseMinion{
