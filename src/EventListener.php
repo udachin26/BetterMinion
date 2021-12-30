@@ -81,7 +81,7 @@ final class EventListener implements Listener{
 			}
 			$minionEvent = new MinionInteractEvent($player, $entity);
 			$minionEvent->call();
-			(new MinionMainMenu($entity))->display($player);
+			(new MinionMainMenu())->display($player);
 		}
 	}
 

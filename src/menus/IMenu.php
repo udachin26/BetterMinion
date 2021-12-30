@@ -8,7 +8,7 @@ use pocketmine\player\Player;
 
 interface IMenu{
 
-	public function render() : void;
+	public function render();
 
 	public function onResponse(Player $player, $response);
 
@@ -17,5 +17,9 @@ interface IMenu{
 	public function forceClose(Player $player): void;
 
 	public function display(Player $player) : void;
+
+	public function onDisplay() : void;
+
+	public function getViewer() : ?Player;
 
 }
