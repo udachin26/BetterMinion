@@ -69,15 +69,11 @@ abstract class InventoryMenu implements IMenu{
 
 	public function display(Player $player) : void{
 		$this->getInvMenu()->send($player);
-		BetterMinion::getInstance()->getScheduler()->scheduleRepeatingTask($this->getRenderTask(), 1); // 1 tick
+		BetterMinion::getInstance()->getScheduler()->scheduleRepeatingTask($this->getRenderTask(), 5); // 5 ticks
 	}
 
 	public function onDisplay() : void{
 		$this->render();
-	}
-
-	public function getViewer() : ?Player{
-		return $this->getInvMenu()->getInventory()->getViewers()[0] ?? null; // One viewer only
 	}
 
 }

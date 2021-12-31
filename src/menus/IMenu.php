@@ -20,6 +20,4 @@ interface IMenu{
 
 	public function onDisplay() : void;
 
-	public function getViewer() : ?Player;
-
 }
