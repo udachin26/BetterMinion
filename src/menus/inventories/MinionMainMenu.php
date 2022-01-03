@@ -36,6 +36,7 @@ class MinionMainMenu extends InventoryMenu{
 	public function onResponse(Player $player, $response){
 		switch($response->getAction()->getSlot()){
 			case 48:
+				//TODO: Inventory check (Add until inventory is full)
 				$player->getInventory()->addItem(...$this->getMinion()->getMinionInventory()->getContents());
 				break;
 			case 53:
