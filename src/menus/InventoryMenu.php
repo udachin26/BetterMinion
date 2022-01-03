@@ -7,6 +7,7 @@ namespace Mcbeany\BetterMinion\menus;
 use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\entities\BaseMinion;
 use muqsit\invmenu\InvMenu;
+use muqsit\invmenu\InvMenuHandler;
 use muqsit\invmenu\transaction\DeterministicInvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
@@ -64,7 +65,7 @@ abstract class InventoryMenu implements IMenu{
 	}
 
 	public function forceClose(Player $player) : void{
-		$player->removeCurrentWindow();
+		InvMenuHandler::getPlayerManager()->get($player)->removeCurrentMenu();
 	}
 
 	public function display(Player $player) : void{
