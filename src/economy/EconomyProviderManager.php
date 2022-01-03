@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\economy;
 
+use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\utils\Configuration;
 
 class EconomyProviderManager{
@@ -19,6 +20,10 @@ class EconomyProviderManager{
 			self::ECONOMY_API => new EconomyAPIProvider(),
 			default => null,
 		};
+		if (!self::$provider->checkAPI()){
+			BetterMinion::getInstance()->getLogger()->error("Couldn't found selected economy plugin, disabling economy feature...");
+			self::$provider = null;
+		}
 	}
 
 	public static function getProvider() : ?EconomyProvider{

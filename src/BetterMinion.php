@@ -40,7 +40,6 @@ final class BetterMinion extends PluginBase{
 		self::setInstance($this);
 		Configuration::load();
 		Language::load();
-		EconomyProviderManager::load();
 	}
 
 	protected function onEnable() : void{
@@ -48,6 +47,8 @@ final class BetterMinion extends PluginBase{
 		$this->initEntities();
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
 		$this->getServer()->getCommandMap()->register("minion", new MinionCommand($this, "minion", "BetterMinion Commands"));
+
+		EconomyProviderManager::load(); //Economy provider depend on economy plugin so this should put at onEnable.
 	}
 
 	protected function initLibraries() : void{

@@ -14,4 +14,6 @@ interface EconomyProvider{
 	public function reduce(Player $player, float $amount = 0) : void;
 
 	public function set(Player $player, float $amount = 0) : void;
+
+	public function checkAPI() : bool;
 }

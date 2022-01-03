@@ -5,6 +5,7 @@ namespace Mcbeany\BetterMinion\economy;
 
 use onebone\economyapi\EconomyAPI;
 use pocketmine\player\Player;
+use pocketmine\Server;
 
 class EconomyAPIProvider implements EconomyProvider{
 
@@ -26,5 +27,12 @@ class EconomyAPIProvider implements EconomyProvider{
 
 	public function set(Player $player, float $amount = 0) : void{
 		EconomyAPI::getInstance()->setMoney($player, $amount);
+	}
+
+	public function checkAPI() : bool{
+		if (Server::getInstance()->getPluginManager()->getPlugin("EconomyAPI") instanceof EconomyAPI){
+			return true;
+		}
+		return false;
 	}
 }
