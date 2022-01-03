@@ -2,7 +2,9 @@
 
 namespace Mcbeany\BetterMinion\menus\inventories;
 
+use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\menus\InventoryMenu;
+use Mcbeany\BetterMinion\utils\Language;
 use muqsit\invmenu\type\InvMenuTypeIds;
 use pocketmine\block\utils\DyeColor;
 use pocketmine\block\VanillaBlocks;
@@ -17,7 +19,7 @@ class MinionMainMenu extends InventoryMenu{
 	public function render() : void{
 		$inv = $this->getInvMenu()->getInventory();
 		$inv->setContents(array_fill(0, 54, VanillaBlocks::INVISIBLE_BEDROCK()->asItem()->setCustomName("")));
-		for($i = 0; $i < 15; $i++) {
+		for($i = 0; $i < 15; $i++){
 			$invItem = $this->getMinion()->getMinionInventory()->slotExists($i) ?
 				$this->getMinion()->getMinionInventory()->getItem($i) :
 				VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::RED())->asItem()->setCustomName("Unlock at level " . $i);
@@ -32,12 +34,19 @@ class MinionMainMenu extends InventoryMenu{
 	}
 
 	public function onResponse(Player $player, $response){
-		switch($response->getAction()->getSlot()) {
+		switch($response->getAction()->getSlot()){
 			case 48:
 				$player->getInventory()->addItem(...$this->getMinion()->getMinionInventory()->getContents());
 				break;
 			case 53:
-				$this->getMinion()->flagForDespawn();
+				$info = $this->getMinion()->getMinionInfo();
+				$spawner = BetterMinion::getInstance()->createSpawner($info->getType(), $info->getTarget(), $info->getLevel(), $info->getMoneyHeld(), $info->getCollectedResources());
+				if($player->getInventory()->canAddItem($spawner)){
+					$this->getMinion()->flagForDespawn();
+					$player->getInventory()->addItem($spawner);
+				}else{
+					$player->sendMessage(Language::inventory_is_full());
+				}
 				$this->forceClose($player);
 				break;
 		}
