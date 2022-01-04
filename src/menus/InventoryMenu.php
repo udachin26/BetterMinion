@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\menus;
 
+use Closure;
 use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\entities\BaseMinion;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\InvMenuHandler;
-use muqsit\invmenu\transaction\DeterministicInvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
 use muqsit\invmenu\type\InvMenuTypeIds;
@@ -34,7 +34,7 @@ abstract class InventoryMenu implements IMenu{
 		$this->invMenu = InvMenu::create(static::TYPE)
 			->setName($this->name)
 			->setListener($this->readonly ? InvMenu::readonly($onResponse) : $onResponse);
-		$this->renderTask = new ClosureTask(\Closure::fromCallable([$this, 'onDisplay']));
+		$this->renderTask = new ClosureTask(Closure::fromCallable([$this, 'onDisplay']));
 		$this->getInvMenu()->setInventoryCloseListener(fn(Player $player, Inventory $inventory) => $this->onClose($player));
 	}
 
