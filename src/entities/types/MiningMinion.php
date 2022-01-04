@@ -79,6 +79,7 @@ class MiningMinion extends BaseMinion{
 			$this->setNameTag($this->getOriginalNameTag() . "\nThis place doesnt perfect :(");
 			return parent::onAction();
 		}
+		$this->setNameTag($this->getOriginalNameTag());
 		if($this->isContainAir()){
 			$pos = $this->getAirBlock()->getPosition();
 			$this->place($pos);

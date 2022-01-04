@@ -29,19 +29,26 @@ class MinionMainMenu extends InventoryMenu{
 		$inv->setItem(53, VanillaBlocks::BEDROCK()->asItem()->setCustomName("Remove your minion"));
 	}
 
-	public function onDisplay() : void{
-		parent::onDisplay();
-	}
-
 	public function onResponse(Player $player, $response){
 		switch($response->getAction()->getSlot()){
 			case 48:
-				//TODO: Inventory check (Add until inventory is full)
-				$player->getInventory()->addItem(...$this->getMinion()->getMinionInventory()->getContents());
+				$notFit = $player->getInventory()->addItem(...$this->getMinion()->getMinionInventory()->getContents());
+				$this->getMinion()->getMinionInventory()->clearAll();
+				if (count($notFit) > 0){
+					$player->sendMessage(Language::inventory_is_full());
+					$this->getMinion()->getMinionInventory()->addItem(...$notFit);
+					$this->forceClose($player);
+				}
 				break;
 			case 53:
 				$info = $this->getMinion()->getMinionInfo();
-				$spawner = BetterMinion::getInstance()->createSpawner($info->getType(), $info->getTarget(), $info->getLevel(), $info->getMoneyHeld(), $info->getCollectedResources());
+				$spawner = BetterMinion::getInstance()->createSpawner(
+					$info->getType(),
+					$info->getTarget(),
+					$info->getLevel(),
+					$info->getMoneyHeld(),
+					$info->getCollectedResources()
+				);
 				if($player->getInventory()->canAddItem($spawner)){
 					$this->getMinion()->flagForDespawn();
 					$player->getInventory()->addItem($spawner);
