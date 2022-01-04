@@ -18,7 +18,7 @@ class MinionMainMenu extends InventoryMenu{
 
 	public function render() : void{
 		$inv = $this->getInvMenu()->getInventory();
-		$inv->setContents(array_fill(0, 54, VanillaBlocks::INVISIBLE_BEDROCK()->asItem()->setCustomName("")));
+		$inv->setContents(array_fill(0, 54, VanillaBlocks::INVISIBLE_BEDROCK()->asItem()->setCustomName("§k"))); //TODO: Hacks (This make item name become empty like "")
 		for($i = 0; $i < 15; $i++){
 			$invItem = $this->getMinion()->getMinionInventory()->slotExists($i) ?
 				$this->getMinion()->getMinionInventory()->getItem($i) :
