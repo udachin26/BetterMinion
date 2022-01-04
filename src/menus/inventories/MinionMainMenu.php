@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\menus\inventories;
 
 use Mcbeany\BetterMinion\BetterMinion;
+use Mcbeany\BetterMinion\entities\BaseMinion;
 use Mcbeany\BetterMinion\menus\InventoryMenu;
 use Mcbeany\BetterMinion\utils\Language;
 use muqsit\invmenu\type\InvMenuTypeIds;
@@ -16,6 +18,11 @@ class MinionMainMenu extends InventoryMenu{
 
 	protected bool $readonly = true;
 
+	public function __construct(?BaseMinion $minion = null){
+		$this->name = $minion?$minion->getOriginalNameTag():"";
+		parent::__construct($minion);
+	}
+
 	public function render() : void{
 		$inv = $this->getInvMenu()->getInventory();
 		$inv->setContents(array_fill(0, 54, VanillaBlocks::INVISIBLE_BEDROCK()->asItem()->setCustomName("§k"))); //TODO: Hacks (This make item name become empty like "")
@@ -27,10 +34,6 @@ class MinionMainMenu extends InventoryMenu{
 		}
 		$inv->setItem(48, VanillaBlocks::CHEST()->asItem()->setCustomName("Retrieve all results"));
 		$inv->setItem(53, VanillaBlocks::BEDROCK()->asItem()->setCustomName("Remove your minion"));
-	}
-
-	public function onDisplay() : void{
-		parent::onDisplay();
 	}
 
 	public function onResponse(Player $player, $response){
