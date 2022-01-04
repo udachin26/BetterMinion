@@ -12,11 +12,8 @@ use pocketmine\player\Player;
 class MinionWorkEvent extends MinionEvent implements Cancellable{
 	use CancellableTrait;
 
-	protected mixed $target;
-
-	public function __construct(Player $player, BaseMinion $minion, $target){
+	public function __construct(Player $player, BaseMinion $minion, protected mixed $target){
 		parent::__construct($player, $minion);
-		$this->target = $target;
 	}
 
 	public function getTarget(){
