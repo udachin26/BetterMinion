@@ -95,7 +95,7 @@ class MiningMinion extends BaseMinion{
 
 	protected function doOfflineAction(int $times) : bool{
 		for ($i = 0; $i < $times; $i++){
-			$this->addStuff();
+			$this->addStuff($this->getMinionInfo()->getRealTarget()->getDrops($this->getTool()));
 		}
 		return parent::doOfflineAction($times);
 	}
@@ -116,7 +116,7 @@ class MiningMinion extends BaseMinion{
 				$this->mining_block = null;
 				$this->getWorld()->addParticle($block->getPosition()->add(0.5, 0.5, 0.5), new BlockBreakParticle($block));
 				$this->getWorld()->setBlock($block->getPosition(), VanillaBlocks::AIR());
-				$this->addStuff();
+				$this->addStuff($this->getMinionInfo()->getRealTarget()->getDrops($this->getTool()));
 				return parent::entityBaseTick($tickDiff);
 			}
 			if($this->miningTimer - $tickDiff < self::MAX_TICKDIFF * (-1)){
@@ -133,18 +133,5 @@ class MiningMinion extends BaseMinion{
 	protected function getTool() : Item{
 		return VanillaItems::DIAMOND_PICKAXE();
 		//TODO: Custom for mining minion using shovel
-	}
-
-	protected function addStuff() : void{
-		$drops = $this->getMinionInfo()->getRealTarget()->getDrops($this->getTool());
-		foreach($drops as $drop){
-			if (!$this->getMinionInventory()->canAddItem($drop)){
-				//TODO: Inventory Full Alert
-				return;
-			}
-			//TODO: Call event.
-			$this->getMinionInventory()->addItem($drop);
-			$this->getMinionInfo()->incrementCollectedResources($drop->getCount());
-		}
 	}
 }

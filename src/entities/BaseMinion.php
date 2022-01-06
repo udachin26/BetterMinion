@@ -183,4 +183,21 @@ abstract class BaseMinion extends Human{
 		//TODO: Expander upgrade
 		return 2;
 	}
+
+	/**
+	 * @param Item[] $drops
+	 *
+	 * @return void
+	 */
+	protected function addStuff(array $drops) : void{
+		foreach($drops as $drop){
+			if (!$this->getMinionInventory()->canAddItem($drop)){
+				//TODO: Inventory Full Alert
+				return;
+			}
+			//TODO: Call event.
+			$this->getMinionInventory()->addItem($drop);
+			$this->getMinionInfo()->incrementCollectedResources($drop->getCount());
+		}
+	}
 }
