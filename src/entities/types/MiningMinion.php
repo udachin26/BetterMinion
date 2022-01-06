@@ -74,41 +74,36 @@ class MiningMinion extends BaseMinion{
 		$this->broadcastSound(new BlockPunchSound($this->mining_block), $this->getViewers());
 	}
 
-	protected function onAction() : bool{
+	protected function onAction() : void{
 		if($this->isContainInvalidBlock()){
 			$this->setNameTag($this->getOriginalNameTag() . "\nThis place doesnt perfect :(");
-			return parent::onAction();
+			return;
 		}
 		$this->setNameTag($this->getOriginalNameTag());
 		if($this->isContainAir()){
 			$pos = $this->getAirBlock()->getPosition();
 			$this->place($pos);
-			return parent::onAction();
+			return;
 		}
 		if($this->mining_block == null){
 			$area = $this->getWorkingBlocks();
 			$block = $area[array_rand($area)];
 			$this->startMine($block);
 		}
-		return parent::onAction();
 	}
 
-	protected function doOfflineAction(int $times) : bool{
+	protected function doOfflineAction(int $times) : void{
 		for ($i = 0; $i < $times; $i++){
 			$this->addStuff($this->getMinionInfo()->getRealTarget()->getDrops($this->getTool()));
 		}
-		return parent::doOfflineAction($times);
 	}
 
-	protected function entityBaseTick(int $tickDiff = 1) : bool{
-		if($this->isStopedWorking()){
-			return true;
-		}
+	protected function minionAnimationTick(int $tickDiff = 1) : void{
 		if($this->mining_block !== null){
 			if($this->miningTimer - $tickDiff > 0){
 				$this->miningTimer -= $tickDiff;
 				$this->mine();
-				return parent::entityBaseTick($tickDiff);
+				return;
 			}
 			if($this->miningTimer - $tickDiff > self::MAX_TICKDIFF * (-1)){
 				$this->miningTimer = 0;
@@ -117,17 +112,15 @@ class MiningMinion extends BaseMinion{
 				$this->getWorld()->addParticle($block->getPosition()->add(0.5, 0.5, 0.5), new BlockBreakParticle($block));
 				$this->getWorld()->setBlock($block->getPosition(), VanillaBlocks::AIR());
 				$this->addStuff($this->getMinionInfo()->getRealTarget()->getDrops($this->getTool()));
-				return parent::entityBaseTick($tickDiff);
+				return;
 			}
 			if($this->miningTimer - $tickDiff < self::MAX_TICKDIFF * (-1)){
 				$this->miningTimer = 0;
 				//TODO: Hacks... Skip and just add stuff like offline action
 				$this->mining_block = null;
 				$this->doOfflineAction(1);
-				return parent::entityBaseTick($tickDiff);
 			}
 		}
-		return parent::entityBaseTick($tickDiff);
 	}
 
 	protected function getTool() : Item{

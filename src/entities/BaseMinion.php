@@ -134,15 +134,17 @@ abstract class BaseMinion extends Human{
 		return false;
 	}
 
-	protected function onAction() : bool{
-		return true;
+	protected function onAction() : void{
 	}
 
-	protected function doOfflineAction(int $times) : bool{
-		return true;
+	protected function doOfflineAction(int $times) : void{
 	}
 
 	protected function entityBaseTick(int $tickDiff = 1) : bool{
+		if($this->isStopedWorking()){
+			return parent::entityBaseTick($tickDiff);
+		}
+		$this->minionAnimationTick($tickDiff);
 		$this->tickWait += $tickDiff;
 		$actionTime = $this->getActionTime();
 		if($this->tickWait >= $actionTime){
@@ -152,15 +154,15 @@ abstract class BaseMinion extends Human{
 				if($times > 1){
 					$this->doOfflineAction($times - 1);
 				}
-				$hasUpdate = $this->onAction();
+				$this->onAction();
 			}else{
-				$hasUpdate = $this->doOfflineAction($times);
+				$this->doOfflineAction($times);
 			}
 		}
-		if(isset($hasUpdate)){
-			return $hasUpdate;
-		}
 		return parent::entityBaseTick($tickDiff);
+	}
+
+	protected function minionAnimationTick(int $tickDiff = 1){
 	}
 
 	protected function getTool() : Item{
