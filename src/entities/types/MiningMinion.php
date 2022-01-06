@@ -144,6 +144,7 @@ class MiningMinion extends BaseMinion{
 			}
 			//TODO: Call event.
 			$this->getMinionInventory()->addItem($drop);
+			$this->getMinionInfo()->incrementCollectedResources($drop->getCount());
 		}
 	}
 }
