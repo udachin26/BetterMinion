@@ -18,6 +18,4 @@ interface IMenu{
 
 	public function display(Player $player) : void;
 
-	public function onDisplay() : void;
-
 }

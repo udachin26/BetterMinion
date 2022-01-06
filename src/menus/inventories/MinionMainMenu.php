@@ -5,7 +5,9 @@ namespace Mcbeany\BetterMinion\menus\inventories;
 
 use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\entities\BaseMinion;
+use Mcbeany\BetterMinion\events\MinionWorkEvent;
 use Mcbeany\BetterMinion\menus\InventoryMenu;
+use Mcbeany\BetterMinion\menus\MinionMenuTrait;
 use Mcbeany\BetterMinion\utils\Language;
 use Mcbeany\BetterMinion\utils\Utils;
 use muqsit\invmenu\type\InvMenuTypeIds;
@@ -14,17 +16,24 @@ use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\utils\DyeColor;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\item\VanillaItems;
+use pocketmine\event\HandlerListManager;
+use pocketmine\event\Listener;
 use pocketmine\player\Player;
 
-class MinionMainMenu extends InventoryMenu{
+class MinionMainMenu extends InventoryMenu implements Listener{
+	use MinionMenuTrait {
+		__construct as private __constructMinionMenu;
+	}
 
 	protected const TYPE = InvMenuTypeIds::TYPE_DOUBLE_CHEST;
 
 	protected bool $readonly = true;
 
 	public function __construct(?BaseMinion $minion = null){
-		$this->name = $minion?$minion->getOriginalNameTag():"";
-		parent::__construct($minion);
+		parent::__construct();
+		$this->name = $minion?->getOriginalNameTag() ?? "";
+		$this->__constructMinionMenu($minion);
+		BetterMinion::getInstance()->getServer()->getPluginManager()->registerEvents($this, BetterMinion::getInstance());
 	}
 
 	public function render() : void{
@@ -55,7 +64,7 @@ class MinionMainMenu extends InventoryMenu{
 			case 48:
 				$notFit = $player->getInventory()->addItem(...$this->getMinion()->getMinionInventory()->getContents());
 				$this->getMinion()->getMinionInventory()->clearAll();
-				if (count($notFit) > 0){
+				if(count($notFit) > 0){
 					$player->sendMessage(Language::inventory_is_full());
 					$this->getMinion()->getMinionInventory()->addItem(...$notFit);
 					$this->forceClose($player);
@@ -79,6 +88,14 @@ class MinionMainMenu extends InventoryMenu{
 				$this->forceClose($player);
 				break;
 		}
+	}
+
+	public function onClose(Player $player) : void{
+		HandlerListManager::global()->unregisterAll($this);
+	}
+
+	public function onMinionWork(MinionWorkEvent $event) : void{
+		$this->render();
 	}
 
 }
