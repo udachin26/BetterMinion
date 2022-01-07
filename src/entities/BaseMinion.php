@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\entities;
 
+use Mcbeany\BetterMinion\events\MinionCollectResourcesEvent;
+use Mcbeany\BetterMinion\inventory\MinionInventory;
 use Mcbeany\BetterMinion\minions\MinionInfo;
 use Mcbeany\BetterMinion\minions\MinionNBT;
 use Mcbeany\BetterMinion\utils\Configuration;
 use pocketmine\block\Air;
 use pocketmine\block\Block;
 use pocketmine\entity\Human;
-use pocketmine\inventory\SimpleInventory;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 use pocketmine\nbt\NBT;
@@ -26,7 +27,7 @@ abstract class BaseMinion extends Human{
 	protected UuidInterface $owner;
 	protected string $ownerName;
 	protected MinionInfo $minionInfo;
-	protected SimpleInventory $minionInv;
+	protected MinionInventory $minionInv;
 
 	protected int $tickWait = 0;
 	protected bool $isPaused = false;
@@ -46,7 +47,7 @@ abstract class BaseMinion extends Human{
 			return;
 		}
 		$this->minionInfo = MinionInfo::nbtDeserialize($info_nbt);
-		$this->minionInv = new SimpleInventory($this->getMinionInfo()->getLevel());
+		$this->minionInv = new MinionInventory($this->getMinionInfo()->getLevel(), $this);
 		$this->getMinionInventory()->setContents(array_map(
 			fn(CompoundTag $nbt) : Item => Item::nbtDeserialize($nbt),
 			$nbt->getListTag(MinionNBT::INV)?->getValue() ?? []
@@ -82,7 +83,7 @@ abstract class BaseMinion extends Human{
 		return $this->minionInfo;
 	}
 
-	public function getMinionInventory() : SimpleInventory{
+	public function getMinionInventory() : MinionInventory{
 		return $this->minionInv;
 	}
 
@@ -197,9 +198,12 @@ abstract class BaseMinion extends Human{
 				//TODO: Inventory Full Alert
 				return;
 			}
-			//TODO: Call event.
-			$this->getMinionInventory()->addItem($drop);
-			$this->getMinionInfo()->incrementCollectedResources($drop->getCount());
+			$event = new MinionCollectResourcesEvent($this);
+			$event->call();
+			if (!$event->isCancelled()){
+				$this->getMinionInventory()->addItem($drop);
+				$this->getMinionInfo()->incrementCollectedResources($drop->getCount());
+			}
 		}
 	}
 }

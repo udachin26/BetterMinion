@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\entities\types;
 
 use Mcbeany\BetterMinion\entities\BaseMinion;
+use Mcbeany\BetterMinion\events\MinionWorkEvent;
 use pocketmine\block\Block;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\entity\animation\ArmSwingAnimation;
@@ -68,7 +69,12 @@ class MiningMinion extends BaseMinion{
 		$block->getPosition()->getWorld()->broadcastPacketToViewers($block->getPosition(), LevelEventPacket::create(LevelEvent::BLOCK_START_BREAK, (int) (65535 * $breakSpeed), $block->getPosition()));
 	}
 
-	protected function mine(){
+	protected function mine() : void{
+		$event = new MinionWorkEvent($this);
+		$event->call();
+		if ($event->isCancelled()){
+			return;
+		}
 		$this->broadcastAnimation(new ArmSwingAnimation($this), $this->getViewers());
 		$this->getWorld()->addParticle($this->mining_block->getPosition(), new BlockPunchParticle($this->mining_block, Facing::opposite($this->getHorizontalFacing())));
 		$this->broadcastSound(new BlockPunchSound($this->mining_block), $this->getViewers());

@@ -5,7 +5,7 @@ namespace Mcbeany\BetterMinion\menus\inventories;
 
 use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\entities\BaseMinion;
-use Mcbeany\BetterMinion\events\MinionWorkEvent;
+use Mcbeany\BetterMinion\events\inventory\MinionInventoryChangedEvent;
 use Mcbeany\BetterMinion\menus\InventoryMenu;
 use Mcbeany\BetterMinion\menus\MinionMenuTrait;
 use Mcbeany\BetterMinion\utils\Language;
@@ -94,7 +94,7 @@ class MinionMainMenu extends InventoryMenu implements Listener{
 		HandlerListManager::global()->unregisterAll($this);
 	}
 
-	public function onMinionWork(MinionWorkEvent $event) : void{
+	public function onMinionInventoryChanged(MinionInventoryChangedEvent $event) : void{
 		$this->render();
 	}
 

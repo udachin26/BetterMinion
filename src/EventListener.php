@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion;
 
 use Mcbeany\BetterMinion\entities\BaseMinion;
-use Mcbeany\BetterMinion\events\MinionInteractEvent;
-use Mcbeany\BetterMinion\events\MinionSpawnEvent;
+use Mcbeany\BetterMinion\events\player\PlayerInteractMinionEvent;
+use Mcbeany\BetterMinion\events\player\PlayerSpawnMinionEvent;
 use Mcbeany\BetterMinion\menus\inventories\MinionMainMenu;
 use Mcbeany\BetterMinion\minions\MinionInfo;
 use Mcbeany\BetterMinion\minions\MinionNBT;
@@ -49,7 +49,7 @@ final class EventListener implements Listener{
 					fmod($player->getLocation()->getYaw(), 360)
 				), $player->getSkin(), $minionNBT);
 
-				$minionEvent = new MinionSpawnEvent($player, $entity);
+				$minionEvent = new PlayerSpawnMinionEvent($player, $entity);
 				$minionEvent->call();
 				if($minionEvent->isCancelled()){
 					$event->uncancel();
@@ -79,7 +79,7 @@ final class EventListener implements Listener{
 				$entity->flagForDespawn();
 				return;
 			}
-			$minionEvent = new MinionInteractEvent($player, $entity);
+			$minionEvent = new PlayerInteractMinionEvent($player, $entity);
 			$minionEvent->call();
 			(new MinionMainMenu($entity))->display($player);
 		}
