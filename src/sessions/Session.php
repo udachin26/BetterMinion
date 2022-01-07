@@ -7,7 +7,6 @@ namespace Mcbeany\BetterMinion\sessions;
 class Session{
 
 	private bool $removeMode = false;
-	private int $minionCount = 0;
 
 	public function toggleRemoveMode() : bool{
 		return $this->removeMode = !$this->removeMode;
