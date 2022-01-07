@@ -62,7 +62,11 @@ class MinionMainMenu extends InventoryMenu{
 	public function onResponse(Player $player, $response){
 		switch($response->getAction()->getSlot()){
 			case 48:
+				$this->getMinion()->continueWorking();
 				$notFit = $player->getInventory()->addItem(...$this->getMinion()->getMinionInventory()->getContents());
+				if (count($notFit) == $this->getMinion()->getMinionInventory()->getContents()){ //Still get inventory full ?
+					$this->getMinion()->stopWorking();
+				}
 				$this->getMinion()->getMinionInventory()->clearAll();
 				if(count($notFit) > 0){
 					$player->sendMessage(Language::inventory_is_full());

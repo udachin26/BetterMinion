@@ -32,7 +32,7 @@ abstract class BaseMinion extends Human{
 	protected MinionInventory $minionInv;
 
 	protected int $tickWait = 0;
-	protected bool $isPaused = false;
+	protected bool $isWorking = true;
 
 	protected $gravity = 0;
 	protected $gravityEnabled = false;
@@ -146,7 +146,7 @@ abstract class BaseMinion extends Human{
 	}
 
 	protected function entityBaseTick(int $tickDiff = 1) : bool{
-		if($this->isStopedWorking()){
+		if(!$this->isWorking()){
 			return parent::entityBaseTick($tickDiff);
 		}
 		$this->minionAnimationTick($tickDiff);
@@ -175,15 +175,15 @@ abstract class BaseMinion extends Human{
 	}
 
 	public function stopWorking() : void{
-		$this->isPaused = true;
+		$this->isWorking = false;
 	}
 
 	public function continueWorking() : void{
-		$this->isPaused = false;
+		$this->isWorking = true;
 	}
 
-	public function isStopedWorking() : bool{
-		return $this->isPaused;
+	public function isWorking() : bool{
+		return $this->isWorking;
 	}
 
 	protected function getWorkingRadius() : int{
@@ -197,7 +197,8 @@ abstract class BaseMinion extends Human{
 	protected function addStuff(array $drops) : void{
 		foreach($drops as $drop){
 			if (!$this->getMinionInventory()->canAddItem($drop)){
-				//TODO: Inventory Full Alert
+				$this->stopWorking();
+				$this->setNameTag($this->getOriginalNameTag() . "\nMy Inventory is FULL !");
 				return;
 			}
 			$event = new MinionCollectResourcesEvent($this);
