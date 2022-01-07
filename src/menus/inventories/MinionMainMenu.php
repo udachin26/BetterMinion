@@ -6,7 +6,6 @@ namespace Mcbeany\BetterMinion\menus\inventories;
 
 use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\entities\BaseMinion;
-use Mcbeany\BetterMinion\events\inventory\MinionInventoryChangedEvent;
 use Mcbeany\BetterMinion\menus\InventoryMenu;
 use Mcbeany\BetterMinion\menus\MinionMenuTrait;
 use Mcbeany\BetterMinion\utils\Language;
@@ -16,15 +15,13 @@ use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\utils\DyeColor;
 use pocketmine\block\VanillaBlocks;
-use pocketmine\event\HandlerListManager;
-use pocketmine\event\Listener;
 use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 use function array_fill;
 use function count;
 use function floor;
 
-class MinionMainMenu extends InventoryMenu implements Listener{
+class MinionMainMenu extends InventoryMenu{
 	use MinionMenuTrait {
 		__construct as private __constructMinionMenu;
 	}
@@ -37,7 +34,6 @@ class MinionMainMenu extends InventoryMenu implements Listener{
 		parent::__construct();
 		$this->name = $minion?->getOriginalNameTag() ?? "";
 		$this->__constructMinionMenu($minion);
-		BetterMinion::getInstance()->getServer()->getPluginManager()->registerEvents($this, BetterMinion::getInstance());
 	}
 
 	public function render() : void{
@@ -95,10 +91,15 @@ class MinionMainMenu extends InventoryMenu implements Listener{
 	}
 
 	public function onClose(Player $player) : void{
-		HandlerListManager::global()->unregisterAll($this);
+		$this->getMinion()->removeMenu($this);
 	}
 
-	public function onMinionInventoryChanged(MinionInventoryChangedEvent $event) : void{
+	public function display(Player $player) : void{
+		parent::display($player);
+		$this->getMinion()->registerMenu($this);
+	}
+
+	public function onUpdate() : void{
 		$this->render();
 	}
 

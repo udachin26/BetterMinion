@@ -21,6 +21,8 @@ abstract class InventoryMenu implements IMenu{
 	protected string $name = "";
 	protected bool $readonly = false;
 
+	public int $menu_id = 0;
+
 	public function __construct(){
 		$onResponse = fn(InvMenuTransaction $transaction) => $this->onResponse($transaction->getPlayer(), $transaction);
 		$this->invMenu = InvMenu::create(static::TYPE)

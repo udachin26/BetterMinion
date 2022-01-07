@@ -6,6 +6,7 @@ namespace Mcbeany\BetterMinion\entities;
 
 use Mcbeany\BetterMinion\events\MinionCollectResourcesEvent;
 use Mcbeany\BetterMinion\inventory\MinionInventory;
+use Mcbeany\BetterMinion\menus\inventories\MinionMainMenu;
 use Mcbeany\BetterMinion\minions\MinionInfo;
 use Mcbeany\BetterMinion\minions\MinionNBT;
 use Mcbeany\BetterMinion\utils\Configuration;
@@ -36,6 +37,8 @@ abstract class BaseMinion extends Human{
 	protected $gravity = 0;
 	protected $gravityEnabled = false;
 	public $canCollide = false;
+	/** @var MinionMainMenu[] */
+	protected array $list_menu = [];
 
 	protected function initEntity(CompoundTag $nbt) : void{
 		parent::initEntity($nbt);
@@ -203,6 +206,23 @@ abstract class BaseMinion extends Human{
 				$this->getMinionInventory()->addItem($drop);
 				$this->getMinionInfo()->incrementCollectedResources($drop->getCount());
 			}
+		}
+	}
+
+	public function registerMenu(MinionMainMenu $menu) : void{
+		$this->list_menu[] = $menu;
+		$menu->menu_id = array_search($menu, $this->list_menu);
+	}
+
+	public function removeMenu(MinionMainMenu $menu) : void{
+		if (isset($this->list_menu[$menu->menu_id])){
+			unset($this->list_menu[$menu->menu_id]);
+		}
+	}
+
+	public function updateMenu() : void{
+		foreach($this->list_menu as $menu){
+			$menu->onUpdate();
 		}
 	}
 }
