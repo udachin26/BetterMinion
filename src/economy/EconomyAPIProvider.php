@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\economy;
@@ -6,6 +7,7 @@ namespace Mcbeany\BetterMinion\economy;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\player\Player;
 use pocketmine\Server;
+use function is_numeric;
 
 class EconomyAPIProvider implements EconomyProvider{
 

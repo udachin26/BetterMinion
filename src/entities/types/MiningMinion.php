@@ -18,6 +18,7 @@ use pocketmine\world\particle\BlockBreakParticle;
 use pocketmine\world\particle\BlockPunchParticle;
 use pocketmine\world\Position;
 use pocketmine\world\sound\BlockPunchSound;
+use function array_rand;
 
 class MiningMinion extends BaseMinion{
 

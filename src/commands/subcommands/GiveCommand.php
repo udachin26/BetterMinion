@@ -17,6 +17,7 @@ use pocketmine\block\BlockLegacyIds;
 use pocketmine\command\CommandSender;
 use pocketmine\item\LegacyStringToItemParserException;
 use pocketmine\player\Player;
+use function count;
 
 class GiveCommand extends BaseSubCommand{
 

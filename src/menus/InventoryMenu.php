@@ -36,7 +36,6 @@ abstract class InventoryMenu implements IMenu{
 	abstract public function render() : void;
 
 	/**
-	 * @param Player             $player
 	 * @param InvMenuTransaction $response
 	 *
 	 * @return InvMenuTransactionResult|void

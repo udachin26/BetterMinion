@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\entities\types;
 
 use Mcbeany\BetterMinion\entities\BaseMinion;
+use function array_rand;
 
 class FarmingMinion extends BaseMinion{
 	public function getWorkingBlocks() : array{

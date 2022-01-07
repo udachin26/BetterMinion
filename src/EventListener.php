@@ -19,12 +19,11 @@ use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\nbt\tag\CompoundTag;
+use function fmod;
 
 final class EventListener implements Listener{
 
 	/**
-	 * @param PlayerItemUseEvent $event
-	 *
 	 * @priority HIGHEST
 	 * @handleCancelled FALSE
 	 */
@@ -64,8 +63,6 @@ final class EventListener implements Listener{
 	}
 
 	/**
-	 * @param PlayerEntityInteractEvent $event
-	 *
 	 * @priority HIGHEST
 	 * @handleCancelled FALSE
 	 */
@@ -86,7 +83,6 @@ final class EventListener implements Listener{
 	}
 
 	/**
-	 * @param PlayerJoinEvent $event
 	 * @priority NORMAL
 	 */
 	public function onJoin(PlayerJoinEvent $event) : void{
@@ -94,7 +90,6 @@ final class EventListener implements Listener{
 	}
 
 	/**
-	 * @param PlayerQuitEvent $event
 	 * @priority NORMAL
 	 */
 	public function onQuit(PlayerQuitEvent $event) : void{

@@ -14,7 +14,7 @@ interface IMenu{
 
 	public function onClose(Player $player) : void;
 
-	public function forceClose(Player $player): void;
+	public function forceClose(Player $player) : void;
 
 	public function display(Player $player) : void;
 

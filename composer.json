@@ -5,7 +5,8 @@
 	"require": {
 		"pocketmine/pocketmine-mp": "^4.0",
 		"php": "^8.0",
-		"cortexpe/commando": "dev-PM4"
+		"cortexpe/commando": "dev-PM4",
+		"friendsofphp/php-cs-fixer": "^3.4"
 	},
 	"license": "MIT",
 	"autoload": {
@@ -18,5 +19,8 @@
 			"name": "Khang Nguyen",
 			"email": "mcbeany7@gmail.com"
 		}
-	]
+	],
+	"scripts": {
+		"fix-cs": "vendor/bin/php-cs-fixer fix src"
+	}
 }

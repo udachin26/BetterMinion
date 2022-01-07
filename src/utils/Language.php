@@ -12,6 +12,8 @@ use pocketmine\lang\Language as PMLang;
 use pocketmine\lang\Translatable;
 use pocketmine\player\Player;
 use pocketmine\utils\SingletonTrait;
+use function explode;
+use function var_export;
 
 final class Language extends PMLang{
 	use SingletonTrait {

@@ -19,6 +19,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ListTag;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use function array_map;
 
 abstract class BaseMinion extends Human{
 
@@ -189,8 +190,6 @@ abstract class BaseMinion extends Human{
 
 	/**
 	 * @param Item[] $drops
-	 *
-	 * @return void
 	 */
 	protected function addStuff(array $drops) : void{
 		foreach($drops as $drop){

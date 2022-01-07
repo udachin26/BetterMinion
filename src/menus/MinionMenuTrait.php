@@ -13,7 +13,6 @@ trait MinionMenuTrait{
 	){
 	}
 
-
 	public function getMinion() : ?BaseMinion{
 		return $this->minion;
 	}

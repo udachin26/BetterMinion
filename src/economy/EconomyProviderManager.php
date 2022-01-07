@@ -1,10 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\economy;
 
 use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\utils\Configuration;
+use function mb_strtolower;
 
 class EconomyProviderManager{
 

@@ -7,6 +7,8 @@ namespace Mcbeany\BetterMinion\minions;
 use Mcbeany\BetterMinion\entities\types\FarmingMinion;
 use Mcbeany\BetterMinion\entities\types\MiningMinion;
 use pocketmine\utils\EnumTrait;
+use function mb_strtoupper;
+use function ucfirst;
 
 /**
  * This doc-block is generated automatically, do not modify it manually.

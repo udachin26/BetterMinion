@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\menus\inventories;
@@ -15,10 +16,13 @@ use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\utils\DyeColor;
 use pocketmine\block\VanillaBlocks;
-use pocketmine\item\VanillaItems;
 use pocketmine\event\HandlerListManager;
 use pocketmine\event\Listener;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
+use function array_fill;
+use function count;
+use function floor;
 
 class MinionMainMenu extends InventoryMenu implements Listener{
 	use MinionMenuTrait {

@@ -27,6 +27,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\world\World;
+use function basename;
 
 final class BetterMinion extends PluginBase{
 	use SingletonTrait;

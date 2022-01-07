@@ -9,6 +9,8 @@ use CortexPE\Commando\BaseSubCommand;
 use Mcbeany\BetterMinion\commands\subcommands\GiveCommand;
 use Mcbeany\BetterMinion\commands\subcommands\RemoveCommand;
 use pocketmine\command\CommandSender;
+use function array_map;
+use function implode;
 
 class MinionCommand extends BaseCommand{
 

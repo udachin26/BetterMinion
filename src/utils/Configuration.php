@@ -8,6 +8,8 @@ use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\economy\EconomyProviderManager;
 use pocketmine\item\Item;
 use pocketmine\lang\Language;
+use function gettype;
+use function is_object;
 
 final class Configuration{
 

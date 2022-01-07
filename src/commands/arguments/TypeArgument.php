@@ -7,6 +7,9 @@ namespace Mcbeany\BetterMinion\commands\arguments;
 use CortexPE\Commando\args\StringEnumArgument;
 use Mcbeany\BetterMinion\minions\MinionType;
 use pocketmine\command\CommandSender;
+use function array_map;
+use function array_values;
+use function strtolower;
 
 class TypeArgument extends StringEnumArgument{
 
