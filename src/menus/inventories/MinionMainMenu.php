@@ -64,7 +64,7 @@ class MinionMainMenu extends InventoryMenu{
 			case 48:
 				$this->getMinion()->continueWorking();
 				$notFit = $player->getInventory()->addItem(...$this->getMinion()->getMinionInventory()->getContents());
-				if (count($notFit) == $this->getMinion()->getMinionInventory()->getContents()){ //Still get inventory full ?
+				if (count($notFit) === count($this->getMinion()->getMinionInventory()->getContents())){ //Still get inventory full ?
 					$this->getMinion()->stopWorking();
 				}
 				$this->getMinion()->getMinionInventory()->clearAll();

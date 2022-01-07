@@ -21,6 +21,7 @@ use pocketmine\nbt\tag\ListTag;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use function array_map;
+use function array_search;
 
 abstract class BaseMinion extends Human{
 
@@ -212,7 +213,7 @@ abstract class BaseMinion extends Human{
 
 	public function registerMenu(MinionMainMenu $menu) : void{
 		$this->list_menu[] = $menu;
-		$menu->menu_id = array_search($menu, $this->list_menu);
+		$menu->menu_id = array_search($menu, $this->list_menu, true);
 	}
 
 	public function removeMenu(MinionMainMenu $menu) : void{
