@@ -40,7 +40,7 @@ abstract class InventoryMenu implements IMenu{
 	/**
 	 * @param InvMenuTransaction $response
 	 *
-	 * @return InvMenuTransactionResult|bool
+	 * @return InvMenuTransactionResult|void
 	 */
 	abstract public function onResponse(Player $player, $response);
 
