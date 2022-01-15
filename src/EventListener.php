@@ -13,12 +13,14 @@ use Mcbeany\BetterMinion\minions\MinionNBT;
 use Mcbeany\BetterMinion\sessions\SessionManager;
 use Mcbeany\BetterMinion\utils\Configuration;
 use pocketmine\entity\Location;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerEntityInteractEvent;
 use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\player\Player;
 use function fmod;
 
 final class EventListener implements Listener{
@@ -70,16 +72,32 @@ final class EventListener implements Listener{
 		$entity = $event->getEntity();
 		$player = $event->getPlayer();
 		if($entity instanceof BaseMinion){
-			$event->cancel();
-			$session = SessionManager::getSession($player);
-			if($session->inRemoveMode()) {
-				$entity->flagForDespawn();
-				return;
-			}
-			$minionEvent = new PlayerInteractMinionEvent($player, $entity);
-			$minionEvent->call();
-			(new MinionMainMenu($entity))->display($player);
+			$this->onTapMinion($player, $entity);
 		}
+	}
+
+	/**
+	 * @priority HIGHEST
+	 * @handleCancelled FALSE
+	 */
+	public function onEntityDamageByEntity(EntityDamageByEntityEvent $event){
+		$damager = $event->getDamager();
+		$victim = $event->getEntity();
+		if (($damager instanceof Player) && ($victim instanceof BaseMinion)){
+			$event->cancel();
+			$this->onTapMinion($damager, $victim);
+		}
+	}
+
+	public function onTapMinion(Player $player, BaseMinion $minion) : void{
+		$session = SessionManager::getSession($player);
+		if($session->inRemoveMode()) {
+			$minion->flagForDespawn();
+			return;
+		}
+		$minionEvent = new PlayerInteractMinionEvent($player, $minion);
+		$minionEvent->call();
+		(new MinionMainMenu($minion))->display($player);
 	}
 
 	/**
