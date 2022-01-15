@@ -29,21 +29,23 @@ class MinionMainMenu extends InventoryMenu{
 	protected const TYPE = InvMenuTypeIds::TYPE_DOUBLE_CHEST;
 
 	protected bool $readonly = true;
+	private array $invSlots;
 
 	public function __construct(?BaseMinion $minion = null){
 		parent::__construct();
 		$this->name = $minion?->getOriginalNameTag() ?? "";
+		$this->invSlots = array_map(fn (int $i) => (int) (21 + ($i % 5) + (9 * (floor($i / 5)))), range(0, 15));
 		$this->__constructMinionMenu($minion);
 	}
 
 	public function render() : void{
 		$inv = $this->getInvMenu()->getInventory();
 		$inv->setContents(array_fill(0, 54, VanillaBlocks::INVISIBLE_BEDROCK()->asItem()->setCustomName("§k"))); //TODO: Hacks (This make item name become empty like "")
-		for($i = 0; $i < 15; $i++){
+		foreach($this->invSlots as $i => $slot){
 			$invItem = $this->getMinion()->getMinionInventory()->slotExists($i) ?
 				$this->getMinion()->getMinionInventory()->getItem($i) :
-				VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::RED())->asItem()->setCustomName("Unlock at level " . $i);
-			$inv->setItem((int) (21 + ($i % 5) + (9 * (floor($i / 5)))), $invItem);
+				VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::RED())->asItem()->setCustomName("Unlock at level " . Utils::getRomanNumeral($i));
+			$inv->setItem($slot, $invItem);
 		}
 		$info_item = VanillaItems::PLAYER_HEAD()->setCustomName("§r§f" . $this->getMinion()->getOriginalNameTag());
 		$info_item->setLore([
@@ -60,19 +62,19 @@ class MinionMainMenu extends InventoryMenu{
 	}
 
 	public function onResponse(Player $player, $response){
-		switch($response->getAction()->getSlot()){
+		$this->getMinion()->continueWorking();
+		$slot = $response->getAction()->getSlot();
+		switch($slot){
 			case 48:
-				$this->getMinion()->continueWorking();
-				$notFit = $player->getInventory()->addItem(...$this->getMinion()->getMinionInventory()->getContents());
-				if (count($notFit) === count($this->getMinion()->getMinionInventory()->getContents())){ //Still get inventory full ?
-					$this->getMinion()->stopWorking();
+				$player->sendMessage(Language::retrieved_all_results());
+				for($i = 0; $i < $this->getMinion()->getMinionInventory()->getSize(); $i++){
+					if(!$this->getMinion()->takeStuff($i, $player)){
+						$player->sendMessage(Language::inventory_is_full());
+						$this->getMinion()->getMinionInventory()->setContents($this->getMinion()->getMinionInventory()->getContents());
+						break;
+					}
 				}
-				$this->getMinion()->getMinionInventory()->clearAll();
-				if(count($notFit) > 0){
-					$player->sendMessage(Language::inventory_is_full());
-					$this->getMinion()->getMinionInventory()->addItem(...$notFit);
-					$this->forceClose($player);
-				}
+				$this->forceClose($player);
 				break;
 			case 53:
 				$info = $this->getMinion()->getMinionInfo();
@@ -90,6 +92,14 @@ class MinionMainMenu extends InventoryMenu{
 					$player->sendMessage(Language::inventory_is_full());
 				}
 				$this->forceClose($player);
+				break;
+			default:
+				if(in_array($slot, $this->invSlots)){
+					if(!$this->getMinion()->takeStuff(array_search($slot, $this->invSlots), $player)){
+						$player->sendMessage(Language::inventory_is_full());
+					}
+				}
+				$this->getMinion()->getMinionInventory()->setContents($this->getMinion()->getMinionInventory()->getContents()); // Reload contents
 				break;
 		}
 	}

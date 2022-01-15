@@ -18,6 +18,7 @@ use pocketmine\item\ItemFactory;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ListTag;
+use pocketmine\player\Player;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use function array_map;
@@ -202,6 +203,7 @@ abstract class BaseMinion extends Human{
 				$this->setNameTag($this->getOriginalNameTag() . "\nMy Inventory is FULL !");
 				return;
 			}
+			$this->setNameTag($this->getOriginalNameTag());
 			$event = new MinionCollectResourcesEvent($this);
 			$event->call();
 			if (!$event->isCancelled()){
@@ -209,6 +211,17 @@ abstract class BaseMinion extends Human{
 				$this->getMinionInfo()->incrementCollectedResources($drop->getCount());
 			}
 		}
+	}
+	
+	public function takeStuff(int $slot, Player $player) : bool{
+		$item = $this->getMinionInventory()->getItem($slot);
+		$addable = $player->getInventory()->getAddableItemQuantity($item);
+		$player->getInventory()->addItem((clone $item)->setCount($addable));
+		if($addable === 0){
+			$this->stopWorking();
+		}
+		$this->getMinionInventory()->setItem($slot, $item->setCount($item->getCount() - $addable));
+		return $addable === $item->getCount();
 	}
 
 	public function registerMenu(MinionMainMenu $menu) : void{

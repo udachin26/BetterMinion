@@ -132,4 +132,8 @@ final class Language extends PMLang{
 		return self::getInstance()->translate(new Translatable(self::getInstance()->get("misc.inventory.full")));
 	}
 
+	public static function retrieved_all_results() : string{
+		return self::getInstance()->translate(new Translatable(self::getInstance()->get("misc.inventory.retrieved")));
+	}
+
 }
