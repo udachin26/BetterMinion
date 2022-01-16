@@ -34,7 +34,7 @@ class MinionMainMenu extends InventoryMenu{
 	public function __construct(?BaseMinion $minion = null){
 		parent::__construct();
 		$this->name = $minion?->getOriginalNameTag() ?? "";
-		$this->invSlots = array_map(fn (int $i) => (int) (21 + ($i % 5) + (9 * (floor($i / 5)))), range(0, 15));
+		$this->invSlots = array_map(fn (int $i) => (int) (21 + ($i % 5) + (9 * (floor($i / 5)))), range(0, BaseMinion::MAX_LEVEL));
 		$this->__constructMinionMenu($minion);
 	}
 
@@ -70,7 +70,6 @@ class MinionMainMenu extends InventoryMenu{
 				for($i = 0; $i < $this->getMinion()->getMinionInventory()->getSize(); $i++){
 					if(!$this->getMinion()->takeStuff($i, $player)){
 						$player->sendMessage(Language::inventory_is_full());
-						$this->getMinion()->getMinionInventory()->setContents($this->getMinion()->getMinionInventory()->getContents());
 						break;
 					}
 				}
@@ -97,11 +96,12 @@ class MinionMainMenu extends InventoryMenu{
 				if(in_array($slot, $this->invSlots)){
 					if(!$this->getMinion()->takeStuff(array_search($slot, $this->invSlots), $player)){
 						$player->sendMessage(Language::inventory_is_full());
+						// TODO: Reload content
 					}
 				}
-				$this->getMinion()->getMinionInventory()->setContents($this->getMinion()->getMinionInventory()->getContents()); // Reload contents
 				break;
 		}
+		$this->render();
 	}
 
 	public function onClose(Player $player) : void{

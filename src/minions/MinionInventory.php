@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mcbeany\BetterMinion\inventory;
+namespace Mcbeany\BetterMinion\minions;
 
 use Mcbeany\BetterMinion\entities\BaseMinion;
 use pocketmine\inventory\SimpleInventory;
@@ -25,6 +25,10 @@ class MinionInventory extends SimpleInventory{
 	public function setContents(array $items) : void{
 		parent::setContents($items);
 		$this->getMinion()->updateMenu();
+	}
+
+	public function setSize(int $size) : void{
+		$this->slots->setSize($size);
 	}
 
 	public function getMinion() : BaseMinion{

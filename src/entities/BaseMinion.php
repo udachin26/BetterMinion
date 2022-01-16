@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\entities;
 
 use Mcbeany\BetterMinion\events\MinionCollectResourcesEvent;
-use Mcbeany\BetterMinion\inventory\MinionInventory;
+use Mcbeany\BetterMinion\minions\MinionInventory;
 use Mcbeany\BetterMinion\menus\inventories\MinionMainMenu;
 use Mcbeany\BetterMinion\minions\MinionInfo;
 use Mcbeany\BetterMinion\minions\MinionNBT;
@@ -27,6 +27,7 @@ use function array_search;
 abstract class BaseMinion extends Human{
 
 	protected const MAX_TICKDIFF = 20;
+	public const MAX_LEVEL = 15;
 
 	protected UuidInterface $owner;
 	protected string $ownerName;
@@ -222,6 +223,15 @@ abstract class BaseMinion extends Human{
 		}
 		$this->getMinionInventory()->setItem($slot, $item->setCount($item->getCount() - $addable));
 		return $addable === $item->getCount();
+	}
+
+	public function levelUp() : bool{
+		if($this->getMinionInfo()->getLevel() < self::MAX_LEVEL){
+			$this->getMinionInfo()->incrementLevel();
+			$this->getMinionInventory()->setSize($this->getMinionInfo()->getLevel());
+			return true;
+		}
+		return false;
 	}
 
 	public function registerMenu(MinionMainMenu $menu) : void{
