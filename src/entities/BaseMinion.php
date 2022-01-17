@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\entities;
 
+use Exception;
 use Mcbeany\BetterMinion\events\MinionCollectResourcesEvent;
 use Mcbeany\BetterMinion\minions\MinionInventory;
 use Mcbeany\BetterMinion\menus\inventories\MinionMainMenu;
@@ -215,7 +216,11 @@ abstract class BaseMinion extends Human{
 	}
 	
 	public function takeStuff(int $slot, Player $player) : bool{
-		$item = $this->getMinionInventory()->getItem($slot);
+		try {
+			$item = $this->getMinionInventory()->getItem($slot);
+		} catch(Exception){
+			return true;
+		}
 		$addable = $player->getInventory()->getAddableItemQuantity($item);
 		$player->getInventory()->addItem((clone $item)->setCount($addable));
 		if($addable === 0){

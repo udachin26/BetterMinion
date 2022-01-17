@@ -73,7 +73,7 @@ class MinionMainMenu extends InventoryMenu{
 						break;
 					}
 				}
-				$this->forceClose($player);
+				$this->onUpdate();
 				break;
 			case 53:
 				$info = $this->getMinion()->getMinionInfo();
@@ -96,12 +96,11 @@ class MinionMainMenu extends InventoryMenu{
 				if(in_array($slot, $this->invSlots)){
 					if(!$this->getMinion()->takeStuff(array_search($slot, $this->invSlots), $player)){
 						$player->sendMessage(Language::inventory_is_full());
-						// TODO: Reload content
 					}
+					$this->onUpdate();
 				}
 				break;
 		}
-		$this->render();
 	}
 
 	public function onClose(Player $player) : void{
