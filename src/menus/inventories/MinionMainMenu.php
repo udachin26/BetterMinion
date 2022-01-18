@@ -18,7 +18,6 @@ use pocketmine\block\VanillaBlocks;
 use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 use function array_fill;
-use function count;
 use function floor;
 
 class MinionMainMenu extends InventoryMenu{
@@ -58,6 +57,7 @@ class MinionMainMenu extends InventoryMenu{
 		$inv->setItem(28, VanillaBlocks::LEGACY_STONECUTTER()->asItem()->setCustomName("Compactor")->setLore(["Comming soon !"]));
 		$inv->setItem(37, BlockFactory::getInstance()->get(BlockLegacyIds::COMMAND_BLOCK, 0)->asItem()->setCustomName("Expander")->setLore(["Comming soon !"]));
 		$inv->setItem(48, VanillaBlocks::CHEST()->asItem()->setCustomName("Retrieve all results"));
+		$inv->setItem(50, VanillaItems::EXPERIENCE_BOTTLE()->setCustomName("Upgrade Minion"));
 		$inv->setItem(53, VanillaBlocks::BEDROCK()->asItem()->setCustomName("Remove your minion"));
 	}
 
@@ -91,6 +91,11 @@ class MinionMainMenu extends InventoryMenu{
 					$player->sendMessage(Language::inventory_is_full());
 				}
 				$this->forceClose($player);
+				break;
+			case 50:
+				//TODO: Upgrade cost
+				$this->getMinion()->levelUp();
+				$this->onUpdate();
 				break;
 			default:
 				if(in_array($slot, $this->invSlots)){
