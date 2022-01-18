@@ -43,7 +43,7 @@ class MinionMainMenu extends InventoryMenu{
 		foreach($this->invSlots as $i => $slot){
 			$invItem = $this->getMinion()->getMinionInventory()->slotExists($i) ?
 				$this->getMinion()->getMinionInventory()->getItem($i) :
-				VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::RED())->asItem()->setCustomName("Unlock at level " . Utils::getRomanNumeral($i));
+				VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::RED())->asItem()->setCustomName("Unlock at level " . Utils::getRomanNumeral($i + 1));
 			$inv->setItem($slot, $invItem);
 		}
 		$info_item = VanillaItems::PLAYER_HEAD()->setCustomName("§r§f" . $this->getMinion()->getOriginalNameTag());
