@@ -106,6 +106,7 @@ class MinionMainMenu extends InventoryMenu{
 				}
 				break;
 		}
+		$this->getMinion()->continueWorking();
 	}
 
 	public function onClose(Player $player) : void{
