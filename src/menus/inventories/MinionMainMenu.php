@@ -18,7 +18,11 @@ use pocketmine\block\VanillaBlocks;
 use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 use function array_fill;
+use function array_map;
+use function array_search;
 use function floor;
+use function in_array;
+use function range;
 
 class MinionMainMenu extends InventoryMenu{
 	use MinionMenuTrait {
@@ -98,8 +102,8 @@ class MinionMainMenu extends InventoryMenu{
 				$this->onUpdate();
 				break;
 			default:
-				if(in_array($slot, $this->invSlots)){
-					if(!$this->getMinion()->takeStuff(array_search($slot, $this->invSlots), $player)){
+				if(in_array($slot, $this->invSlots, true)){
+					if(!$this->getMinion()->takeStuff(array_search($slot, $this->invSlots, true), $player)){
 						$player->sendMessage(Language::inventory_is_full());
 					}
 					$this->onUpdate();

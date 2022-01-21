@@ -6,9 +6,9 @@ namespace Mcbeany\BetterMinion\entities;
 
 use Exception;
 use Mcbeany\BetterMinion\events\MinionCollectResourcesEvent;
-use Mcbeany\BetterMinion\minions\MinionInventory;
 use Mcbeany\BetterMinion\menus\inventories\MinionMainMenu;
 use Mcbeany\BetterMinion\minions\MinionInfo;
+use Mcbeany\BetterMinion\minions\MinionInventory;
 use Mcbeany\BetterMinion\minions\MinionNBT;
 use Mcbeany\BetterMinion\utils\Configuration;
 use pocketmine\block\Air;
@@ -214,7 +214,7 @@ abstract class BaseMinion extends Human{
 			}
 		}
 	}
-	
+
 	public function takeStuff(int $slot, Player $player) : bool{
 		try {
 			$item = $this->getMinionInventory()->getItem($slot);

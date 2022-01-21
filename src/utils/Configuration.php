@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\utils;
 
 use Mcbeany\BetterMinion\BetterMinion;
-use Mcbeany\BetterMinion\economy\EconomyProviderManager;
 use pocketmine\item\Item;
 use pocketmine\lang\Language;
 use function gettype;

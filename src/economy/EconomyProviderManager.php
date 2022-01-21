@@ -6,6 +6,8 @@ namespace Mcbeany\BetterMinion\economy;
 
 use Mcbeany\BetterMinion\BetterMinion;
 use Mcbeany\BetterMinion\utils\Configuration;
+use function array_keys;
+use function in_array;
 use function mb_strtolower;
 
 class EconomyProviderManager{

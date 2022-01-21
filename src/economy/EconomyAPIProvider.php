@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\economy;
 
-use onebone\economyapi\EconomyAPI;
 use pocketmine\player\Player;
 use pocketmine\Server;
 
