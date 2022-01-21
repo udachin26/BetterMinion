@@ -16,5 +16,5 @@ interface EconomyProvider{
 
 	public function set(Player $player, float $amount = 0) : void;
 
-	public function checkAPI() : bool;
+	public function getEconomy() : mixed;
 }

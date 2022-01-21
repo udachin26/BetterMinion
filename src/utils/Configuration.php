@@ -23,7 +23,7 @@ final class Configuration{
 			"language" => Language::FALLBACK_LANGUAGE,
 			"minion-spawner" => "nether_star",
 			"minion-size" => 0.5,
-			"economy-provider" => EconomyProviderManager::BEDROCK_ECONOMY
+			"economy-provider" => "bedrockeconomy"
 		];
 	}
 

@@ -10,26 +10,33 @@ use function mb_strtolower;
 
 class EconomyProviderManager{
 
-	public const BEDROCK_ECONOMY = "bedrock_economy";
-	public const ECONOMY_API = "economyapi";
-	public const CAPITAL = "capital";
+	protected const AVAILABLE_PROVIDERS = [
+		"economyapi" => EconomyAPIProvider::class,
+		"bedrockeconomy" => BedrockEconomyProvider::class,
+		"economy" => EconomyAPIProvider::class,
+	];
 
-	protected static ?EconomyProvider $provider;
+	protected static ?EconomyProvider $provider = null;
 
 	public static function load(){
-		self::$provider = match (mb_strtolower(Configuration::economy_provider())) {
-			self::BEDROCK_ECONOMY => new BedrockEconomyProvider(),
-			self::ECONOMY_API => new EconomyAPIProvider(),
-			default => null,
-		};
-		if (!self::$provider->checkAPI()){
-			BetterMinion::getInstance()->getLogger()->error("Couldn't found selected economy plugin, disabling economy feature...");
-			self::$provider = null;
+		$available = mb_strtolower(Configuration::economy_provider());
+		if(!in_array($available, array_keys(self::AVAILABLE_PROVIDERS), true)){
+			BetterMinion::getInstance()->getLogger()->error("Economy provider $available is not available.");
+			return;
+		}
+		foreach(self::AVAILABLE_PROVIDERS as $name => $class){
+			if($available === $name){
+				self::$provider = new $class();
+				if (self::$provider->getEconomy() === null){
+					BetterMinion::getInstance()->getLogger()->error("Couldn't found selected economy plugin, disabling economy feature...");
+					self::$provider = null;
+				}
+				return;
+			}
 		}
 	}
 
 	public static function getProvider() : ?EconomyProvider{
 		return self::$provider;
 	}
-
 }
