@@ -33,6 +33,8 @@ class EconomyAPIProvider implements EconomyProvider{
 	}
 
 	public function getEconomy() : ?EconomyAPI{
-		return Server::getInstance()->getPluginManager()->getPlugin("EconomyAPI");
+		$economy = Server::getInstance()->getPluginManager()->getPlugin("EconomyAPI");
+		if($economy instanceof EconomyAPI) return $economy;
+		return;
 	}
 }

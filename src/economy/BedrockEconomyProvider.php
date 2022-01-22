@@ -27,7 +27,9 @@ class BedrockEconomyProvider implements EconomyProvider{
 	}
 
 	public function getEconomy() : ?BedrockEconomy{
-		return Server::getInstance()->getPluginManager()->getPlugin("BedrockEconomy");
+		$economy = Server::getInstance()->getPluginManager()->getPlugin("BedrockEconomy");
+		if($economy instanceof BedrockEconomy) return $economy;
+		return null;
 	}
 
 }
