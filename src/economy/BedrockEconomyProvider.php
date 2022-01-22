@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\economy;
 
+use cooldogedev\BedrockEconomy\BedrockEconomy;
 use pocketmine\player\Player;
 use pocketmine\Server;
 
@@ -25,7 +26,7 @@ class BedrockEconomyProvider implements EconomyProvider{
 		$this->getEconomy()->getAPI()->setPlayerBalance($player->getName(), (int) $amount);
 	}
 
-	public function getEconomy() : mixed{
+	public function getEconomy() : ?BedrockEconomy{
 		return Server::getInstance()->getPluginManager()->getPlugin("BedrockEconomy");
 	}
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\economy;
 
+use onebone\economyapi\EconomyAPI;
 use pocketmine\player\Player;
 use pocketmine\Server;
 
@@ -31,7 +32,7 @@ class EconomyAPIProvider implements EconomyProvider{
 		$this->getEconomy()->setMoney($player, $amount);
 	}
 
-	public function getEconomy() : mixed{
+	public function getEconomy() : ?EconomyAPI{
 		return Server::getInstance()->getPluginManager()->getPlugin("EconomyAPI");
 	}
 }
