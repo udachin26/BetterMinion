@@ -6,4 +6,8 @@ namespace Mcbeany\BetterMinion;
 
 use pocketmine\plugin\PluginBase;
 
-class BetterMinion extends PluginBase{}
+final class BetterMinion extends PluginBase{
+	protected function onEnable() : void{
+		$this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
+	}
+}
