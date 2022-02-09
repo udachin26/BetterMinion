@@ -20,28 +20,36 @@ use function ucfirst;
  * @method static MinionType MINING()
  */
 
+// Basic type of the minions.
 class MinionType implements MinionNBT{
 	use EnumTrait;
 
+	// TODO: Add more types.
 	protected static function setup() : void{
 		self::registerAll(
 			new self("mining")
 		);
 	}
 
+	// Gets type from name.
+	// Returns null if not found.
 	public static function fromString(string $typeName) : ?self{
 		self::checkInit();
 		return self::$members[mb_strtoupper($typeName)] ?? null;
 	}
 
+	// Returns the name of the type with first letter uppercased.
+	// Example: "mining" -> "Mining".
 	public function typeName() : string{
 		return ucfirst($this->name());
 	}
 
+	// @see MinionNBT::nbtSerialize()
 	public function nbtSerialize() : StringTag{
 		return new StringTag($this->name());
 	}
 
+	// @see MinionNBT::nbtDeserialize()
 	public static function nbtDeserialize(Tag $nbt) : self{
 		if(!$nbt instanceof StringTag){
 			throw new \InvalidArgumentException("Expected " . StringTag::class . ", got " . get_class($nbt));

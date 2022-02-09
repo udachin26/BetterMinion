@@ -8,6 +8,8 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\Tag;
 use function get_class;
 
+// Some basic upgrades of the minions which are copied from Hypixel :D
+// Method names are self-explanatory
 class MinionUpgrade implements MinionNBT{
 	public function __construct(
 		private bool $autoSmelter = false,
@@ -49,23 +51,25 @@ class MinionUpgrade implements MinionNBT{
 		$this->expander = $expander;
 	}
 
+	// @see MinionNBT::nbtSerialize()
 	public function nbtSerialize() : CompoundTag{
 		return CompoundTag::create()
-			->setByte(self::AUTO_SMELTER, (int) $this->autoSmelter)
-			->setByte(self::AUTO_SELLER, (int) $this->autoSeller)
-			->setByte(self::COMPACTOR, (int) $this->compactor)
-			->setByte(self::EXPANDER, (int) $this->expander);
+			->setByte(MinionNBT::AUTO_SMELTER, (int) $this->autoSmelter)
+			->setByte(MinionNBT::AUTO_SELLER, (int) $this->autoSeller)
+			->setByte(MinionNBT::COMPACTOR, (int) $this->compactor)
+			->setByte(MinionNBT::EXPANDER, (int) $this->expander);
 	}
 
+	// @see MinionNBT::nbtDeserialize()
 	public static function nbtDeserialize(Tag $nbt) : self{
 		if(!$nbt instanceof CompoundTag){
 			throw new \InvalidArgumentException("Expected " . CompoundTag::class . ", got " . get_class($nbt));
 		}
 		return new self(
-			(bool) $nbt->getByte(self::AUTO_SMELTER),
-			(bool) $nbt->getByte(self::AUTO_SELLER),
-			(bool) $nbt->getByte(self::COMPACTOR),
-			(bool) $nbt->getByte(self::EXPANDER)
+			(bool) $nbt->getByte(MinionNBT::AUTO_SMELTER),
+			(bool) $nbt->getByte(MinionNBT::AUTO_SELLER),
+			(bool) $nbt->getByte(MinionNBT::COMPACTOR),
+			(bool) $nbt->getByte(MinionNBT::EXPANDER)
 		);
 	}
 }
