@@ -32,7 +32,7 @@ interface MinionNBT{
 	/**
 	 * Deserializes data from NBT.
 	 *
-	 * @internal Should initialize from class and use MinionFactory::spawnMinion() instead.
+	 * @deprecated Should initialize from class and use MinionFactory::spawnMinion() instead.
 	 */
 	public static function nbtDeserialize(Tag $nbt);
 }
