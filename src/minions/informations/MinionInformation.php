@@ -11,8 +11,10 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\Tag;
 use function get_class;
 
-// Basic information about the minions include: type, target, upgrades, etc.
-// Information can be initialized from NBT.
+/**
+ * Basic information about the minions include: type, target, upgrades, etc.
+ * Information can be initialized from NBT.
+ */
 class MinionInformation implements MinionNBT{
 	public function __construct(
 		private MinionType $type,
@@ -23,17 +25,29 @@ class MinionInformation implements MinionNBT{
 	) {
 	}
 
-	// Returns the type of the minions.
+	/**
+	 * Returns the type of the minions.
+	 *
+	 * @return MinionType
+	 */
 	public function getType() : MinionType{
 		return $this->type;
 	}
 
-	// Returns target block.
+	/**
+	 * Returns target block.
+	 *
+	 * @return BlockIdentifier
+	 */
 	public function getTarget() : BlockIdentifier{
 		return $this->target;
 	}
 
-	// Returns real target as a Block.
+	/**
+	 * Returns real target as a Block.
+	 *
+	 * @return Block
+	 */
 	public function getRealTarget() : Block{
 		/** @var Block $block */
 		$block = BlockFactory::getInstance()->get(
@@ -43,29 +57,49 @@ class MinionInformation implements MinionNBT{
 		return $block;
 	}
 
-	// Returns the upgrades of the minions.
+	/**
+	 * Returns the upgrades of the minions.
+	 *
+	 * @return MinionUpgrade
+	 */
 	public function getUpgrade() : MinionUpgrade{
 		return $this->upgrade;
 	}
 
-	// Returns the level of the minions.
+	/**
+	 * Returns the level of the minions.
+	 *
+	 * @return int
+	 */
 	public function getLevel() : int{
 		return $this->level;
 	}
 
-	// Increases the level of the minions.
+	/**
+	 * Increases the level of the minions.
+	 */
 	public function increaseLevel() : void{
 		$this->level++;
 	}
 
-	// Serializes the target of the minions to NBT.
+	/**
+	 * Serializes the target of the minions to NBT.
+	 *
+	 * @return CompoundTag
+	 */
 	protected function targetSerialize() : CompoundTag{
 		return CompoundTag::create()
 			->setInt(MinionNBT::BLOCK_ID, $this->target->getBlockId())
 			->setInt(MinionNBT::VARIANT, $this->target->getVariant());
 	}
 
-	// Deserializes the target of the minions from NBT.
+	/**
+	 * Deserializes the target of the minions from NBT.
+	 *
+	 * @param CompoundTag $nbt
+	 *
+	 * @return BlockIdentifier
+	 */
 	protected static function targetDeserialize(CompoundTag $nbt) : BlockIdentifier{
 		return new BlockIdentifier(
 			$nbt->getInt(MinionNBT::BLOCK_ID),
@@ -73,7 +107,11 @@ class MinionInformation implements MinionNBT{
 		);
 	}
 
-	// @see MinionNBT::nbtSerialize()
+	/**
+	 * @return CompoundTag
+	 *
+	 * @see MinionNBT::nbtSerialize()
+	 */
 	public function nbtSerialize() : CompoundTag{
 		return CompoundTag::create()
 			->setTag(MinionNBT::TYPE, $this->type->nbtSerialize())
@@ -82,7 +120,13 @@ class MinionInformation implements MinionNBT{
 			->setInt(MinionNBT::LEVEL, $this->level);
 	}
 
-	// @see MinionNBT::nbtDeserialize()
+	/**
+	 * @param CompoundTag $nbt
+	 *
+	 * @return MinionInformation
+	 *
+	 * @see MinionNBT::nbtDeserialize()
+	 */
 	public static function nbtDeserialize(Tag $nbt) : self{
 		if(!$nbt instanceof CompoundTag){
 			throw new \InvalidArgumentException("Expected " . CompoundTag::class . ", got " . get_class($nbt));

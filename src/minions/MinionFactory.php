@@ -22,6 +22,10 @@ use function basename;
 use function fmod;
 use function is_a;
 
+/**
+ * MinionFactory class
+ * Usage: MinionFactory::getInstance()
+ */
 final class MinionFactory{
 	use SingletonTrait;
 
@@ -32,8 +36,14 @@ final class MinionFactory{
 		// TODO: Register some basic minions.
 	}
 
-	// Summon minion for player based on the minion information.
-	// Returns true if successful or false if PlayerSpawnMinionEvent is cancelled.
+	/**
+	 * Summon minion for player based on the minion information.
+	 * 
+	 * @param MinionInformation $information
+	 * @param Player $player
+	 *
+	 * @return bool Returns true if successful or false if PlayerSpawnMinionEvent is cancelled.
+	 */
 	public function spawnMinion(MinionInformation $information, Player $player) : bool{
 		$class = $this->getMinion($information->getType());
 		if($class === null){
@@ -58,8 +68,15 @@ final class MinionFactory{
 		return true;
 	}
 
-	// Register minion class.
-	// TODO: Apply to register custom minions from other plugins.
+	/**
+	 * Register minion class.
+	 * TODO: Apply to register custom minions from other plugins.
+	 *
+	 * @param string $className
+	 * @param MinionType $type
+	 *
+	 * @throws \InvalidArgumentException If $className is not extended from BaseMinion.
+	 */
 	public function register(string $className, MinionType $type) : void{
 		if(!is_a($className, BaseMinion::class, true)){
 			throw new \InvalidArgumentException("$className is not a valid minion class");
@@ -76,6 +93,13 @@ final class MinionFactory{
 		$this->minions[$type->name()] = $className;
 	}
 
+	/**
+	 * Get minion class by type.
+	 *
+	 * @param MinionType $type
+	 *
+	 * @return string|null Returns null if not found.
+	 */
 	public function getMinion(MinionType $type) : ?string{
 		return $this->minions[$type->name()] ?? null;
 	}

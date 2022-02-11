@@ -8,8 +8,10 @@ use Mcbeany\BetterMinion\minions\entities\BaseMinion;
 use pocketmine\event\player\PlayerEvent;
 use pocketmine\player\Player;
 
-// Base PlayerMinionEvent.
-// I want it to extend MinionEvent, but why PHP :sadthonk:
+/**
+ * Base PlayerMinionEvent, like MinionEvent but called by player.
+ * I want it to extend MinionEvent, but why PHP :sadthonk:
+ */
 abstract class PlayerMinionEvent extends PlayerEvent{
 	public function __construct(
 		Player $player,
@@ -18,7 +20,11 @@ abstract class PlayerMinionEvent extends PlayerEvent{
 		$this->player = $player;
 	}
 
-	// Returns the selected minion.
+	/**
+	 * Returns the selected minion.
+	 *
+	 * @return BaseMinion
+	 */
 	public function getMinion() : BaseMinion{
 		return $this->minion;
 	}

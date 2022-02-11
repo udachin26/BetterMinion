@@ -8,8 +8,10 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\Tag;
 use function get_class;
 
-// Some basic upgrades of the minions which are copied from Hypixel :D
-// Method names are self-explanatory
+/**
+ * Some basic upgrades of the minions which are copied from Hypixel :D
+ * Method names are self-explanatory
+ */
 class MinionUpgrade implements MinionNBT{
 	public function __construct(
 		private bool $autoSmelter = false,
@@ -51,7 +53,11 @@ class MinionUpgrade implements MinionNBT{
 		$this->expander = $expander;
 	}
 
-	// @see MinionNBT::nbtSerialize()
+	/**
+	 * @return CompoundTag
+	 *
+	 * @see MinionNBT::nbtSerialize()
+	 */
 	public function nbtSerialize() : CompoundTag{
 		return CompoundTag::create()
 			->setByte(MinionNBT::AUTO_SMELTER, (int) $this->autoSmelter)
@@ -60,7 +66,13 @@ class MinionUpgrade implements MinionNBT{
 			->setByte(MinionNBT::EXPANDER, (int) $this->expander);
 	}
 
-	// @see MinionNBT::nbtDeserialize()
+	/*
+	 * @param CompoundTag $nbt
+	 *
+	 * @return MinionUpgrade
+	 *
+	 * @see MinionNBT::nbtDeserialize()
+	 */
 	public static function nbtDeserialize(Tag $nbt) : self{
 		if(!$nbt instanceof CompoundTag){
 			throw new \InvalidArgumentException("Expected " . CompoundTag::class . ", got " . get_class($nbt));

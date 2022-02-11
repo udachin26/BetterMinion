@@ -14,13 +14,19 @@ use pocketmine\nbt\tag\ListTag;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-// Base class for all minions.
+/**
+ * Base class for all minions.
+ */
 abstract class BaseMinion extends Human{
 	protected UuidInterface $owner;
 	protected MinionInformation $minionInformation;
 	protected MinionInventory $minionInventory;
 
-	// Constructor of the minions, I think.
+	/**
+	 * Constructor of the minions, I think.
+	 *
+	 * @param CompoundTag $nbt
+	 */
 	protected function initEntity(CompoundTag $nbt) : void{
 		parent::initEntity($nbt);
 		$this->owner = Uuid::uuid3(Uuid::NIL, $nbt->getString(MinionNBT::OWNER));
@@ -37,7 +43,11 @@ abstract class BaseMinion extends Human{
 		$this->minionInventory->setSize($this->minionInformation->getLevel());
 	}
 
-	// Save the minion's information.
+	/**
+	 * Save the minion's information.
+	 *
+	 * @return CompoundTag
+	 */
 	public function saveNBT() : CompoundTag{
 		return parent::saveNBT()
 			->setString(MinionNBT::OWNER, $this->owner->toString())

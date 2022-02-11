@@ -13,15 +13,22 @@ use pocketmine\nbt\tag\Tag;
 use function array_map;
 use function get_class;
 
-// Inventory for the minions based on SimpleInventory.
+/**
+ * Inventory for the minions based on SimpleInventory.
+ */
 class MinionInventory extends SimpleInventory implements MinionNBT{
 	public const MAX_SIZE = 15; // TODO: Make this configurable.
+
 	// R.I.P PM3 feature.
 	public function setSize(int $size) : void{
 		$this->slots->setSize($size);
 	}
 
-	// @see MinionNBT::nbtSerialize()
+	/**
+	 * @return ListTag
+	 *
+	 * @see MinionNBT::nbtSerialize()
+	 */
 	public function nbtSerialize() : ListTag{
 		return new ListTag(
 			array_map(
@@ -32,7 +39,13 @@ class MinionInventory extends SimpleInventory implements MinionNBT{
 		);
 	}
 
-	// @see MinionNBT::nbtDeserialize()
+	/**
+	 * @param ListTag $nbt
+	 *
+	 * @return MinionInventory
+	 *
+	 * @see MinionNBT::nbtDeserialize()
+	 */
 	public static function nbtDeserialize(Tag $nbt) : self{
 		if(!$nbt instanceof ListTag){
 			throw new \InvalidArgumentException("Expected " . ListTag::class . ", got " . get_class($nbt));
