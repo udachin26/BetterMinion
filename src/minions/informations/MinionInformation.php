@@ -27,8 +27,6 @@ class MinionInformation implements MinionNBT{
 
 	/**
 	 * Returns the type of the minions.
-	 *
-	 * @return MinionType
 	 */
 	public function getType() : MinionType{
 		return $this->type;
@@ -36,8 +34,6 @@ class MinionInformation implements MinionNBT{
 
 	/**
 	 * Returns target block.
-	 *
-	 * @return BlockIdentifier
 	 */
 	public function getTarget() : BlockIdentifier{
 		return $this->target;
@@ -45,8 +41,6 @@ class MinionInformation implements MinionNBT{
 
 	/**
 	 * Returns real target as a Block.
-	 *
-	 * @return Block
 	 */
 	public function getRealTarget() : Block{
 		/** @var Block $block */
@@ -59,8 +53,6 @@ class MinionInformation implements MinionNBT{
 
 	/**
 	 * Returns the upgrades of the minions.
-	 *
-	 * @return MinionUpgrade
 	 */
 	public function getUpgrade() : MinionUpgrade{
 		return $this->upgrade;
@@ -68,8 +60,6 @@ class MinionInformation implements MinionNBT{
 
 	/**
 	 * Returns the level of the minions.
-	 *
-	 * @return int
 	 */
 	public function getLevel() : int{
 		return $this->level;
@@ -84,8 +74,6 @@ class MinionInformation implements MinionNBT{
 
 	/**
 	 * Serializes the target of the minions to NBT.
-	 *
-	 * @return CompoundTag
 	 */
 	protected function targetSerialize() : CompoundTag{
 		return CompoundTag::create()
@@ -95,10 +83,6 @@ class MinionInformation implements MinionNBT{
 
 	/**
 	 * Deserializes the target of the minions from NBT.
-	 *
-	 * @param CompoundTag $nbt
-	 *
-	 * @return BlockIdentifier
 	 */
 	protected static function targetDeserialize(CompoundTag $nbt) : BlockIdentifier{
 		return new BlockIdentifier(
@@ -108,8 +92,6 @@ class MinionInformation implements MinionNBT{
 	}
 
 	/**
-	 * @return CompoundTag
-	 *
 	 * @see MinionNBT::nbtSerialize()
 	 */
 	public function nbtSerialize() : CompoundTag{

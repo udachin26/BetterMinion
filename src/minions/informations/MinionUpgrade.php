@@ -54,8 +54,6 @@ class MinionUpgrade implements MinionNBT{
 	}
 
 	/**
-	 * @return CompoundTag
-	 *
 	 * @see MinionNBT::nbtSerialize()
 	 */
 	public function nbtSerialize() : CompoundTag{

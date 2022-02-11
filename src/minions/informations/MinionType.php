@@ -36,8 +36,6 @@ class MinionType implements MinionNBT{
 	/**
 	 * Gets type from name.
 	 *
-	 * @param string $typeName
-	 *
 	 * @return MinionType|null Returns null if not found.
 	 */
 	public static function fromString(string $typeName) : ?self{
@@ -48,16 +46,12 @@ class MinionType implements MinionNBT{
 	/**
 	 * Returns the name of the type with first letter uppercased.
 	 * Example: "mining" -> "Mining".
-	 *
-	 * @return string
 	 */
 	public function typeName() : string{
 		return ucfirst($this->name());
 	}
 
 	/**
-	 * @return StringTag
-	 *
 	 * @see MinionNBT::nbtSerialize()
 	 */
 	public function nbtSerialize() : StringTag{

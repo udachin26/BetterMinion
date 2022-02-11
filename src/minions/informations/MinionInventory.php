@@ -25,8 +25,6 @@ class MinionInventory extends SimpleInventory implements MinionNBT{
 	}
 
 	/**
-	 * @return ListTag
-	 *
 	 * @see MinionNBT::nbtSerialize()
 	 */
 	public function nbtSerialize() : ListTag{

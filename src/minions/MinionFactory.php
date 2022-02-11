@@ -38,9 +38,6 @@ final class MinionFactory{
 
 	/**
 	 * Summon minion for player based on the minion information.
-	 * 
-	 * @param MinionInformation $information
-	 * @param Player $player
 	 *
 	 * @return bool Returns true if successful or false if PlayerSpawnMinionEvent is cancelled.
 	 */
@@ -72,9 +69,6 @@ final class MinionFactory{
 	 * Register minion class.
 	 * TODO: Apply to register custom minions from other plugins.
 	 *
-	 * @param string $className
-	 * @param MinionType $type
-	 *
 	 * @throws \InvalidArgumentException If $className is not extended from BaseMinion.
 	 */
 	public function register(string $className, MinionType $type) : void{
@@ -95,8 +89,6 @@ final class MinionFactory{
 
 	/**
 	 * Get minion class by type.
-	 *
-	 * @param MinionType $type
 	 *
 	 * @return string|null Returns null if not found.
 	 */

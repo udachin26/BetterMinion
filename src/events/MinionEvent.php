@@ -18,8 +18,6 @@ abstract class MinionEvent extends Event{
 
 	/**
 	 * Returns the selected minion.
-	 *
-	 * @return BaseMinion
 	 */
 	public function getMinion() : BaseMinion{
 		return $this->minion;

@@ -24,8 +24,6 @@ abstract class BaseMinion extends Human{
 
 	/**
 	 * Constructor of the minions, I think.
-	 *
-	 * @param CompoundTag $nbt
 	 */
 	protected function initEntity(CompoundTag $nbt) : void{
 		parent::initEntity($nbt);
@@ -45,8 +43,6 @@ abstract class BaseMinion extends Human{
 
 	/**
 	 * Save the minion's information.
-	 *
-	 * @return CompoundTag
 	 */
 	public function saveNBT() : CompoundTag{
 		return parent::saveNBT()
