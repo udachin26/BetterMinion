@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mcbeany\BetterMinion\events;
+namespace Mcbeany\BetterMinion\events\minions;
 
 use Mcbeany\BetterMinion\minions\entities\BaseMinion;
 use pocketmine\event\Event;

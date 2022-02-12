@@ -35,7 +35,7 @@ final class Utils{
 	/**
 	 * Give player item, if player's inventory is full, drop it.
 	 *
-	 * @return bool Returns false if item is dropped.
+	 * @return bool True if item is not dropped and false otherwise.
 	 */
 	public static function giveItem(Player $player, Item $item) : bool{
 		if($player->getInventory()->canAddItem($item)){

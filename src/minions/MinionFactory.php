@@ -52,8 +52,7 @@ final class MinionFactory{
 
 	/**
 	 * Summon minion for player based on the minion information.
-	 *
-	 * @return bool Returns true if successful or false if PlayerSpawnMinionEvent is cancelled.
+	 * Returns true if successful or false if PlayerSpawnMinionEvent is cancelled.
 	 */
 	public function spawnMinion(MinionInformation $information, Player $player) : bool{
 		$class = $this->getMinion($information->getType());
@@ -104,8 +103,7 @@ final class MinionFactory{
 
 	/**
 	 * Get minion class by type.
-	 *
-	 * @return string|null Returns null if not found.
+	 * Returns null if not found.
 	 */
 	public function getMinion(MinionType $type) : ?string{
 		return $this->minions[$type->name()] ?? null;

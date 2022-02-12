@@ -22,6 +22,5 @@ final class BetterMinion extends PluginBase{
 			"Minion Command"
 		));
 		MinionFactory::init($this);
-		$this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
 	}
 }

@@ -6,6 +6,8 @@ namespace Mcbeany\BetterMinion\utils;
 
 use pocketmine\item\Item;
 use pocketmine\utils\Config;
+use function is_float;
+use function is_string;
 
 class Configuration{
 	use SingletonTrait;
@@ -16,15 +18,25 @@ class Configuration{
 	}
 
 	/**
-	 * @return Item Returns default minion's spawner.
+	 * Returns default minion's spawner.
 	 */
 	final public function minion_spawner() : Item{
-		$item = Utils::parseItem($this->get("spawner") ?? "");
+		$name = $this->get("spawner");
+		$item = Utils::parseItem(is_string($name) ? $name : "");
 		if($item === null){
 			$this->setDefault("spawner");
 			return $this->minion_spawner();
 		}
 		return $item;
+	}
+
+	final public function minion_scale() : float{
+		$scale = $this->get("scale");
+		if(!is_float($scale)){
+			$this->setDefault("scale");
+			return $this->minion_scale();
+		}
+		return $scale;
 	}
 
 	public function getConfig() : Config{
@@ -36,11 +48,14 @@ class Configuration{
 	}
 
 	/**
-	 * @return array<string, mixed> Returns default configurations.
+	 * Returns default configurations.
+	 *
+	 * @return array<string, mixed>
 	 */
 	public function defaults() : array{
 		return [
-			"spawner" => "nether_star"
+			"spawner" => "nether_star",
+			"scale" => 0.5
 		];
 	}
 
