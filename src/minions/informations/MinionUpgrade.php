@@ -54,9 +54,9 @@ class MinionUpgrade implements MinionNBT{
 	}
 
 	/**
-	 * @see MinionNBT::nbtSerialize()
+	 * @see MinionNBT::serializeTag()
 	 */
-	public function nbtSerialize() : CompoundTag{
+	public function serializeTag() : CompoundTag{
 		return CompoundTag::create()
 			->setByte(MinionNBT::AUTO_SMELTER, (int) $this->autoSmelter)
 			->setByte(MinionNBT::AUTO_SELLER, (int) $this->autoSeller)
@@ -65,21 +65,21 @@ class MinionUpgrade implements MinionNBT{
 	}
 
 	/*
-	 * @param CompoundTag $nbt
+	 * @param CompoundTag $tag
 	 *
 	 * @return MinionUpgrade
 	 *
-	 * @see MinionNBT::nbtDeserialize()
+	 * @see MinionNBT::deserializeTag()
 	 */
-	public static function nbtDeserialize(Tag $nbt) : self{
-		if(!$nbt instanceof CompoundTag){
-			throw new \InvalidArgumentException("Expected " . CompoundTag::class . ", got " . get_class($nbt));
+	public static function deserializeTag(Tag $tag) : self{
+		if(!$tag instanceof CompoundTag){
+			throw new \InvalidArgumentException("Expected " . CompoundTag::class . ", got " . get_class($tag));
 		}
 		return new self(
-			(bool) $nbt->getByte(MinionNBT::AUTO_SMELTER),
-			(bool) $nbt->getByte(MinionNBT::AUTO_SELLER),
-			(bool) $nbt->getByte(MinionNBT::COMPACTOR),
-			(bool) $nbt->getByte(MinionNBT::EXPANDER)
+			(bool) $tag->getByte(MinionNBT::AUTO_SMELTER),
+			(bool) $tag->getByte(MinionNBT::AUTO_SELLER),
+			(bool) $tag->getByte(MinionNBT::COMPACTOR),
+			(bool) $tag->getByte(MinionNBT::EXPANDER)
 		);
 	}
 }

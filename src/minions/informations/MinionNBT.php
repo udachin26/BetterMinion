@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Mcbeany\BetterMinion\minions\informations;
 
-use Mcbeany\BetterMinion\minions\MinionFactory;
 use pocketmine\nbt\tag\Tag;
 
 interface MinionNBT{
@@ -13,6 +12,7 @@ interface MinionNBT{
 	public const LEVEL = "minionLevel";
 
 	public const OWNER = "owner";
+	public const OWNER_NAME = "ownerName";
 
 	public const TARGET = "minionTarget";
 	public const BLOCK_ID = "blockId";
@@ -28,11 +28,11 @@ interface MinionNBT{
 	/**
 	 * Serializes data to NBT.
 	 */
-	public function nbtSerialize();
+	public function serializeTag();
 	/**
 	 * Deserializes data from NBT.
 	 *
 	 * @deprecated Should initialize from class and use MinionFactory::spawnMinion() instead.
 	 */
-	public static function nbtDeserialize(Tag $nbt);
+	public static function deserializeTag(Tag $tag);
 }

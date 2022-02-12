@@ -9,12 +9,16 @@ use Mcbeany\BetterMinion\minions\entities\BaseMinion;
 use Mcbeany\BetterMinion\minions\informations\MinionInformation;
 use Mcbeany\BetterMinion\minions\informations\MinionNBT;
 use Mcbeany\BetterMinion\minions\informations\MinionType;
+use Mcbeany\BetterMinion\minions\informations\MinionUpgrade;
+use Mcbeany\BetterMinion\utils\Configuration;
 use Mcbeany\BetterMinion\utils\SingletonTrait;
+use pocketmine\block\BlockIdentifier;
 use pocketmine\entity\Entity;
 use pocketmine\entity\EntityDataHelper;
 use pocketmine\entity\EntityFactory;
 use pocketmine\entity\Human;
 use pocketmine\entity\Location;
+use pocketmine\item\Item;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\player\Player;
 use pocketmine\world\World;
@@ -36,6 +40,16 @@ final class MinionFactory{
 		// TODO: Register some basic minions.
 	}
 
+	public function getSpawner(MinionType $type, BlockIdentifier $target) : Item{
+		$item = Configuration::getInstance()->minion_spawner();
+		// TODO: Custom name
+		$item->setNamedTag($item->getNamedTag()->setTag(
+			MinionNBT::INFORMATION,
+			(new MinionInformation($type, $target, new MinionUpgrade()))->serializeTag()
+		));
+		return $item;
+	}
+
 	/**
 	 * Summon minion for player based on the minion information.
 	 *
@@ -49,7 +63,8 @@ final class MinionFactory{
 		}
 		$nbt = CompoundTag::create()
 			->setString(MinionNBT::OWNER, $player->getUniqueId()->toString())
-			->setTag(MinionNBT::INFORMATION, $information->nbtSerialize());
+			->setString(MinionNBT::OWNER_NAME, $player->getName())
+			->setTag(MinionNBT::INFORMATION, $information->serializeTag());
 		/** @var BaseMinion $entity */
 		$entity = new $class(Location::fromObject(
 			$player->getPosition()->floor()->add(0.5, 0, 0.5),

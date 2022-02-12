@@ -5,6 +5,14 @@ declare(strict_types=1);
 namespace Mcbeany\BetterMinion\commands;
 
 use CortexPE\Commando\BaseCommand;
+use Mcbeany\BetterMinion\commands\subcommands\GiveCommand;
+use pocketmine\command\CommandSender;
 
-// Base MinionCommand
-final class MinionCommand extends BaseCommand{}
+final class MinionCommand extends BaseCommand{
+	protected function prepare() : void{
+		$this->registerSubCommand(new GiveCommand("give", "Give Minion to Player"));
+	}
+
+	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
+	}
+}

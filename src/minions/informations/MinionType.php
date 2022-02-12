@@ -18,6 +18,7 @@ use function ucfirst;
  * @generate-registry-docblock
  *
  * @method static MinionType MINING()
+ * @method static MinionType FARMING()
  */
 
 /*
@@ -29,7 +30,8 @@ class MinionType implements MinionNBT{
 	// TODO: Add more types.
 	protected static function setup() : void{
 		self::registerAll(
-			new self("mining")
+			new self("mining"),
+			new self("farming")
 		);
 	}
 
@@ -52,23 +54,23 @@ class MinionType implements MinionNBT{
 	}
 
 	/**
-	 * @see MinionNBT::nbtSerialize()
+	 * @see MinionNBT::serializeTag()
 	 */
-	public function nbtSerialize() : StringTag{
+	public function serializeTag() : StringTag{
 		return new StringTag($this->name());
 	}
 
 	/**
-	 * @param StringTag $nbt
+	 * @param StringTag $tag
 	 *
 	 * @return MinionType
 	 *
-	 * @see MinionNBT::nbtDeserialize()
+	 * @see MinionNBT::deserializeTag()
 	 */
-	public static function nbtDeserialize(Tag $nbt) : self{
-		if(!$nbt instanceof StringTag){
-			throw new \InvalidArgumentException("Expected " . StringTag::class . ", got " . get_class($nbt));
+	public static function deserializeTag(Tag $tag) : self{
+		if(!$tag instanceof StringTag){
+			throw new \InvalidArgumentException("Expected " . StringTag::class . ", got " . get_class($tag));
 		}
-		return self::fromString($nbt->getValue());
+		return self::fromString($tag->getValue());
 	}
 }

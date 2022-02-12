@@ -17,17 +17,15 @@ use function get_class;
  * Inventory for the minions based on SimpleInventory.
  */
 class MinionInventory extends SimpleInventory implements MinionNBT{
-	public const MAX_SIZE = 15; // TODO: Make this configurable.
-
 	// R.I.P PM3 feature.
 	public function setSize(int $size) : void{
 		$this->slots->setSize($size);
 	}
 
 	/**
-	 * @see MinionNBT::nbtSerialize()
+	 * @see MinionNBT::serializeTag()
 	 */
-	public function nbtSerialize() : ListTag{
+	public function serializeTag() : ListTag{
 		return new ListTag(
 			array_map(
 				fn (Item $item) => $item->nbtSerialize(),
@@ -38,21 +36,21 @@ class MinionInventory extends SimpleInventory implements MinionNBT{
 	}
 
 	/**
-	 * @param ListTag $nbt
+	 * @param ListTag $tag
 	 *
 	 * @return MinionInventory
 	 *
-	 * @see MinionNBT::nbtDeserialize()
+	 * @see MinionNBT::deserializeTag()
 	 */
-	public static function nbtDeserialize(Tag $nbt) : self{
-		if(!$nbt instanceof ListTag){
-			throw new \InvalidArgumentException("Expected " . ListTag::class . ", got " . get_class($nbt));
+	public static function deserializeTag(Tag $tag) : self{
+		if(!$tag instanceof ListTag){
+			throw new \InvalidArgumentException("Expected " . ListTag::class . ", got " . get_class($tag));
 		}
-		$inventory = new self(self::MAX_SIZE);
+		$inventory = new self(MinionInformation::MAX_LEVEL);
 		$inventory->setContents(
 			array_map(
 				fn (CompoundTag $tag) => Item::nbtDeserialize($tag),
-				$nbt->getValue()
+				$tag->getValue()
 			)
 		);
 		return $inventory;
