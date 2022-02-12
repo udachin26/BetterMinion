@@ -272,6 +272,9 @@ abstract class BaseMinion extends Human{
 		return $this->minionInventory;
 	}
 
+	/**
+	 * Returns the minion's tool.
+	 */
 	public function getTool() : Item{
 		return match($this->minionInformation->getRealTarget()->getBreakInfo()->getToolType()){
 			BlockToolType::AXE => VanillaItems::IRON_AXE(),
